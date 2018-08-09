@@ -1,0 +1,15 @@
+---
+title: "Nine core indicators"
+author: "Alec Friedhoff"
+date: "August 8, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+cbsa2 <- readRDS("/home/alec/Projects/Brookings/heartland/build/data/md/cbsa2.rds")
+```
+
+```{r explore, echo=FALSE}
+print(cbsa2)
+```
