@@ -1,6 +1,8 @@
 import dir from "../../../js-modules/rackspace.js";
 import degradation from "../../../js-modules/degradation.js";
 
+import state_tile_map from "./state-tile-map.js";
+
 
 //main function
 function main(){
@@ -21,6 +23,8 @@ function main(){
   //browser degradation
   if(compat.browser()){
     //run app...
+    state_tile_map(d3.select("#heartland1").node());
+
   }
 
 
