@@ -1,7 +1,7 @@
 import dir from "../../../js-modules/rackspace.js";
 import degradation from "../../../js-modules/degradation.js";
 
-import state_tile_map from "./state-tile-map.js";
+import number_lines from "./number-lines.js";
 
 
 //main function
@@ -17,14 +17,26 @@ function main(){
   //production data
   //dir.add("dirAlias", "rackspace-slug/path/to/dir");
   //dir.add("dirAlias", "rackspace-slug/path/to/dir");
-  var compat = degradation(document.getElementById("heartland1"));
+  var compat = degradation(document.getElementById("heartland-fb0"));
 
 
   //browser degradation
   if(compat.browser()){
     //run app...
-    state_tile_map(d3.select("#heartland1").node());
 
+    //number lines
+    var wrap_nl = d3.select("#number-lines");
+    wrap_nl.selectAll("p.rm").remove();
+    
+    //args: container, metric [change|start|end], geolevel [state|metro|micro|rural], geocode [fips]
+    var update_nl = number_lines(wrap_nl.node(), "change", "micro", "10100");
+
+  }
+  else{
+    //dislay alerts in other interactive wrappers
+    compat.alert(document.getElementById("heartland-fb1"), "browser")
+          .alert(document.getElementById("heartland-fb2"), "browser")
+          ;
   }
 
 

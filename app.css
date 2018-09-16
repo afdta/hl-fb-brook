@@ -1,0 +1,106 @@
+html{
+    font-size:16px;
+}
+
+body{
+    min-width:420px;
+    margin:0px;
+}
+
+div{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* >>> headers and text <<< */
+
+p, li, text, td{
+    font-family: 'Open Sans', sans-serif;
+    color:#0d2c6c;
+    margin:0rem 0rem 1rem 0rem;
+    line-height:1.3em;
+}
+
+/*expected use: class="fb-header [section-title | chart-title]"*/
+.fb-header, .fb-light-header, h1, h2, h3{
+    font-family: 'Montserrat', sans-serif;
+    color:#0d2c6c;
+    font-weight:900;
+    margin:0rem 0rem 1rem 0rem;
+    line-height:1.3em;
+}
+.fb-light-header{
+    font-weight:normal;
+}
+
+.section-title{font-size:1.5rem;}
+.chart-title{font-size:1.25rem;}
+
+.subtitle{font-style:italic;}
+
+/*footnotes container for notes and sources*/
+.footnotes{
+    margin:2rem 0rem 0rem 0rem;
+    position:relative;
+}
+.footnotes:before{
+    content:"";
+    position:absolute;
+    width:200px;
+    height:1px;
+    border-top:1px solid #aaaaaa;
+}
+.footnotes > *{
+    font-style:italic;
+    color:#555555;
+}
+
+/*longer text sections*/
+.reading > *{
+    line-height:1.7em;
+}
+
+/* >>> graphics <<<
+
+/*number line plots*/
+.number-line-plot{
+    overflow: hidden;
+    margin:1rem 0rem;
+}
+
+/*columns*/
+.two-columns{
+    max-width:1600px;
+    margin:0rem auto;
+}
+.two-columns > div{
+    float:left;
+    width:50%;
+    min-width:320px;
+    max-width:800px;
+}
+
+/*clearfix*/
+.c-fix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+@media (min-width:0px){
+    .two-columns > div{
+        float:none;
+        width:auto;
+    }
+}
+
+@media (min-width:780px){
+    .two-columns > div{
+        float:left;
+        width:50%;
+    }
+}
+
+
