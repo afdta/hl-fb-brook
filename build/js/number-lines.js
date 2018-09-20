@@ -1,50 +1,12 @@
 import palette from './palette.js';
 import outcome_data from './outcome-data.js';
+import {lookup} from './data-lookup.js';
 import format from '../../../js-modules/formats.js';
 
 //TODO - all data should go in one import. also eases import. need to provide a mapping from
 //indicator to group/category
 
-//metric is one of ["change","start","end"]
-function lookup(indicator, metric, geolevel, geo){
-    var metric_object = outcome_data[indicator].vars[metric];
-
-    var d = {
-        summary: metric_object.summary[geolevel],
-        hl: metric_object.summary.heartland,
-        nhl: metric_object.summary.non_heartland,
-        label: metric_object.label,
-        period: metric_object.period,
-        all:[],
-        value:null,
-        format: metric_object.format,
-        formatAxis: metric_object.formatAxis
-    };
-    try{
-        if(d.summary != null){
-            geo = geo+"";
-            var data = metric_object.lookup[geolevel];
-            for(var g in data){
-                if(data.hasOwnProperty(g)){
-                    if(data[g] != null){
-                        d.all.push({value:data[g], geo:g});
-                        if(g===geo){d.value = data[g]}
-                    }
-                }
-            }
-        }
-    }
-    catch(e){
-        console.log(e);
-        d.value = null;
-        d.all = [];
-    }
-    return d;
-}
-
-//tests
-console.log(lookup("med", "change", "micro", "10220"))
-console.log(lookup("job", "change", "micro", "10220"))
+//lookup: lookup(indicator, metric, geolevel, geo) // metric is one of ["change","start","end"]
 
 //individual number line plot
 function number_line(container, indicator, metric_, geolevel_, geo_){
@@ -97,7 +59,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
  
     //update
     var update = function(metric, geolevel, geo){
-        var data = lookup(indicator, metric, geolevel, geo);
+        var data = lookup(indicator, metric, geolevel);
         
         var value = data.value;
         indicator_title.html(data.label + ",&nbsp;");
@@ -107,7 +69,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
             var dot_data = [];
         }
         else{
-            var dot_data = data.all;
+            var dot_data = data.get();
             var domain = [data.summary.min, data.summary.max];
         
             minanno.text(format[data.formatAxis](domain[0]));
@@ -152,8 +114,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
 
 export default function number_lines(container, metric_, geolevel_, geo_){
     //one-time setup
-    var wrap0 = d3.select(container).append("div")
-                                    .classed("c-fix two-columns",true);
+    var wrap0 = d3.select(container).append("div").classed("c-fix two-columns fb-center-col",true);
 
     var wrap_outcomes = wrap0.append("div").append("div")
                             .style("margin","15px 15px 30px 15px")
@@ -165,8 +126,8 @@ export default function number_lines(container, metric_, geolevel_, geo_){
                             .style("padding","25px")
                             .style("border","5px solid "+palette.green);
 
-    wrap_outcomes.append("p").text("Outcomes").classed("fb-header section-title",true);
-    wrap_drivers.append("p").text("Drivers").classed("fb-header section-title",true);
+    wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true);
+    wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true);
 
     
     var outcome_codes = outcome_data.map.growth.concat(outcome_data.map.prosperity,

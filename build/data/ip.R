@@ -6,7 +6,6 @@
 library(tidyverse)
 library(jsonlite)
 library(readxl)
-library(sf)
 
 file <- "/home/alec/Projects/Brookings/heartland/build/data/Interactive_Data_Top9_v3.xlsx"
 driver_file <- "/home/alec/Projects/Brookings/heartland/build/data/Interactive_Data_Drivers_v5.xlsx"
@@ -280,16 +279,7 @@ JSON <- toJSON(schema1, digits=5, na="null", pretty=TRUE)
 writeLines(c("var outcome_data = ", JSON, ";", "export default outcome_data;"), "/home/alec/Projects/Brookings/heartland/build/js/outcome-data.js")
 
 
-
-
-
-#schema(outcomes, "medearn_2012-16", "Percent change in median earnings", format="pct1", formatAxis="pct0", startYear=2012, endYear=2016, asjson=TRUE)
-
-
-#schema(outcomes, "epop_2012-16", "Percentage point change in employment to pop. ratio", format="shch1", formatAxis="shch0", startYear=2012, endYear=2016, asjson=TRUE)
-
-
-
+#geo data
 
 
 
@@ -330,37 +320,7 @@ agg <-
 
 # outcomes <- readRDS(file="/home/alec/Projects/Brookings/heartland/build/data/md/outcomes.rds")
 
-#geos
-geos <- outcomes %>% select(fips, Name, geolevel) %>% unique()
 
-#geo (shp) data
-cbsa_shp <- "http://www2.census.gov/geo/tiger/GENZ2017/shp/cb_2017_us_cbsa_5m.zip"
-st_shp <- "http://www2.census.gov/geo/tiger/GENZ2017/shp/cb_2017_us_state_5m.zip"
-
-download.file(cbsa_shp, "/home/alec/Projects/Brookings/heartland/build/data/cbsa_shp.zip")
-download.file(st_shp, "/home/alec/Projects/Brookings/heartland/build/data/st_shp.zip")
-
-unzip("/home/alec/Projects/Brookings/heartland/build/data/cbsa_shp.zip", exdir="/home/alec/Projects/Brookings/heartland/build/data/cbsa_shp")
-unzip("/home/alec/Projects/Brookings/heartland/build/data/st_shp.zip", exdir="/home/alec/Projects/Brookings/heartland/build/data/st_shp")
-
-file.remove("/home/alec/Projects/Brookings/heartland/build/data/cbsa_shp.zip", "/home/alec/Projects/Brookings/heartland/build/data/st_shp.zip")
-
-cbsa <- st_read("/home/alec/Projects/Brookings/heartland/build/data/cbsa_shp", "cb_2017_us_cbsa_5m") %>% mutate(fips=as.character(CBSAFP))
-st <- st_read("/home/alec/Projects/Brookings/heartland/build/data/st_shp", "cb_2017_us_state_5m") %>% mutate(fips=as.character(STATEFP))
-
-cbsa2 <- cbsa %>% left_join(emp_all, by="fips") %>%
-                  left_join(gdp_all, by="fips") %>%
-                  left_join(jyf_all, by="fips") %>%
-                  left_join(sol_all, by="fips") %>%
-                  left_join(prod_all, by="fips") %>%
-                  left_join(avgwage_all, by="fips") %>%
-                  left_join(medearn_all, by="fips") %>%
-                  left_join(epop_all, by="fips") %>%
-                  left_join(povrate_all, by="fips")
-
-saveRDS(cbsa2, file="/home/alec/Projects/Brookings/heartland/build/data/md/cbsa2.rds")
-
-rm(list=(tibble(obs=ls(1)) %>% filter(obs!="cbsa2"))$obs)
 
 
 #read in drivers data
