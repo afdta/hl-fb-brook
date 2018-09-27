@@ -10,7 +10,7 @@ library(readxl)
 file <- "/home/alec/Projects/Brookings/heartland/build/data/Interactive_Data_Top9_v3.xlsx"
 driver_file <- "/home/alec/Projects/Brookings/heartland/build/data/Interactive_Data_Drivers_v5.xlsx"
 
-#OUTCOMES
+#DATA
 
 #EMP
 emp <- list()
@@ -105,6 +105,78 @@ outcomes <- emp_all %>%
         full_join(epop_all, by=c("fips", "Name", "geolevel")) %>%
         full_join(povrate_all, by=c("fips", "Name", "geolevel"))
 
+#drivers
+
+#adv industries
+ai <- list()
+ai$state <- read_excel(driver_file, sheet="Adv Industries_State") %>% mutate(geolevel=1)
+ai_all <- bind_rows(ai) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(FIPs)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("ai_",n)))})
+ai$missing <- bind_rows(ai) %>% filter(is.na(Name))
+
+#exports
+ex <- list()
+ex$state <- read_excel(driver_file, sheet="Exports_State") %>% mutate(geolevel=1)
+ex_all <- bind_rows(ex) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(FIPs)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("ex_",n)))})
+ex$missing <- bind_rows(ex) %>% filter(is.na(Name))
+
+#pop
+pop <- list()
+pop$state <- read_excel(driver_file, sheet="Population_State") %>% mutate(geolevel=1) %>% rename(`FIPS Code`=FIPs, `CAGR_2010-17`=`CAGR_10-17`)
+pop$msa <- read_excel(driver_file, sheet="Population_MSA") %>% mutate(geolevel=2)
+pop$micro <- read_excel(driver_file, sheet="Population_Micro") %>% mutate(geolevel=3)
+pop$rural <- read_excel(driver_file, sheet="Population_Rural") %>% mutate(geolevel=4)
+pop_all <- bind_rows(pop) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(`FIPS Code`)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("pop_",n)))})
+pop$missing <- bind_rows(pop) %>% filter(is.na(Name))
+
+#young adults
+ya <- list()
+ya$state <- read_excel(driver_file, sheet="Young Adults_State") %>% mutate(geolevel=1)
+ya_all <- bind_rows(ya) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(FIPS)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("ya_",n)))})
+ya$missing <- bind_rows(ya) %>% filter(is.na(Name))
+
+#edattain
+edu <- list()
+edu$state <- read_excel(driver_file, sheet="Edu Attainment_State") %>% mutate(geolevel=1)
+edu_all <- bind_rows(edu) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(FIPs)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("edu_",n)))})
+edu$missing <- bind_rows(ya) %>% filter(is.na(Name))
+
+#R&D
+rd <- list()
+rd$state <- read_excel(driver_file, sheet="R&D_State") %>% mutate(geolevel=1)
+rd_all <- bind_rows(rd) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(FIPs)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("rd_",n)))})
+rd$missing <- bind_rows(rd) %>% filter(is.na(Name))
+
+#university tech transfer
+utt <- list()
+utt$state <- read_excel(driver_file, sheet="Univ Tech Transfer_State") %>% mutate(geolevel=1)
+utt_all <- bind_rows(utt) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(FIPs)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("utt_",n)))})
+utt$missing <- bind_rows(utt) %>% filter(is.na(Name))
+
+#housing prices
+hp <- list()
+hp$state <- read_excel(driver_file, sheet="Housing_State") %>% mutate(geolevel=1)
+hp_all <- bind_rows(hp) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(FIPS)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("hp_",n)))})
+hp$missing <- bind_rows(hp) %>% filter(is.na(Name))
+
+#broadband
+bb <- list()
+bb$state <- read_excel(driver_file, sheet="Broadband_State") %>% mutate(geolevel=1) %>% rename(`FIPS Code`=FIPs)
+bb$msa <- read_excel(driver_file, sheet="Broadband_MSA") %>% mutate(geolevel=2)
+bb$micro <- read_excel(driver_file, sheet="Broadband_Micro") %>% mutate(geolevel=3)
+bb$rural <- read_excel(driver_file, sheet="Broadband_Rural") %>% mutate(geolevel=4)
+bb_all <- bind_rows(bb) %>% filter(!is.na(Name)) %>% mutate(fips=as.character(`FIPS Code`)) %>% rename_all(function(n){return(ifelse(n=="fips" | n=="Name" | n=="geolevel", n, paste0("bb_",n)))})
+bb$missing <- bind_rows(bb) %>% filter(is.na(Name))
+
+drivers <- ai_all %>%
+  full_join(ex_all, by=c("fips", "Name", "geolevel")) %>%
+  full_join(pop_all, by=c("fips", "Name", "geolevel")) %>%
+  full_join(ya_all, by=c("fips", "Name", "geolevel")) %>%
+  full_join(edu_all, by=c("fips", "Name", "geolevel")) %>%
+  full_join(rd_all, by=c("fips", "Name", "geolevel")) %>%
+  full_join(utt_all, by=c("fips", "Name", "geolevel")) %>%
+  full_join(hp_all, by=c("fips", "Name", "geolevel")) %>%
+  full_join(bb_all, by=c("fips", "Name", "geolevel"))
+
 #saveRDS(outcomes, file="/home/alec/Projects/Brookings/heartland/build/data/md/outcomes.rds")
 
 schema <- function(data=NA, var=NA, label=NA, format=NA, formatAxis=format, startYear=NA, endYear=NA, asjson=FALSE){
@@ -179,7 +251,14 @@ schema1 <- list()
 
 schema1$map <- list(growth=c("job", "jyf", "gdp"),
                     prosperity=c("awg", "pro", "sol"),
-                    inclusion=c("pov", "med", "epo"))
+                    inclusion=c("pov", "med", "epo"),
+                    trade=c("ai","ex"),
+                    human_capital=c("pop","ya","edu"),
+                    innovation=c("rd","utt"),
+                    infrastructure=c("hp","bb")
+                    )
+
+
 
 #job TODO: unbox() these props: label, definition, source
 schema1$job <- list()
@@ -188,8 +267,8 @@ schema1$job$definition <- ""
 schema1$job$source <- ""
 schema1$job$vars <- list()
 schema1$job$vars$change <- schema(outcomes, "emp_CAGR_10-17", "Percent change in job", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
-schema1$job$vars$start <- schema(outcomes, "emp_2010", "job", format="num0", startYear=2010)
-schema1$job$vars$end <- schema(outcomes, "emp_2017", "job", format="num0", startYear=2017)  
+schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs", format="num0", startYear=2010)
+schema1$job$vars$end <- schema(outcomes, "emp_2017", "Job", format="num0", startYear=2017)  
 
 #gdp
 schema1$gdp <- list()
@@ -252,7 +331,7 @@ schema1$med$vars$change <- schema(outcomes, "medearn_CAGR_10-16", "Percent chang
 schema1$med$vars$start <- schema(outcomes, "medearn_2010", "Median earnings", format="doll0", startYear=2010)
 schema1$med$vars$end <- schema(outcomes, "medearn_2016", "Median earnings", format="doll0", startYear=2016)
 
-LL <- schema(outcomes, "medearn_CAGR_10-16", "Percent change in median earnings", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016, asjson=FALSE)
+#LL <- schema(outcomes, "medearn_CAGR_10-16", "Percent change in median earnings", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016, asjson=FALSE)
 
 #epo
 schema1$epo <- list()
@@ -274,9 +353,102 @@ schema1$pov$vars$change <- schema(outcomes, "povrate_2010-16", "Change in povert
 schema1$pov$vars$start <- schema(outcomes, "povrate_2010", "Poverty rate", format="sh1", formatAxis = "sh0", startYear=2010)
 schema1$pov$vars$end <- schema(outcomes, "povrate_2016", "Poverty rate", format="sh1", formatAxis = "sh0", startYear=2016)
 
+#drivers
+
+#ai
+schema1$ai <- list()
+schema1$ai$label <- "ai"
+schema1$ai$definition <- ""
+schema1$ai$source <- ""
+schema1$ai$vars <- list()
+schema1$ai$vars$change <- schema(drivers, "ai_CAGR_Emp_10-16", "Percent change in advanced industry employment", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
+#schema1$ai$vars$start <- schema(drivers, "", "Average annual wage", format="doll0", startYear=2010)
+schema1$ai$vars$start <- unbox(NA)
+schema1$ai$vars$end <- schema(drivers, "ai_EmpShare_16", "Share of jobs in advanced industries", format="sh1", formatAxis="sh0", startYear=2016)
+
+#exports
+schema1$ex <- list()
+schema1$ex$label <- "ex"
+schema1$ex$definition <- ""
+schema1$ex$source <- ""
+schema1$ex$vars <- list()
+schema1$ex$vars$change <- schema(drivers, "ex_RealExports_CAGR_10-17", "Percent change in exports output", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
+schema1$ex$vars$start <- unbox(NA)
+schema1$ex$vars$end <- schema(drivers, "ex_ExportShare_17", "Export share of output", format="sh1", formatAxis="sh0", startYear=2017)
+
+#pop
+schema1$pop <- list()
+schema1$pop$label <- "pop"
+schema1$pop$definition <- ""
+schema1$pop$source <- ""
+schema1$pop$vars <- list()
+schema1$pop$vars$change <- schema(drivers, "pop_CAGR_2010-17", "Percent change in population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
+schema1$pop$vars$start <- unbox(NA)
+schema1$pop$vars$end <- schema(drivers, "pop_2017", "Population", format="num0", startYear=2017)
+
+#ya pop
+schema1$ya <- list()
+schema1$ya$label <- "ya"
+schema1$ya$definition <- ""
+schema1$ya$source <- ""
+schema1$ya$vars <- list()
+schema1$ya$vars$change <- schema(drivers, "ya_YAs_CAGR_10-16", "Percent change in young adult population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
+schema1$ya$vars$start <- unbox(NA)
+schema1$ya$vars$end <- schema(drivers, "ya_YAs_16", "Young adult population", format="num0", startYear=2016)
+
+#edu
+schema1$edu <- list()
+schema1$edu$label <- "edu"
+schema1$edu$definition <- ""
+schema1$edu$source <- ""
+schema1$edu$vars <- list()
+schema1$edu$vars$change <- schema(drivers, "edu_BA_ShareChange_10-16", "Change in BA attainment share", format="shch1", formatAxis="shch0", startYear=2010, endYear=2016)
+schema1$edu$vars$start <- unbox(NA)
+schema1$edu$vars$end <- schema(drivers, "edu_BA_Share_16", "BA attainment share", format="sh1", formatAxis="sh0", startYear=2016)
+
+#R&D
+schema1$rd <- list()
+schema1$rd$label <- "rd"
+schema1$rd$definition <- ""
+schema1$rd$source <- ""
+schema1$rd$vars <- list()
+schema1$rd$vars$change <- schema(drivers, "rd_CAGR_1015", "Percent change in R&D spending", format="pct1", formatAxis="pct0", startYear=2010, endYear=2015)
+schema1$rd$vars$start <- unbox(NA)
+schema1$rd$vars$end <- schema(drivers, "rd_RD_ShareGSP_15", "R&D spending share of gross product", format="sh1", formatAxis="sh0", startYear=2015)
+
+#Univ. tech transfer
+schema1$utt <- list()
+schema1$utt$label <- "utt"
+schema1$utt$definition <- ""
+schema1$utt$source <- ""
+schema1$utt$vars <- list()
+schema1$utt$vars$change <- unbox(NA)
+schema1$utt$vars$start <- unbox(NA)
+schema1$utt$vars$end <- schema(drivers, "utt_Universities_Top100_17", "University tech transfer ranking", format="num0", startYear=2017)
+
+#home prices
+schema1$hp <- list()
+schema1$hp$label <- "hp"
+schema1$hp$definition <- ""
+schema1$hp$source <- ""
+schema1$hp$vars <- list()
+schema1$hp$vars$change <- schema(drivers, "hp_CAGR_10-16", "Percent change in home prices", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
+schema1$hp$vars$start <- unbox(NA)
+schema1$hp$vars$end <- schema(drivers, "hp_2016", "Home prices", format="doll0", startYear=2016)
+
+#broadband
+schema1$bb <- list()
+schema1$bb$label <- "bb"
+schema1$bb$definition <- ""
+schema1$bb$source <- ""
+schema1$bb$vars <- list()
+schema1$bb$vars$change <- unbox(NA)
+schema1$bb$vars$start <- unbox(NA)
+schema1$bb$vars$end <- schema(drivers, "bb_NoHiSpeed_Share_16", "Share of population without broadband access", format="sh1", formatAxis="sh0", startYear=2016)
+
 JSON <- toJSON(schema1, digits=5, na="null", pretty=TRUE)
 
-writeLines(c("var outcome_data = ", JSON, ";", "export default outcome_data;"), "/home/alec/Projects/Brookings/heartland/build/js/outcome-data.js")
+writeLines(c("var all_data = ", JSON, ";", "export default all_data;"), "/home/alec/Projects/Brookings/heartland/build/js/all-data.js")
 
 
 #geo data

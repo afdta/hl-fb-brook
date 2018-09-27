@@ -1,5 +1,5 @@
 import palette from './palette.js';
-import outcome_data from './outcome-data.js';
+import all_data from './all-data.js';
 import {lookup} from './data-lookup.js';
 import format from '../../../js-modules/formats.js';
 
@@ -61,14 +61,19 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     var update = function(metric, geolevel, geo){
         var data = lookup(indicator, metric, geolevel);
         
-        var value = data.value;
-        indicator_title.html(data.label + ",&nbsp;");
-        indicator_period.html(data.period);
+
 
         if(data.summary==null){
             var dot_data = [];
+            indicator_title.html("");
+            indicator_period.html("");
+            wrap0.style("display","none");
         }
         else{
+            wrap0.style("display","block");
+            indicator_title.html(data.label + ",&nbsp;");
+            indicator_period.html(data.period);
+
             var dot_data = data.get();
             var domain = [data.summary.min, data.summary.max];
         
@@ -116,23 +121,19 @@ export default function number_lines(container, metric_, geolevel_, geo_){
     //one-time setup
     var wrap0 = d3.select(container).append("div").classed("c-fix two-columns fb-center-col",true);
 
-    var wrap_outcomes = wrap0.append("div").append("div")
-                            .style("margin","15px 15px 30px 15px")
-                            .style("padding","25px")
-                            .style("border","5px solid "+palette.green);
+    var wrap_outcomes = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
-    var wrap_drivers = wrap0.append("div").append("div")
-                            .style("margin","15px 15px 30px 15px")
-                            .style("padding","25px")
-                            .style("border","5px solid "+palette.green);
+    var wrap_drivers = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
     wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true);
     wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true);
 
     
-    var outcome_codes = outcome_data.map.growth.concat(outcome_data.map.prosperity,
-                                                       outcome_data.map.inclusion);
-    var driver_codes = outcome_codes;
+    var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,
+                                                    all_data.map.inclusion);
+    var driver_codes = all_data.map.trade.concat(all_data.map.human_capital,
+                                                    all_data.map.innovation,
+                                                    all_data.map.infrastructure);
 
     var number_line_updaters = [];
     var outcomes = wrap_outcomes.selectAll("div").data(outcome_codes).enter().append("div")

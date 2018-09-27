@@ -30,7 +30,7 @@ function main(){
     wrap_nl.selectAll("p.rm").remove();
     
     //args: container, metric [change|start|end], geolevel [state|metro|micro|rural], geocode [fips]
-    var update_nl = number_lines(wrap_nl.node(), "change", "metro", "10420");
+    var update_nl = number_lines(wrap_nl.node(), "end", "state", "1");
 
 
     //map module

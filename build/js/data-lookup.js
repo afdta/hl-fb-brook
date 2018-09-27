@@ -1,39 +1,50 @@
-import outcome_data from './outcome-data.js';
+import all_data from './all-data.js';
 import palette from './palette.js';
+
+//missing data:
+//altogether: metric_object will be null -- no data for metric -- for all geos
+//no valid data for selected geo -- summary will be null, lookup will return null or empty array
 
 //metric is one of ["change","start","end"]
 function lookup(indicator, metric, geolevel){
-    var metric_object = outcome_data[indicator].vars[metric];
+    var metric_object = all_data[indicator].vars[metric];
     var all = [];
 
-    var d = {
-        summary: metric_object.summary[geolevel],
-        hl: metric_object.summary.heartland,
-        nhl: metric_object.summary.non_heartland,
-        label: metric_object.label,
-        period: metric_object.period,
-        get:function(g){
-            g = g+"";
-            var r;
-            if(arguments.length > 0){
-                try{
-                    var d = metric_object.lookup[geolevel];
-                    r = d[g] == null ? null : d[g];
+    try{
+        if(metric_object == null){throw new Error("No data")}
+        var d = {
+            summary: metric_object.summary[geolevel],
+            hl: metric_object.summary.heartland,
+            nhl: metric_object.summary.non_heartland,
+            label: metric_object.label,
+            period: metric_object.period,
+            get:function(g){
+                g = g+"";
+                var r;
+                if(arguments.length > 0){
+                    try{
+                        var d = metric_object.lookup[geolevel];
+                        r = d[g] == null ? null : d[g];
+                    }
+                    catch(e){
+                        r = null;
+                    }
                 }
-                catch(e){
-                    r = null;
+                else{
+                    r = all;
                 }
-            }
-            else{
-                r = all;
-            }
-            return r;
-        },
-        format: metric_object.format,
-        formatAxis: metric_object.formatAxis,
-        color_scale: function(d){return "#e0e0e0"}
-    };
+                return r;
+            },
+            format: metric_object.format,
+            formatAxis: metric_object.formatAxis,
+            color_scale: function(d){return "#e0e0e0"}
+        };
+    }
+    catch(e){
+        var d = {summary: null}
+    }
 
+    //use summary to populate all and to build scales
     try{
         if(d.summary != null){
             var data = metric_object.lookup[geolevel];
@@ -84,6 +95,7 @@ function lookup(indicator, metric, geolevel){
         //no-op
         all = [];
     }
+
     return d;
 }
 
