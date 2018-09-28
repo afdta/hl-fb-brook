@@ -16,7 +16,7 @@ var all_data =
     "vars": {
       "change": {
         "var": "emp_CAGR_10-17",
-        "label": "Percent change in job",
+        "label": "Percent change in jobs",
         "years": [2010, 2017],
         "period": "2010–2017",
         "format": "pct1",
@@ -582,7 +582,7 @@ var all_data =
       },
       "start": {
         "var": "emp_2010",
-        "label": "job",
+        "label": "Jobs",
         "years": [2010],
         "period": 2010,
         "format": "num0",
@@ -1148,7 +1148,7 @@ var all_data =
       },
       "end": {
         "var": "emp_2017",
-        "label": "job",
+        "label": "Jobs",
         "years": [2017],
         "period": 2017,
         "format": "num0",
@@ -11106,8 +11106,8 @@ var all_data =
         "label": "Emp. to pop. ratio",
         "years": [2010],
         "period": 2010,
-        "format": "num1",
-        "formatAxis": "num0",
+        "format": "num2",
+        "formatAxis": "num1",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -11317,8 +11317,8 @@ var all_data =
         "label": "Emp. to pop. ratio",
         "years": [2016],
         "period": 2016,
-        "format": "num1",
-        "formatAxis": "num0",
+        "format": "num2",
+        "formatAxis": "num1",
         "summary": {
           "metro": {
               "geo": "metro",

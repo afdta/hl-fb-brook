@@ -19,7 +19,26 @@ p, li, text, td{
     font-family: 'Open Sans', sans-serif;
     color:#0d2c6c;
     margin:0rem 0rem 1rem 0rem;
-    line-height:1.3em;
+    line-height:1.5em;
+}
+
+.select-wrap{
+    float:left;
+    border:3px solid #019966;
+    border-radius:13px;
+    margin:0px 10px 10px 0px;
+    padding-right:20px;
+    position:relative;
+}
+
+select{
+    background:none;
+    outline:none;
+    border:none;
+    padding:7px 9px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance:none;
 }
 
 /*expected use: class="fb-header [section-title | chart-title]"*/
@@ -27,7 +46,7 @@ p, li, text, td{
     font-family: 'Montserrat', sans-serif;
     color:#0d2c6c;
     font-weight:900;
-    margin:0rem 0rem 1rem 0rem;
+    margin:0rem 0rem 10px 0rem;
     line-height:1.3em;
 }
 .fb-light-header{
@@ -38,7 +57,7 @@ p, li, text, td{
 .group-title{font-size:1.75rem;}
 .chart-title{font-size:1.25rem;}
 
-.subtitle{font-style:italic;}
+.subtitle{font-style:italic;line-height:1.5em}
 
 /*footnotes container for notes and sources*/
 .footnotes{
@@ -66,23 +85,23 @@ p, li, text, td{
 
 /*number line plots*/
 .number-line-plot{
-    overflow: hidden;
+    overflow: visible;
     margin:1rem 0rem;
 }
 
 
 /*columns*/
 .fb-center-col{
-    max-width:1800px;
+    max-width:1400px;
     margin:0px auto;
 }
 
 .green-square-wrap{
-    padding:15px 15px 15px 15px;
+    padding:0px 15px;
 }
 
 .green-square-wrap > div{
-    border-width:5px;
+    border-width:3px;
     padding:15px 25px;
     border-style:solid;
     border-color:#019966;
@@ -96,16 +115,20 @@ p, li, text, td{
 
 .hl-map-split > div{
     float:left;
-    width:75%;
-    min-height:200px;
+    width:25%;
+    min-height:100%;
+    border:1px solid #019966;
+    border-width:0px 0px 0px 0px;
 }
 .hl-map-split > div:first-child{
-    width:25%;
+    width:75%;
+    border-width:0px 1px 0px 0px;
 }
 
 .hl-map-split.hl-mobile > div{
     width:auto;
     float:none;
+    border-width:0px;
 }
 
 /*clearfix*/

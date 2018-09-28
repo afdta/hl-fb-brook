@@ -266,9 +266,9 @@ schema1$job$label <- "job"
 schema1$job$definition <- ""
 schema1$job$source <- ""
 schema1$job$vars <- list()
-schema1$job$vars$change <- schema(outcomes, "emp_CAGR_10-17", "Percent change in job", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
+schema1$job$vars$change <- schema(outcomes, "emp_CAGR_10-17", "Percent change in jobs", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
 schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs", format="num0", startYear=2010)
-schema1$job$vars$end <- schema(outcomes, "emp_2017", "Job", format="num0", startYear=2017)  
+schema1$job$vars$end <- schema(outcomes, "emp_2017", "Jobs", format="num0", startYear=2017)  
 
 #gdp
 schema1$gdp <- list()
@@ -340,8 +340,8 @@ schema1$epo$definition <- ""
 schema1$epo$source <- ""
 schema1$epo$vars <- list()
 schema1$epo$vars$change <- schema(outcomes, "epop_2010-16", "Percentage point change in employment to pop. ratio", format="shch1", formatAxis="shch0", startYear=2010, endYear=2016, asjson=FALSE)
-schema1$epo$vars$start <- schema(outcomes, "epop_2010", "Emp. to pop. ratio", format="num1", formatAxis = "num0", startYear=2010)
-schema1$epo$vars$end <- schema(outcomes, "epop_2016", "Emp. to pop. ratio", format="num1", formatAxis = "num0", startYear=2016)
+schema1$epo$vars$start <- schema(outcomes, "epop_2010", "Emp. to pop. ratio", format="num2", formatAxis = "num1", startYear=2010)
+schema1$epo$vars$end <- schema(outcomes, "epop_2016", "Emp. to pop. ratio", format="num2", formatAxis = "num1", startYear=2016)
 
 #pov
 schema1$pov <- list()

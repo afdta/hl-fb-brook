@@ -1,13 +1,13 @@
 import {lookup} from './data-lookup.js';
-import {state_geos, state_mesh} from './state-geos';
+import {HL, state_geos, state_mesh, heartland_mesh} from './state-geos';
 import cbsa_geos from './cbsa-geos';
 import palette from './palette.js';
 
 //lookup: lookup(indicator, metric, geolevel) // metric is one of ["change","start","end"]
 
 export default function map_module(container){
-    //19 heartland states, keys==numeric fips
-    var HL = {"1":"Alabama","5":"Arkansas","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri","31":"Nebraska","38":"North Dakota","39":"Ohio","40":"Oklahoma","46":"South Dakota","47":"Tennessee","55":"Wisconsin"};    
+
+    //heartland feature collection
     var HLFC = {
                 type: "FeatureCollection", 
                 features: state_geos.features.filter(function(d){
@@ -34,29 +34,44 @@ export default function map_module(container){
     }
     
     //outer wrap
-    var wrap0 = d3.select(container).classed("fb-center-col",true);
+    var wrap0 = d3.select(container).append("div").classed("fb-center-col",true);
 
-    var main_title = wrap0.append("p").text("Main title").classed("fb-header section-title",true);
+    //var main_title = wrap0.append("p").text("Main title").classed("fb-header section-title",true);
     
     var wrap1 = wrap0.append("div").classed("green-square-wrap",true)
                             .append("div").classed("c-fix", true).style("padding","0px");
 
     //map dom
     var map_wrap0 = wrap1.append("div");
-    var map_title = map_wrap0.append("p").text("Map title").classed("fb-header chart-title", true);
     
     var map_wrap1 = map_wrap0.append("div").classed("hl-map-split c-fix",true);
+
+    //build svg filters
+    var defs = wrap1.append("div").style("height","0px").append("svg").append("defs");
+    var filter = defs.append("filter").attr("id","feBlur").attr("width","150%").attr("height","150%");
+    filter.append("feOffset").attr("result","offsetout").attr("in","SourceGraphic").attr("dx","6").attr("dy","6");
+    filter.append("feColorMatrix").attr("result","matrixout").attr("in","offsetout").attr("type","matrix").attr("values","0.25 0 0 0 0 0 0.25 0 0 0 0 0 0.25 0 0 0 0 0 1 0");
+    filter.append("feGaussianBlur").attr("result","blurout").attr("in","matrixout").attr("stdDeviation","4");
+    filter.append("feBlend").attr("in","SourceGraphic").attr("in2","blurout").attr("mode","normal");
+    
+    //TWO MAP PANELS
+    var map_wrap3 = map_wrap1.append("div"); //hold map
     var map_wrap2 = map_wrap1.append("div"); //hold bars/legend
-    var map_wrap3 = map_wrap1.append("div").style("border","1px solid " + palette.green); //hold map
+    
 
     
     var map_svg = map_wrap3.append("svg").attr("width","100%").attr("height","100%");
     
     //map <g>roups
-    var g_back = map_svg.append("g");
+    var g_back = map_svg.append("g"); //all states
+    var g_shadow = map_svg.append("g").attr("filter", "url(#feBlur)"); //HL shadow
+    
+    //data layers
     var g_states = map_svg.append("g");
     var g_metros = map_svg.append("g");
     var g_micros = map_svg.append("g");
+    
+    var g_hl = map_svg.append("g"); //top heartland outline
     var g_anno = map_svg.append("g");
 
     function obj2arr(){
@@ -96,6 +111,10 @@ export default function map_module(container){
         var aspect = width < 900 ? 1 : 0.7; //width x aspect = height;
 
         scope.height = width * aspect;
+
+        //bar chart as legend -- and update scope.height if necessary to fit bars
+        draw_bars();
+        
         map_wrap3.style("height", scope.height+"px");
 
         proj.fitExtent([[10,10], [width-10, scope.height-10]], HLFC);
@@ -115,24 +134,26 @@ export default function map_module(container){
         }
 
         //draw map background
-        var states_back = draw_states(g_back, [state_mesh], {stroke:palette.green, "stroke-width":0.5, fill:"#ffffff"});
+        var states_back = draw_states(g_back, [state_mesh], {stroke:"#666666", "stroke-width":0.5, fill:"#ffffff", "stroke-dasharray":"3,3"});
+        var state_shadow = draw_states(g_shadow, HLFC.features, {stroke:"#cccccc", "stroke-width":0.5, fill:"#cccccc"});
+        var state_outline = draw_states(g_hl, [heartland_mesh], {stroke:palette.green, "stroke-width":1.5, fill:"none"});
         
         if(scope.geolevel=="state" || scope.geolevel=="rural"){
-            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:fill(state_accessor) });
+            var states = draw_states(g_states, HLFC.features, {stroke:"#aaaaaa", fill:fill(state_accessor) });
             
             g_metros.style("visibility","hidden").style("pointer-events","none");
             g_micros.style("visibility","hidden").style("pointer-events","none");
         }
         else if(scope.geolevel=="metro"){
             var metros = draw_points(g_metros, cbsa_geos2.metro, {fill:fill(), r:5});
-            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#e0e0e0"});
+            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
            
             g_metros.style("visibility","visible").style("pointer-events","all");
             g_micros.style("visibility","hidden").style("pointer-events","none");
         }
         else if(scope.geolevel=="micro"){
             var micros = draw_points(g_micros, cbsa_geos2.micro, {fill:fill(), r:5});
-            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#e0e0e0"});
+            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
 
             g_micros.style("visibility","visible").style("pointer-events","all");
             g_metros.style("visibility","hidden").style("pointer-events","none");
@@ -141,8 +162,7 @@ export default function map_module(container){
 
         }
 
-        //bar chart as legend
-        draw_bars();
+
     }
 
     //TODO: add tooltip functionality
@@ -188,7 +208,7 @@ export default function map_module(container){
     //bar chart dom
     var bars_wrap0 = map_wrap2.append("div");
         
-    var bars_title = bars_wrap0.append("p").text("Bar chart title").classed("subtitle", true);
+    //var bars_title = bars_wrap0.append("p").text("Bar chart title").classed("subtitle", true);
 
     var bars_wrap1 = bars_wrap0.append("div").style("min-height","360px").style("width","100%");
     var bars_svg = bars_wrap1.append("svg").attr("width","100%").attr("height","100%");
@@ -234,14 +254,21 @@ export default function map_module(container){
             var x = function(){return 0}
         }
 
-        //set height to accommodate all bars
+        //set height to accommodate all bars -- start with scope.height set by map
         var height = scope.height > 600 ? 600 : scope.height;
         var top_pad = 20;
         var bot_pad = 30;
         var bar_height = Math.round((height-top_pad-bot_pad)/data.length);
         if(bar_height < 2){bar_height = 2}
         
+        //final height
         height = (bar_height * data.length) + top_pad + bot_pad;
+        
+        //update scope.height if smaller than bar height
+        if(scope.height < height){
+            scope.height = height;
+        }
+        
         bars_wrap1.style("height", height+"px");
 
         var bars_u = bars_svg.selectAll("g.bar").data(data, function(d){return d.geo});

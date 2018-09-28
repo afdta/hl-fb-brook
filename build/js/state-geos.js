@@ -2,4 +2,15 @@ var state_topo = {"type":"Topology","bbox":[-179.174265,18.917465999999997,-66.9
 var state_geos = topojson.feature(state_topo, state_topo.objects.geos);
 var state_mesh = topojson.mesh(state_topo, state_topo.objects.geos);
 
-export {state_geos, state_mesh};
+
+//19 heartland states, keys==numeric fips
+var HL = {"1":"Alabama","5":"Arkansas","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri","31":"Nebraska","38":"North Dakota","39":"Ohio","40":"Oklahoma","46":"South Dakota","47":"Tennessee","55":"Wisconsin"};    
+    
+var heartland_mesh = topojson.mesh(state_topo, state_topo.objects.geos, function(a, b) { 
+    var a_heart = HL.hasOwnProperty( (parseInt(a.properties.geo_id)+"") );
+    var b_heart = HL.hasOwnProperty( (parseInt(b.properties.geo_id)+"") );
+
+    return a_heart != b_heart || (a_heart && b_heart && a===b); 
+});
+
+export {HL, state_geos, state_mesh, heartland_mesh};
