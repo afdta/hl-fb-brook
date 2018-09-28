@@ -16893,10 +16893,10 @@
 	    //map module ++++++++++++++++++++++++++++++++++++++++++++
 
 	    var mp_state = {
-	      indicator: "awg",
+	      indicator: "job",
 	      metric:"end",
-	      geolevel: "metro",
-	      geo: "10420"
+	      geolevel: "state",
+	      geo: "1"
 	    };
 
 	    var wrap_mp = d3.select("#map-module");
@@ -16908,7 +16908,7 @@
 
 	    var map_head = header(wrap_mp.node());
 	    map_head.title("Map module");
-	    map_head.subtitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
+	    map_head.subtitle("<span style='color:" + palette.orange + "'>TO DO: <br />[1] ADD SCALES AND ANNOTATION TO BAR CHART/LEGEND -- REVISE COLORS! <br/>[2] ENABLE TOOLTIPS (MAP HOVER FUNCTION), <br />[3] ADD TITLES TO MAPS</span> " + "<br />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
 
 	    var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
 
