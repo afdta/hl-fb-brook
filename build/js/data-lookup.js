@@ -14,6 +14,7 @@ function lookup(indicator, metric, geolevel){
         if(metric_object == null){throw new Error("No data")}
         var d = {
             summary: metric_object.summary[geolevel],
+            invalid_metric:false,
             hl: metric_object.summary.heartland,
             nhl: metric_object.summary.non_heartland,
             label: metric_object.label,
@@ -41,7 +42,7 @@ function lookup(indicator, metric, geolevel){
         };
     }
     catch(e){
-        var d = {summary: null}
+        var d = {summary: null, invalid_metric:true}
     }
 
     //use summary to populate all and to build scales

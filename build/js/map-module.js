@@ -5,7 +5,7 @@ import palette from './palette.js';
 
 //lookup: lookup(indicator, metric, geolevel) // metric is one of ["change","start","end"]
 
-export default function map_module(container){
+export default function map_module(container, init_indicator, init_metric, init_geolevel, init_geo){
 
     //heartland feature collection
     var HLFC = {
@@ -27,6 +27,12 @@ export default function map_module(container){
         geo:"1",
         data:null
     }
+
+    //set selections, if any
+    if(init_indicator != null){scope.indicator = init_indicator}
+    if(init_metric != null){scope.metric = init_metric}
+    if(init_geolevel != null){scope.geolevel = init_geolevel}
+    if(init_geo != null){scope.geo = init_geo}
 
     //styles
     var styles = {
@@ -128,7 +134,6 @@ export default function map_module(container){
             return function(d){
                 var geo_code = geo_accessor(d);
                 var v = scope.data.get(geo_code);
-                console.log(geo_code);
                 return scope.data.color_scale(v);
             }
         }
@@ -327,21 +332,7 @@ export default function map_module(container){
         resizeTimer = setTimeout(update, 200);
     })
 
-    setTimeout(update, 10);
+    setTimeout(update, 0);
 
-    setTimeout(function(){
-        scope.indciator = "awg";
-        scope.metric = "end";
-        scope.geolevel = "metro";
-        scope.geo = "10420";   
-        update();    
-    }, 2500)
-
-    setTimeout(function(){
-        scope.indciator = "gdp";
-        scope.metric = "change";
-        scope.geolevel = "micro";
-        scope.geo = "10100";    
-        update();   
-    }, 5000);
+    return update;
 }

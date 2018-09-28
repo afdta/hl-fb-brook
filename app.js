@@ -15832,6 +15832,7 @@
 	        if(metric_object == null){throw new Error("No data")}
 	        var d = {
 	            summary: metric_object.summary[geolevel],
+	            invalid_metric:false,
 	            hl: metric_object.summary.heartland,
 	            nhl: metric_object.summary.non_heartland,
 	            label: metric_object.label,
@@ -15859,7 +15860,7 @@
 	        };
 	    }
 	    catch(e){
-	        var d = {summary: null};
+	        var d = {summary: null, invalid_metric:true};
 	    }
 
 	    //use summary to populate all and to build scales
@@ -16066,18 +16067,16 @@
 	    var wrap0 = d3.select(container).classed("number-line-plot", true);
 
 	    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%");
-	    var indicator_title = tbox.append("p")
+	    var indicator_title0 = tbox.append("p")
 	                              .style("margin","3px 0px 1px 0px")
 	                              .classed("fb-header", true)
-	                              .style("float","left")
 	                              ;
 
-	    var indicator_period = tbox.append("p")
-	                               .style("margin","3px 0px 1px 0px")
-	                               .classed("fb-light-header subtitle",true)
-	                               .style("float","left")
-	                               .style("white-space", "nowrap")
-	                               ;
+	    var indicator_title = indicator_title0.append("span");
+
+	    var indicator_period = indicator_title0.append("span").classed("fb-light-header subtitle",true).style("white-space", "nowrap").style("font-size","0.9em");
+
+	    var indicator_na = indicator_title0.append("span").classed("fb-light-header subtitle",true);
 
 	    var svg_wrap = wrap0.append("div").style("height",height+"px").style("width","100%");
 	    var svg = svg_wrap.append("svg").attr("width","100%").attr("height","100%").style("overflow","visible");
@@ -16124,16 +16123,18 @@
 	        var format_ = function(v){return v};
 	        var formatAxis_ = function(v){return v};
 
+	        indicator_title.html(data.label != null ? data.label + ",&nbsp;" : "");
+	        indicator_period.html(data.period != null ? data.period : "");
+
+	        wrap0.style("display", data.invalid_metric ? "none" : "block");
+
 	        if(data.summary==null){
 	            var dot_data = [];
-	            indicator_title.html("");
-	            indicator_period.html("");
-	            wrap0.style("display","none");
+
+	            indicator_na.html(" (Not&nbsp;available)");
 	        }
 	        else{
-	            wrap0.style("display","block");
-	            indicator_title.html(data.label + ",&nbsp;");
-	            indicator_period.html(data.period);
+	            indicator_na.html("");
 
 	            var dot_data = data.get();
 	            var domain = [data.summary.min, data.summary.max];
@@ -16277,7 +16278,7 @@
 
 	//lookup: lookup(indicator, metric, geolevel) // metric is one of ["change","start","end"]
 
-	function map_module(container){
+	function map_module(container, init_indicator, init_metric, init_geolevel, init_geo){
 
 	    //heartland feature collection
 	    var HLFC = {
@@ -16299,6 +16300,12 @@
 	        geo:"1",
 	        data:null
 	    };
+
+	    //set selections, if any
+	    if(init_indicator != null){scope.indicator = init_indicator;}
+	    if(init_metric != null){scope.metric = init_metric;}
+	    if(init_geolevel != null){scope.geolevel = init_geolevel;}
+	    if(init_geo != null){scope.geo = init_geo;}
 	    
 	    //outer wrap
 	    var wrap0 = d3.select(container).append("div").classed("fb-center-col",true);
@@ -16395,7 +16402,6 @@
 	            return function(d){
 	                var geo_code = geo_accessor(d);
 	                var v = scope.data.get(geo_code);
-	                console.log(geo_code);
 	                return scope.data.color_scale(v);
 	            }
 	        };
@@ -16591,23 +16597,9 @@
 	        resizeTimer = setTimeout(update, 200);
 	    });
 
-	    setTimeout(update, 10);
+	    setTimeout(update, 0);
 
-	    setTimeout(function(){
-	        scope.indciator = "awg";
-	        scope.metric = "end";
-	        scope.geolevel = "metro";
-	        scope.geo = "10420";   
-	        update();    
-	    }, 2500);
-
-	    setTimeout(function(){
-	        scope.indciator = "gdp";
-	        scope.metric = "change";
-	        scope.geolevel = "micro";
-	        scope.geo = "10100";    
-	        update();   
-	    }, 5000);
+	    return update;
 	}
 
 	//v1.0 developed for congressional district poverty and gig economy
@@ -16620,7 +16612,48 @@
 
 	    var dropdown_wrap = wrap.append("div").classed("c-fix", true);
 
-	    var legend_wrap = wrap.append("div").classed("c-fix",true);
+	    var select_wrap = {};
+
+	    select_wrap.geo = dropdown_wrap.append("div").classed("select-wrap",true).style("display","none");
+	    select_wrap.geo.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
+	                .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
+
+	    select_wrap.indicator = dropdown_wrap.append("div").classed("select-wrap",true).style("display","none");
+	    select_wrap.indicator.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
+	                .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
+
+	    select_wrap.metric = dropdown_wrap.append("div").classed("select-wrap",true).style("display","none");
+	    select_wrap.metric.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
+	                .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
+
+	    select_wrap.geolevel = dropdown_wrap.append("div").classed("select-wrap",true).style("display","none");
+	    select_wrap.geolevel.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
+	                            .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
+
+	    var legend_wrap = dropdown_wrap.append("div").classed("c-fix",true).style("display","none").style("float","right");
+
+	    var d_triangle = "M18,4 L23,11.5 L13,11.5 Z";
+
+	    var select_swatch = legend_wrap.append("div").classed("legend-swatch",true);
+	    var select_swatch_svg = select_swatch.append("svg").attr("height","1rem").attr("width","28px").style("display","inline-block");
+	        select_swatch_svg.append("circle").attr("r", 4).attr("fill", palette.orange).attr("cx","6").attr("cy","50%").attr("fill-opacity","1");
+	        select_swatch_svg.append("path").attr("d",d_triangle).attr("fill", palette.orange).attr("stroke", palette.orange);
+	    var select_swatch_geo = select_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Selected place").style("font-weight","bold");
+
+	    var place_swatch = legend_wrap.append("div").classed("legend-swatch",true);
+	        place_swatch.append("svg").attr("height","1rem").attr("width","1rem").style("display","inline-block")
+	                    .append("circle").attr("r", 3.5).attr("fill", palette.green).attr("cx","50%").attr("cy","50%").attr("fill-opacity","0.7");
+	    var place_swatch_geolevel = place_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("States");
+
+	    var hl_swatch = legend_wrap.append("div").classed("legend-swatch",true);
+	    var hl_swatch_svg = hl_swatch.append("svg").attr("height","1rem").attr("width","28px").style("display","inline-block");
+	        hl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", "none").attr("stroke", palette.green);
+	    hl_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Heartland avg.");
+
+	    var nhl_swatch = legend_wrap.append("div").classed("legend-swatch",true);
+	    var nhl_swatch_svg = nhl_swatch.append("svg").attr("height","1rem").attr("width","28px").style("display","inline-block");
+	        nhl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", "#aaaaaa").attr("stroke", "#aaaaaa");
+	    nhl_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Non-Heartland avg.");
 
 	    //methods for building menu
 	    var methods = {};
@@ -16660,11 +16693,7 @@
 	            }
 	        }
 
-	        var select_wrap = dropdown_wrap.append("div").classed("select-wrap",true);
-	            select_wrap.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
-	                        .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
-	        
-	        var select = select_wrap.append("select");
+	        var select = select_wrap.geo.style("display","block").append("select");
 
 	        select.append("option").text("Select an area").attr("disabled","yes").attr("selected","1").attr("hidden","1");
 
@@ -16683,24 +16712,117 @@
 	                               .attr("value", function(d){return d.geolevel + "|" + d.geo})
 	                               .text(function(d){return d.name});
 
+	        legend_wrap.style("display","block");
+
+
+
+	        var update_legend = function(geolevel, geo){
+
+	            var levels = {
+	                metro: "Metropolitan areas",
+	                micro: "Micropolitan areas",
+	                state: "States",
+	                rural: "Rural portion of states"
+	            };
+
+	            var name = "";
+	            try{
+	                if(geolevel=="metro" || geolevel=="micro"){
+	                    name = cbsa_geos[geolevel][geo].name;
+	                }
+	                else{
+	                    name = HL[geo];
+	                }
+	            }
+	            catch(e){
+	                name = "";
+	            }
+
+	            place_swatch_geolevel.text(levels[geolevel]);
+	            select_swatch_geo.text(name);
+	        };
+
+	        select.on("change", function(){
+	            var v = this.value.split("|");
+	            
+	            callback(v[0], v[1]);
+
+	            update_legend(v[0], v[1]);
+	        });
+
+	        return update_legend;
+
+	    };
+
+	    methods.select_metric = function(callback){        
+	        var select = select_wrap.metric.style("display","block").append("select");
+
+	        var options = select.selectAll("option").data(["end","change"]).enter().append("option").attr("value", function(v){return v})
+	                                .text(function(v){return v=="end" ? "View point in time" : "View change over time"});
+
+	        //select.append("option").text("View changes or points in time").attr("disabled","yes").attr("selected","1").attr("hidden","1").lower();
+
+	        select.on("change", function(){
+	            var v = this.value;
+	            callback(v);
+	        });
+	    };
+
+	    methods.select_indicator = function(callback){        
+	        var select = select_wrap.indicator.style("display","block").append("select");
+
+	        var groups = {
+	            end:[],
+	            change:[]
+	        };
+
+	        var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,all_data.map.inclusion);
+	        var driver_codes = all_data.map.trade.concat(all_data.map.human_capital,all_data.map.innovation,all_data.map.infrastructure);
+
+	        var indicators = outcome_codes.concat(driver_codes);
+
+	        indicators.forEach(function(d){
+	            groups.end.push({value: d+"|"+"end", label:all_data[d].vars["end"].label});
+	            if(d != "utt" && d != "bb"){
+	                groups.change.push({value: d+"|change", label:all_data[d].vars["change"].label});
+	            }
+	        });
+
+	        var optgroups = select.selectAll("optgroup")
+	                              .data([
+	                                  {label:"Point in time", options: groups.end},
+	                                  {label:"Change over time", options: groups.change}
+	                               ])
+	                               .enter().append("optgroup")
+	                               .attr("label", function(d){return d.label});
+	        
+	        var options = optgroups.selectAll("option").data(function(d){return d.options}).enter()
+	                               .append("option")
+	                               .attr("value", function(d){return d.value})
+	                               .text(function(d){return d.label});
+
 	        select.on("change", function(){
 	            var v = this.value.split("|");
 	            callback(v[0], v[1]);
 	        });
 
+
 	    };
 
-	    methods.select_metric = function(callback){
-	        var select_wrap = dropdown_wrap.append("div").classed("select-wrap",true);
-	            select_wrap.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
-	                        .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
-	        
-	        var select = select_wrap.append("select");
+	    methods.select_geolevel = function(callback){        
+	        var select = select_wrap.geolevel.style("display","block").append("select");
 
-	        var options = select.selectAll("option").data(["end","change"]).enter().append("option").attr("value", function(v){return v})
-	                                .text(function(v){return v=="end" ? "Point in time" : "Change over time"});
+	        var options = select.selectAll("option")
+	                                .data([{id:"state", label:"States"},
+	                                        {id:"metro", label:"Metropolitan areas"},
+	                                        {id:"micro", label:"Micropolitan areas"},
+	                                        {id:"rural", label:"Rural portion of states"}
+	                                    ])
+	                                .enter().append("option")
+	                                .attr("value", function(d){return d.id})
+	                                .text(function(d){return d.label});
 
-	        select.append("option").text("Select change or point in time").attr("disabled","yes").attr("selected","1").attr("hidden","1").lower();
+	        //select.append("option").text("View data for states, metro/micro areas").attr("disabled","yes").attr("selected","1").attr("hidden","1").lower();
 
 	        select.on("change", function(){
 	            var v = this.value;
@@ -16746,33 +16868,60 @@
 	    dash_head.subtitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
 
 	    //args: container, metric [change|start|end], geolevel [state|metro|micro|rural], geocode [fips]
-	    var update_nl = number_lines(wrap_nl.node(), nl_state.metric, nl_state.geolevel, nl_state.geo);
-
-	    dash_head.select_geo(function(geolevel, geo){
+	    var update_nl = number_lines(wrap_nl.node(), nl_state.metric, nl_state.geolevel, nl_state.geo);    
+	    
+	    var update_legend = dash_head.select_geo(function(geolevel, geo){
 	      nl_state.geolevel = geolevel;
 	      nl_state.geo = geo;
 
 	      update_nl(nl_state.metric, nl_state.geolevel, nl_state.geo);
 	    });
 
+	    update_legend(nl_state.geolevel, nl_state.geo); //initialize legend to default selection
+
 	    dash_head.select_metric(function(metric){
 	      nl_state.metric = metric;
 
 	      update_nl(nl_state.metric, nl_state.geolevel, nl_state.geo);
 	    });
+
+
 	    
 	    //end number lines ++++++++++++++++++++++++++++++++++++++
 
 
-	    //map module
+	    //map module ++++++++++++++++++++++++++++++++++++++++++++
+
+	    var mp_state = {
+	      indicator: "awg",
+	      metric:"end",
+	      geolevel: "metro",
+	      geo: "10420"
+	    };
+
 	    var wrap_mp = d3.select("#map-module");
 	    wrap_mp.selectAll("p.rm").remove();
+
+	    var mp_head = header(wrap_mp.node());
+
+	    //var update_legend = dash_head.legend();
 
 	    var map_head = header(wrap_mp.node());
 	    map_head.title("Map module");
 	    map_head.subtitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
 
-	    var update_mp = map_module(wrap_mp.node());
+	    var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
+
+	    map_head.select_geolevel(function(geolevel){
+	      mp_state.geolevel = geolevel;
+	      update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
+	    });
+
+	    map_head.select_indicator(function(indicator, metric){
+	      mp_state.indicator = indicator;
+	      mp_state.metric = metric;
+	      update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
+	    });    
 
 	  }
 	  else{

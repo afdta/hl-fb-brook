@@ -15,18 +15,16 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     var wrap0 = d3.select(container).classed("number-line-plot", true);
 
     var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%");
-    var indicator_title = tbox.append("p")
+    var indicator_title0 = tbox.append("p")
                               .style("margin","3px 0px 1px 0px")
                               .classed("fb-header", true)
-                              .style("float","left")
                               ;
 
-    var indicator_period = tbox.append("p")
-                               .style("margin","3px 0px 1px 0px")
-                               .classed("fb-light-header subtitle",true)
-                               .style("float","left")
-                               .style("white-space", "nowrap")
-                               ;
+    var indicator_title = indicator_title0.append("span");
+
+    var indicator_period = indicator_title0.append("span").classed("fb-light-header subtitle",true).style("white-space", "nowrap").style("font-size","0.9em");
+
+    var indicator_na = indicator_title0.append("span").classed("fb-light-header subtitle",true);
 
     var svg_wrap = wrap0.append("div").style("height",height+"px").style("width","100%");
     var svg = svg_wrap.append("svg").attr("width","100%").attr("height","100%").style("overflow","visible");
@@ -73,16 +71,18 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
         var format_ = function(v){return v};
         var formatAxis_ = function(v){return v};
 
+        indicator_title.html(data.label != null ? data.label + ",&nbsp;" : "");
+        indicator_period.html(data.period != null ? data.period : "");
+
+        wrap0.style("display", data.invalid_metric ? "none" : "block");
+
         if(data.summary==null){
             var dot_data = [];
-            indicator_title.html("");
-            indicator_period.html("");
-            wrap0.style("display","none");
+
+            indicator_na.html(" (Not&nbsp;available)");
         }
         else{
-            wrap0.style("display","block");
-            indicator_title.html(data.label + ",&nbsp;");
-            indicator_period.html(data.period);
+            indicator_na.html("");
 
             var dot_data = data.get();
             var domain = [data.summary.min, data.summary.max];

@@ -20,25 +20,41 @@ p, li, text, td{
     color:#0d2c6c;
     margin:0rem 0rem 1rem 0rem;
     line-height:1.5em;
+    font-size:16px;
+}
+
+select, select option{
+    font-family: 'Open Sans', sans-serif;
+    color:#0d2c6c;
+    line-height:1.5em;
+    font-size:16px;
 }
 
 .select-wrap{
     float:left;
     border:3px solid #019966;
-    border-radius:13px;
+    border-radius:0px;
     margin:0px 10px 10px 0px;
     padding-right:20px;
     position:relative;
+    min-width:243px;
 }
 
 select{
     background:none;
     outline:none;
     border:none;
-    padding:7px 9px;
+    padding:2px 9px 12px 9px;
+    top:5px;
+    position:relative;
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance:none;
+}
+
+.legend-swatch{
+    float:left;
+    margin:10px 15px 10px 0px;
 }
 
 /*expected use: class="fb-header [section-title | chart-title]"*/
@@ -105,6 +121,7 @@ select{
     padding:15px 25px;
     border-style:solid;
     border-color:#019966;
+    overflow:hidden;
 }
 
 .two-columns > div{
@@ -138,11 +155,24 @@ select{
   clear: both;
 }
 
+.no-data-available > div{
+    /*display:none;*/
+}
+
+.no-data-available > div:first-child:after{
+    content:"Not available";
+    font-family: 'Open Sans', 'PT Serif', sans-serif;
+}
+
 
 @media (min-width:0px){
     .two-columns > div{
         float:none;
         width:auto;
+    }
+
+    .select-wrap{
+        float:none;
     }
 }
 
@@ -150,6 +180,9 @@ select{
     .two-columns > div{
         float:left;
         width:50%;
+    }
+    .select-wrap{
+        float:left;
     }
 }
 

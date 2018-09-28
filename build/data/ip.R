@@ -245,6 +245,24 @@ schema <- function(data=NA, var=NA, label=NA, format=NA, formatAxis=format, star
 }
 #end schema
 
+#create data structure for metrics with no data - to facilitate JS code (so you don't have to do a bunch of checks for missing props)
+schemaNA <- function(var=NA, label=NA, format=NA, formatAxis=format, startYear=NA, endYear=NA){
+  d <- list()
+  d$var <- unbox(var)
+  d$label <- unbox(label)
+  if(is.na(endYear)){
+    d$years <- c(startYear)
+    d$period <- unbox(startYear)
+  } else{
+    d$years <- c(startYear, endYear)
+    d$period <- unbox(paste0(startYear,"–",endYear))
+  }
+  d$format <- unbox(format)
+  d$formatAxis <- unbox(formatAxis)
+  d$summary <- unbox(NA)
+  d$lookup <- unbox(NA)  
+}
+
 
 #oucomes schema
 schema1 <- list()
