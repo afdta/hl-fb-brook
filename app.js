@@ -15827,40 +15827,46 @@
 	function lookup(indicator, metric, geolevel){
 	    var metric_object = all_data[indicator].vars[metric];
 	    var all = [];
+	    var d = {
+	        color_scale: function(d){return "#e0e0e0"}
+	    };
 
 	    try{
 	        if(metric_object == null){throw new Error("No data")}
-	        var d = {
-	            summary: metric_object.summary[geolevel],
-	            invalid_metric:false,
-	            hl: metric_object.summary.heartland,
-	            nhl: metric_object.summary.non_heartland,
-	            label: metric_object.label,
-	            period: metric_object.period,
-	            get:function(g){
-	                g = g+"";
-	                var r;
-	                if(arguments.length > 0){
-	                    try{
-	                        var d = metric_object.lookup[geolevel];
-	                        r = d[g] == null ? null : d[g];
-	                    }
-	                    catch(e){
-	                        r = null;
-	                    }
+
+	        d.summary = metric_object.summary[geolevel];
+	        d.invalid_metric = false;
+	        d.hl = metric_object.summary.heartland;
+	        d.nhl = metric_object.summary.non_heartland;
+	        d.label = metric_object.label;
+	        d.period = metric_object.period;
+	        d.format = metric_object.format;
+	        d.formatAxis = metric_object.formatAxis;
+	        d.get = function(g){
+	            g = g+"";
+	            var r;
+	            if(arguments.length > 0){
+	                try{
+	                    var d = metric_object.lookup[geolevel];
+	                    r = d[g] == null ? null : d[g];
 	                }
-	                else{
-	                    r = all;
+	                catch(e){
+	                    r = null;
 	                }
-	                return r;
-	            },
-	            format: metric_object.format,
-	            formatAxis: metric_object.formatAxis,
-	            color_scale: function(d){return "#e0e0e0"}
+	            }
+	            else{
+	                r = all;
+	            }
+	            return r;
 	        };
+
 	    }
 	    catch(e){
-	        var d = {summary: null, invalid_metric:true};
+	        d.summary = null;
+	        d.invalid_metric = true;
+	        d.get = function(g){
+	            return arguments.length > 0 ? null : [];
+	        };
 	    }
 
 	    //use summary to populate all and to build scales
@@ -16074,7 +16080,7 @@
 
 	    var indicator_title = indicator_title0.append("span");
 
-	    var indicator_period = indicator_title0.append("span").classed("fb-light-header subtitle",true).style("white-space", "nowrap").style("font-size","0.9em");
+	    var indicator_period = indicator_title0.append("span").classed("fb-light-header",true).style("white-space", "nowrap").style("font-size","1em");
 
 	    var indicator_na = indicator_title0.append("span").classed("fb-light-header subtitle",true);
 
@@ -16123,7 +16129,7 @@
 	        var format_ = function(v){return v};
 	        var formatAxis_ = function(v){return v};
 
-	        indicator_title.html(data.label != null ? data.label + ",&nbsp;" : "");
+	        indicator_title.html(data.label != null ? data.label + "&nbsp;" : "");
 	        indicator_period.html(data.period != null ? data.period : "");
 
 	        wrap0.style("display", data.invalid_metric ? "none" : "block");
@@ -16291,9 +16297,12 @@
 	    //mobile state        
 	    var is_mobile = false;
 
-	    //selection state
+	    //selection state (and other parameters)
 	    var scope = {
 	        height:400,
+	        aspect:1.154,
+	        width:300,
+	        column_height:150,
 	        indicator:"job",
 	        metric:"change",
 	        geolevel:"state",
@@ -16318,7 +16327,7 @@
 	    //map dom
 	    var map_wrap0 = wrap1.append("div");
 	    
-	    var map_wrap1 = map_wrap0.append("div").classed("hl-map-split c-fix",true);
+	    var map_wrap1 = map_wrap0.append("div").style("position","relative");
 
 	    //build svg filters
 	    var defs = wrap1.append("div").style("height","0px").append("svg").append("defs");
@@ -16329,12 +16338,22 @@
 	    filter.append("feBlend").attr("in","SourceGraphic").attr("in2","blurout").attr("mode","normal");
 	    
 	    //TWO MAP PANELS
-	    var map_wrap3 = map_wrap1.append("div"); //hold map
-	    var map_wrap2 = map_wrap1.append("div"); //hold bars/legend
+	    var map_panel = map_wrap1.append("div"); //hold map
+	    
+	    //hold bars/legend
+	    var map_bars_panel = map_wrap1.append("div")
+	                            .style("position","absolute")
+	                            .style("bottom","20px")
+	                            .style("right","20px")
+	                            .style("width","150px")
+	                            .style("background-color","rgba(255,255,2552,0.7)")
+	                            .style("border","1px solid " + palette.green)
+	                            .style("border-width","1px 0px 0px 1px")
+	                            ; 
 	    
 
 	    
-	    var map_svg = map_wrap3.append("svg").attr("width","100%").attr("height","100%");
+	    var map_svg = map_panel.append("svg").attr("width","100%").attr("height","100%");
 	    
 	    //map <g>roups
 	    var g_back = map_svg.append("g"); //all states
@@ -16342,10 +16361,12 @@
 	    
 	    //data layers
 	    var g_states = map_svg.append("g");
+	    var g_hl = map_svg.append("g"); //top heartland outline
+
 	    var g_metros = map_svg.append("g");
 	    var g_micros = map_svg.append("g");
 	    
-	    var g_hl = map_svg.append("g"); //top heartland outline
+	    
 	    var g_anno = map_svg.append("g");
 
 	    function obj2arr(){
@@ -16372,26 +16393,50 @@
 	    
 	    //map draw/redraw fn
 	    function draw_map(){
-	        var width;
+
 	    
 	        try{
-	            var box = map_wrap3.node().getBoundingClientRect();
-	            width = box.right - box.left;
+	            var box = map_panel.node().getBoundingClientRect();
+	            scope.width = box.right - box.left;
 	        }
 	        catch(e){
-	            width = 400;
+	            scope.width = 400;
 	        }
 
-	        var aspect = width < 900 ? 1 : 0.7; //width x aspect = height;
+	        //aspect ratio of heartland
+	        var max_height = 800;
+	        var min_height = 400;
+	        var hl_height = scope.width * scope.aspect;
 
-	        scope.height = width * aspect;
+	        //set height
+	        scope.height = hl_height > max_height ? max_height : 
+	                        hl_height < min_height ? min_height : hl_height;
+	        map_panel.style("height", scope.height+"px");
 
-	        //bar chart as legend -- and update scope.height if necessary to fit bars
+	        //draw bars
+	        {
+	            var bars_width = scope.width*(scope.width > 1200 ? 0.3 : 0.2);
+	            map_bars_panel.style("width", bars_width+"px").style("height","100%");
+
+	            //amount of horizontal space on either side of heartland
+	            //var bars_width_available = ((scope.width - (scope.height/scope.aspect))/2) - 10;
+	            //console.log(bars_width_available);
+
+	            proj.fitExtent([[10, 10], 
+	                            [scope.width-bars_width - 40, scope.height-10]], HLFC);            
+
+	            //proj.fitExtent([[(bars_width_available > bars_width ? 10 : bars_width - bars_width_available + 40), 10], 
+	            //                [scope.width-10, scope.height-10]], HLFC);
+	        }
+	        
+	        
+
+	        //bar chart as legend
 	        draw_bars();
 	        
-	        map_wrap3.style("height", scope.height+"px");
+	        
 
-	        proj.fitExtent([[10,10], [width-10, scope.height-10]], HLFC);
+	        
 
 	        var state_accessor = function(d){return parseInt(d.properties.geo_id)+"";};
 
@@ -16409,10 +16454,10 @@
 	        //draw map background
 	        var states_back = draw_states(g_back, [state_mesh], {stroke:"#666666", "stroke-width":0.5, fill:"#ffffff", "stroke-dasharray":"3,3"});
 	        var state_shadow = draw_states(g_shadow, HLFC.features, {stroke:"#cccccc", "stroke-width":0.5, fill:"#cccccc"});
-	        var state_outline = draw_states(g_hl, [heartland_mesh], {stroke:palette.green, "stroke-width":1.5, fill:"none"});
+	        var state_outline = draw_states(g_hl, [heartland_mesh], {stroke:"#666666", "stroke-width":1.5, fill:"none"});
 	        
 	        if(scope.geolevel=="state" || scope.geolevel=="rural"){
-	            var states = draw_states(g_states, HLFC.features, {stroke:"#aaaaaa", fill:fill(state_accessor) });
+	            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:fill(state_accessor), "stroke-width":"0.5" });
 	            
 	            g_metros.style("visibility","hidden").style("pointer-events","none");
 	            g_micros.style("visibility","hidden").style("pointer-events","none");
@@ -16476,20 +16521,19 @@
 	    }
 
 	    //bar chart dom
-	    var bars_wrap0 = map_wrap2.append("div");
+	    var bars_wrap0 = map_bars_panel.append("div").style("height","100%");
 	        
 	    //var bars_title = bars_wrap0.append("p").text("Bar chart title").classed("subtitle", true);
 
-	    var bars_wrap1 = bars_wrap0.append("div").style("min-height","360px").style("width","100%");
+	    var bars_wrap1 = bars_wrap0.append("div").style("min-height","360px").style("width","100%").style("height","100%");
 	    var bars_svg = bars_wrap1.append("svg").attr("width","100%").attr("height","100%");
 
-	    //map draw/redraw fn
+	    //bar chart draw/redraw
 	    function draw_bars(){
 	        var data = scope.data.get().slice(0).sort(function(a,b){return b.value-a.value});
-	        
-	        //build scale
+	        var extent = null;
+
 	        if(data.length > 0){
-	            var extent;
 	            var min = d3.min(data, function(d){return d.value});
 	            var max = d3.max(data, function(d){return d.value});
 	            if(min >= 0){
@@ -16501,69 +16545,81 @@
 	            else{
 	                extent = [min, max];
 	            }
+	        }
+	        
 
+	        if(false){
+	            //optional horizonal layout - TK
+	            if(true){
+	                var zero = y(0);
+	                var height = function(d){
+	                };
+	            }
+	            else{
+	                var height = 0;
+	            }
 	            
-	            var x = d3.scaleLinear().domain(extent).range([10,90]);
-	            var zero = x(0);
-
-	            var width = function(d){
-	                var v = d.value;
-	                var w;
-	                var xpos = x(v);
-	                if(v >= 0){
-	                    w = xpos - zero;
-	                }
-	                else{
-	                    w = zero - xpos;
-	                }
-	                return w + "%";
-	            };
+	        
 	        }
 	        else{
-	            var width = 0;
-	            var x = function(){return 0};
+	            if(extent !== null){
+	                var x = d3.scaleLinear().domain(extent).range([10,90]);
+	                var zero = x(0);
+	                var width = function(d){
+	                    var v = d.value;
+	                    var w;
+	                    var xpos = x(v);
+	                    if(v >= 0){
+	                        w = xpos - zero;
+	                    }
+	                    else{
+	                        w = zero - xpos;
+	                    }
+	                    return w + "%";
+	                };
+	            }
+	            else{
+	                var x = function(){return 0};
+	                var width = 0;
+	            }
+
+	            //set height to accommodate all bars -- start with scope.height set by map
+	            var height = scope.height > 600 ? 600 : scope.height;
+	            var top_pad = 30;
+	            var bot_pad = 30;
+	            var bar_height = Math.floor((height-top_pad-bot_pad)/data.length);
+	            if(bar_height < 1){bar_height = 1;}
+	            
+	            //final height
+	            height = (bar_height * data.length) + top_pad + bot_pad;
+	            
+	            map_bars_panel.style("height", height+"px"); //.style("top", ((scope.height - height)/2)+"px");
+
+	            var bars_u = bars_svg.selectAll("g.bar").data(data, function(d){return d.geo});
+	            bars_u.exit().remove();
+	            var bars_e = bars_u.enter().append("g").classed("bar",true);
+	            bars_e.append("rect");
+	            bars_e.append("text");
+
+	            var bars = bars_e.merge(bars_u);
+	        
+	            bars.select("rect")
+	                .attr("width", width)
+	                .attr("height", bar_height)
+	                .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
+	                .attr("y","0")
+	                .attr("fill", function(d){return scope.data.color_scale(d.value)});
+
+	            bars.interrupt().transition().attr("transform", function(d,i){
+	                return "translate(0," + ((i*bar_height) + top_pad) + ")";
+	            });
 	        }
-
-	        //set height to accommodate all bars -- start with scope.height set by map
-	        var height = scope.height > 600 ? 600 : scope.height;
-	        var top_pad = 20;
-	        var bot_pad = 30;
-	        var bar_height = Math.round((height-top_pad-bot_pad)/data.length);
-	        if(bar_height < 2){bar_height = 2;}
-	        
-	        //final height
-	        height = (bar_height * data.length) + top_pad + bot_pad;
-	        
-	        //update scope.height if smaller than bar height
-	        if(scope.height < height){
-	            scope.height = height;
-	        }
-	        
-	        bars_wrap1.style("height", height+"px");
-
-	        var bars_u = bars_svg.selectAll("g.bar").data(data, function(d){return d.geo});
-	        bars_u.exit().remove();
-	        var bars_e = bars_u.enter().append("g").classed("bar",true);
-	        bars_e.append("rect");
-	        bars_e.append("text");
-
-	        var bars = bars_e.merge(bars_u);
-	    
-	        bars.select("rect")
-	            .attr("width", width)
-	            .attr("height", bar_height)
-	            .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
-	            .attr("y","0")
-	            .attr("fill", function(d){return scope.data.color_scale(d.value)});
-
-	        bars.interrupt().transition().attr("transform", function(d,i){
-	            return "translate(0," + ((i*bar_height) + top_pad) + ")";
-	        });
 	    }
-
 
 	    //package all drawing in an update function
 	    function update(indicator_, metric_, geolevel_, geo_){
+	        test_mobile();
+
 	        if(indicator_!=null){scope.indicator=indicator_;}
 	        if(metric_!=null){scope.metric=metric_;}
 	        if(geolevel_!=null){scope.geolevel=geolevel_;}
@@ -16575,15 +16631,11 @@
 
 	        //define color scale -- should handle nulls
 
-
 	        draw_map();
 	        
 	    }
 
-	    var resizeTimer;
-	    window.addEventListener("resize", function(){
-	        clearTimeout(resizeTimer);
-
+	    function test_mobile(){
 	        try{
 	            var box = wrap1.node().getBoundingClientRect();
 	            var width = box.right-box.left;
@@ -16594,6 +16646,11 @@
 	        }
 
 	        map_wrap1.classed("hl-mobile", is_mobile);
+	    }
+
+	    var resizeTimer;
+	    window.addEventListener("resize", function(){
+	        clearTimeout(resizeTimer);
 	        resizeTimer = setTimeout(update, 200);
 	    });
 
@@ -16629,6 +16686,18 @@
 	    select_wrap.geolevel = dropdown_wrap.append("div").classed("select-wrap",true).style("display","none");
 	    select_wrap.geolevel.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
 	                            .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
+
+
+	    var focus_in = function(){
+	        try{
+	            d3.select(this).select("select").focus();
+	        }
+	        catch(e){
+
+	        }
+	    };                       
+	    select_wrap.geo.on("mousedown", focus_in);                        
+
 
 	    var legend_wrap = dropdown_wrap.append("div").classed("c-fix",true).style("display","none").style("float","right");
 
@@ -16758,7 +16827,7 @@
 	        var select = select_wrap.metric.style("display","block").append("select");
 
 	        var options = select.selectAll("option").data(["end","change"]).enter().append("option").attr("value", function(v){return v})
-	                                .text(function(v){return v=="end" ? "View point in time" : "View change over time"});
+	                                .text(function(v){return v=="end" ? "Most recent year" : "Change over time"});
 
 	        //select.append("option").text("View changes or points in time").attr("disabled","yes").attr("selected","1").attr("hidden","1").lower();
 
@@ -16768,13 +16837,14 @@
 	        });
 	    };
 
+	    /*
 	    methods.select_indicator = function(callback){        
 	        var select = select_wrap.indicator.style("display","block").append("select");
 
 	        var groups = {
 	            end:[],
 	            change:[]
-	        };
+	        }
 
 	        var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,all_data.map.inclusion);
 	        var driver_codes = all_data.map.trade.concat(all_data.map.human_capital,all_data.map.innovation,all_data.map.infrastructure);
@@ -16807,6 +16877,27 @@
 	        });
 
 
+	    }
+	    */
+	    methods.select_indicator = function(callback){        
+	        var select = select_wrap.indicator.style("display","block").append("select");
+
+	        var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,all_data.map.inclusion);
+	        var driver_codes = all_data.map.trade.concat(all_data.map.human_capital,all_data.map.innovation,all_data.map.infrastructure);
+
+	        var indicators = outcome_codes.concat(driver_codes).map(function(d){
+	            return {value: d, label:all_data[d].vars["end"].label}
+	        });
+
+	        var options = select.selectAll("option").data(indicators).enter()
+	                                .append("option")
+	                                .attr("value", function(d){return d.value})
+	                                .text(function(d){return d.label});
+
+	        select.on("change", function(){
+	            var v = this.value+"";
+	            callback(v);
+	        });
 	    };
 
 	    methods.select_geolevel = function(callback){        
@@ -16917,11 +17008,15 @@
 	      update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
 	    });
 
-	    map_head.select_indicator(function(indicator, metric){
+	    map_head.select_indicator(function(indicator){
 	      mp_state.indicator = indicator;
+	      update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
+	    });   
+	    
+	    map_head.select_metric(function(metric){
 	      mp_state.metric = metric;
 	      update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
-	    });    
+	    });
 
 	  }
 	  else{

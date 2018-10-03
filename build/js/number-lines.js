@@ -22,7 +22,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
 
     var indicator_title = indicator_title0.append("span");
 
-    var indicator_period = indicator_title0.append("span").classed("fb-light-header subtitle",true).style("white-space", "nowrap").style("font-size","0.9em");
+    var indicator_period = indicator_title0.append("span").classed("fb-light-header",true).style("white-space", "nowrap").style("font-size","1em");
 
     var indicator_na = indicator_title0.append("span").classed("fb-light-header subtitle",true);
 
@@ -71,7 +71,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
         var format_ = function(v){return v};
         var formatAxis_ = function(v){return v};
 
-        indicator_title.html(data.label != null ? data.label + ",&nbsp;" : "");
+        indicator_title.html(data.label != null ? data.label + "&nbsp;" : "");
         indicator_period.html(data.period != null ? data.period : "");
 
         wrap0.style("display", data.invalid_metric ? "none" : "block");

@@ -92,11 +92,15 @@ function main(){
       update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
     });
 
-    map_head.select_indicator(function(indicator, metric){
+    map_head.select_indicator(function(indicator){
       mp_state.indicator = indicator;
+      update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
+    });   
+    
+    map_head.select_metric(function(metric){
       mp_state.metric = metric;
       update_mp(mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
-    });    
+    });
 
   }
   else{

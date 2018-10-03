@@ -30,6 +30,18 @@ export default function header(container){
     select_wrap.geolevel.append("svg").attr("width","20px").attr("height","20px").style("position","absolute").style("top","45%").style("right","0px")
                             .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
 
+
+    var focus_in = function(){
+        try{
+            d3.select(this).select("select").focus();
+        }
+        catch(e){
+
+        }
+    }                       
+    select_wrap.geo.on("mousedown", focus_in);                        
+
+
     var legend_wrap = dropdown_wrap.append("div").classed("c-fix",true).style("display","none").style("float","right");
 
     var d_triangle = "M18,4 L23,11.5 L13,11.5 Z";
@@ -158,7 +170,7 @@ export default function header(container){
         var select = select_wrap.metric.style("display","block").append("select");
 
         var options = select.selectAll("option").data(["end","change"]).enter().append("option").attr("value", function(v){return v})
-                                .text(function(v){return v=="end" ? "View point in time" : "View change over time"});
+                                .text(function(v){return v=="end" ? "Most recent year" : "Change over time"});
 
         //select.append("option").text("View changes or points in time").attr("disabled","yes").attr("selected","1").attr("hidden","1").lower();
 
@@ -168,6 +180,7 @@ export default function header(container){
         });
     }
 
+    /*
     methods.select_indicator = function(callback){        
         var select = select_wrap.indicator.style("display","block").append("select");
 
@@ -207,6 +220,27 @@ export default function header(container){
         });
 
 
+    }
+    */
+    methods.select_indicator = function(callback){        
+        var select = select_wrap.indicator.style("display","block").append("select");
+
+        var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,all_data.map.inclusion);
+        var driver_codes = all_data.map.trade.concat(all_data.map.human_capital,all_data.map.innovation,all_data.map.infrastructure);
+
+        var indicators = outcome_codes.concat(driver_codes).map(function(d){
+            return {value: d, label:all_data[d].vars["end"].label}
+        });
+
+        var options = select.selectAll("option").data(indicators).enter()
+                                .append("option")
+                                .attr("value", function(d){return d.value})
+                                .text(function(d){return d.label});
+
+        select.on("change", function(){
+            var v = this.value+"";
+            callback(v);
+        });
     }
 
     methods.select_geolevel = function(callback){        

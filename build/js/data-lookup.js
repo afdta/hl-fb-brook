@@ -9,40 +9,46 @@ import palette from './palette.js';
 function lookup(indicator, metric, geolevel){
     var metric_object = all_data[indicator].vars[metric];
     var all = [];
+    var d = {
+        color_scale: function(d){return "#e0e0e0"}
+    };
 
     try{
         if(metric_object == null){throw new Error("No data")}
-        var d = {
-            summary: metric_object.summary[geolevel],
-            invalid_metric:false,
-            hl: metric_object.summary.heartland,
-            nhl: metric_object.summary.non_heartland,
-            label: metric_object.label,
-            period: metric_object.period,
-            get:function(g){
-                g = g+"";
-                var r;
-                if(arguments.length > 0){
-                    try{
-                        var d = metric_object.lookup[geolevel];
-                        r = d[g] == null ? null : d[g];
-                    }
-                    catch(e){
-                        r = null;
-                    }
+
+        d.summary = metric_object.summary[geolevel];
+        d.invalid_metric = false;
+        d.hl = metric_object.summary.heartland;
+        d.nhl = metric_object.summary.non_heartland;
+        d.label = metric_object.label;
+        d.period = metric_object.period;
+        d.format = metric_object.format;
+        d.formatAxis = metric_object.formatAxis;
+        d.get = function(g){
+            g = g+"";
+            var r;
+            if(arguments.length > 0){
+                try{
+                    var d = metric_object.lookup[geolevel];
+                    r = d[g] == null ? null : d[g];
                 }
-                else{
-                    r = all;
+                catch(e){
+                    r = null;
                 }
-                return r;
-            },
-            format: metric_object.format,
-            formatAxis: metric_object.formatAxis,
-            color_scale: function(d){return "#e0e0e0"}
-        };
+            }
+            else{
+                r = all;
+            }
+            return r;
+        }
+
     }
     catch(e){
-        var d = {summary: null, invalid_metric:true}
+        d.summary = null;
+        d.invalid_metric = true;
+        d.get = function(g){
+            return arguments.length > 0 ? null : [];
+        }
     }
 
     //use summary to populate all and to build scales
