@@ -2,6 +2,7 @@ import {lookup} from './data-lookup.js';
 import {HL, state_geos, state_mesh, heartland_mesh} from './state-geos';
 import cbsa_geos from './cbsa-geos';
 import palette from './palette.js';
+import format from '../../../js-modules/formats.js';
 
 //lookup: lookup(indicator, metric, geolevel) // metric is one of ["change","start","end"]
 
@@ -69,12 +70,13 @@ export default function map_module(container, init_indicator, init_metric, init_
     //hold bars/legend
     var map_bars_panel = map_wrap1.append("div")
                             .style("position","absolute")
-                            .style("bottom","20px")
-                            .style("right","20px")
+                            .style("bottom","0px")
+                            .style("right","0px")
                             .style("width","150px")
+                            .style("height","100%")
                             .style("background-color","rgba(255,255,2552,0.7)")
                             .style("border","1px solid " + palette.green)
-                            .style("border-width","1px 0px 0px 1px")
+                            .style("border-width","0px 0px 0px 1px")
                             ; 
     
 
@@ -146,7 +148,7 @@ export default function map_module(container, init_indicator, init_metric, init_
             proj.fitExtent([[10,10], [scope.width-10, scope.height-160]], HLFC);
         }
         else{
-            var bars_width = scope.width*(scope.width > 1200 ? 0.3 : 0.2);
+            var bars_width = scope.width*(scope.width > 1200 ? 0.35 : 0.3);
             map_bars_panel.style("width", bars_width+"px").style("height","100%");
 
             //amount of horizontal space on either side of heartland
@@ -165,10 +167,6 @@ export default function map_module(container, init_indicator, init_metric, init_
         //bar chart as legend
         draw_bars();
         
-        
-
-        
-
         var state_accessor = function(d){return parseInt(d.properties.geo_id)+"";}
 
         var fill = function(geo_accessor){
@@ -261,6 +259,47 @@ export default function map_module(container, init_indicator, init_metric, init_
 
     var bars_wrap1 = bars_wrap0.append("div").style("min-height","360px").style("width","100%").style("height","100%");
     var bars_svg = bars_wrap1.append("svg").attr("width","100%").attr("height","100%");
+    var bars_grid = bars_svg.append("g");
+    var bars_axis = bars_svg.append("g").attr("transform","translate(0,20)");
+    var bars_main = bars_svg.append("g");
+    var bars_front = bars_svg.append("g");
+
+    //render axes and grid lines
+    function draw_axis(scale, tickFormat){
+        if(scale===null){
+            var tickvals = [];
+            scale = function(){return null}
+            var fmt = function(){return "N/A"}
+
+        }
+        else{
+            var tickvals = scale.ticks(3);
+            var fmt = format.fn0(tickFormat);
+            
+        }
+
+        var ticks = bars_axis.selectAll("line.tick-mark").data(tickvals);
+        ticks.exit().remove();
+        ticks.enter().append("line").classed("tick-mark",true).merge(ticks)
+            .attr("x1", function(d){return scale(d)+"%"})
+            .attr("x2", function(d){return scale(d)+"%"})
+            .attr("y1","2").attr("y2","7").attr("stroke",palette.gray);
+
+        var tickLabels = bars_axis.selectAll("text.tick-mark").data(tickvals);
+        tickLabels.exit().remove();
+        tickLabels.enter().append("text").classed("tick-mark",true).merge(tickLabels)
+            .attr("x", function(d){return scale(d)+"%"}).attr("text-anchor","middle")
+            .attr("y","0").attr("y2","0").attr("fill",palette.gray).style("font-size","13px")
+            .text(function(d){return fmt(d)});
+
+        var gridlines = bars_grid.selectAll("line.grid-line").data(tickvals);
+        gridlines.exit().remove();
+        gridlines.enter().append("line").classed("grid-line",true).merge(gridlines)
+            .attr("x1", function(d){return scale(d)+"%"})
+            .attr("x2", function(d){return scale(d)+"%"})
+            .attr("y1","30").attr("y2","95%").attr("stroke","#dddddd");
+
+    }
 
     //bar chart draw/redraw
     function draw_bars(){
@@ -282,7 +321,7 @@ export default function map_module(container, init_indicator, init_metric, init_
         }
         
 
-        if(false){
+        /*if(false){
             //optional horizonal layout - TK
             if(extent !== null){
                 var y = d3.scaleLinear().domain(extent).range([90,10]);
@@ -306,60 +345,115 @@ export default function map_module(container, init_indicator, init_metric, init_
             }
             
         
-        }
-        else{
-            if(extent !== null){
-                var x = d3.scaleLinear().domain(extent).range([10,90]);
-                var zero = x(0);
-                var width = function(d){
-                    var v = d.value;
-                    var w;
-                    var xpos = x(v);
-                    if(v >= 0){
-                        w = xpos - zero;
-                    }
-                    else{
-                        w = zero - xpos;
-                    }
-                    return w + "%";
+        }*/
+
+        if(extent !== null){
+            var x = d3.scaleLinear().domain(extent).range([10,90]);
+            var zero = x(0);
+            var width = function(d){
+                var v = d.value;
+                var w;
+                var xpos = x(v);
+                if(v >= 0){
+                    w = xpos - zero;
                 }
+                else{
+                    w = zero - xpos;
+                }
+                return w + "%";
             }
-            else{
-                var x = function(){return 0};
-                var width = 0;
-            }
 
-            //set height to accommodate all bars -- start with scope.height set by map
-            var height = scope.height > 600 ? 600 : scope.height;
-            var top_pad = 30;
-            var bot_pad = 30;
-            var bar_height = Math.floor((height-top_pad-bot_pad)/data.length);
-            if(bar_height < 1){bar_height = 1}
-            
-            //final height
-            height = (bar_height * data.length) + top_pad + bot_pad;
-            
-            map_bars_panel.style("height", height+"px"); //.style("top", ((scope.height - height)/2)+"px");
+            draw_axis(x, scope.data.formatAxis);
 
-            var bars_u = bars_svg.selectAll("g.bar").data(data, function(d){return d.geo});
-            bars_u.exit().remove();
-            var bars_e = bars_u.enter().append("g").classed("bar",true);
-            bars_e.append("rect");
-            bars_e.append("text");
+            var fmt = format.fn0(scope.data.format);
+            var bar_group_data = data.map(function(d){
+                return {value:d.value, geo:d.geo, color:scope.data.color_scale(d.value)}
+            });
+            var bar_groups = d3.nest().key(function(d){return d.color}).entries(bar_group_data)
+                                    .map(function(d){
+                                        if(d.values.length > 1){
+                                            var extent = d3.extent(d.values, function(d){return d.value});
+                                            var label = fmt(extent[0]) + " to " + fmt(extent[1]); 
+                                            var min = extent[0];
+                                        }
+                                        else{
+                                            var min = d.values[0].value;
+                                            label = fmt(min);
+                                        }
+                                        return {
+                                            label: label,
+                                            min: min,
+                                            bars: d.values.sort(function(a,b){
+                                                return d3.descending(a.value, b.value);
+                                            })
+                                        }
+                                    })
+                                    .sort(function(a,b){return b.min - a.min});
 
-            var bars = bars_e.merge(bars_u);
-        
-            bars.select("rect")
-                .attr("width", width)
-                .attr("height", bar_height)
-                .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
-                .attr("y","0")
-                .attr("fill", function(d){return scope.data.color_scale(d.value)})
-
-            bars.interrupt().transition().attr("transform", function(d,i){
-                return "translate(0," + ((i*bar_height) + top_pad) + ")";
+            var prior_bars = 0;
+            bar_groups.forEach(function(d){
+                d.prior_bars = prior_bars;
+                prior_bars = prior_bars + d.bars.length;
             });
         }
+        else{
+            var x = function(){return 0};
+            var width = 0;
+            draw_axis(null);
+            var bar_groups = [];
+        }
+
+        //set height to accommodate all bars -- start with scope.height set by map
+        var height = scope.height > 600 ? 600 : scope.height;
+        var top_pad = 30;
+        var bot_pad = 10;
+        var group_pad = 30;
+        var bar_height = Math.floor((height-top_pad-bot_pad-(group_pad*bar_groups.length))/data.length);
+        if(bar_height < 1){bar_height = 1}
+        
+        //final height
+        height = (bar_height * data.length) + top_pad + bot_pad + group_pad*bar_groups.length;
+        
+        //map_bars_panel.style("height", height+"px"); //.style("top", ((scope.height - height)/2)+"px");
+
+        //bar groups
+        var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
+        bars_u.exit().remove();
+        var bars_e = bars_u.enter().append("g").classed("bar",true);
+        bars_e.append("text");
+        var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
+            return "translate(0," + (top_pad + (i+1)*group_pad + d.prior_bars*bar_height) + ")";
+        });
+
+        var b_u = bars.selectAll("rect.bar").data(function(d){return d.bars});
+        b_u.exit().remove();
+        var b_e = b_u.enter().append("rect").classed("bar",true);
+        var b = b_e.merge(b_u);
+    
+        b.attr("width", width)
+            .attr("height", bar_height)
+            .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
+            .attr("y",function(d,i){return i*bar_height})
+            .attr("fill", function(d){return d.color})
+
+        var labels_u = bars.selectAll("text.label").data(function(d){return [d.label]});
+        labels_u.exit().remove();
+        var labels_e = labels_u.enter().append("text").classed("label",true);
+        var labels = labels_e.merge(labels_u);
+    
+        labels.attr("x", zero+"%") 
+            .attr("text-anchor","start")
+            .attr("y",function(d,i){return 0})
+            .attr("dy","-3")
+            .text(function(d){return d})
+            .attr("fill","#555555")
+            .style("font-size","13px")
+            ;
+
+        //bars.interrupt().transition().duration(1000).attr("transform", function(d,i){
+        //    return "translate(0," + ((i*bar_height) + top_pad) + ")";
+        //});
+
     }
 
     //package all drawing in an update function

@@ -112,8 +112,10 @@
 	    text:{
 	        orange:"#cc4619"
 	    },
-	    reds:['#fee090','#fdae61','#f46d43','#d73027','#a50026'],
-	    blues:['#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'],
+	    blues6:['#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'],
+	    reds6:['#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#8c2d04'],
+	    blues4:['#eff3ff','#bdd7e7','#6baed6','#2171b5'],
+	    reds4:['#feedde','#fdbe85','#fd8d3c','#d94701'],
 	    na:"#dddddd"
 	};
 
@@ -704,8 +706,8 @@
 	        "label": "Jobs",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "ths0",
+	        "formatAxis": "ths0",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -1270,8 +1272,8 @@
 	        "label": "Jobs",
 	        "years": [2017],
 	        "period": 2017,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "ths0",
+	        "formatAxis": "ths0",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -4117,8 +4119,8 @@
 	        "label": "Jobs at young firms",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "ths0",
+	        "formatAxis": "ths0",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -4683,8 +4685,8 @@
 	        "label": "Jobs at young firms",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "ths0",
+	        "formatAxis": "ths0",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -14158,8 +14160,8 @@
 	        "label": "Population",
 	        "years": [2017],
 	        "period": 2017,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "ths0",
+	        "formatAxis": "ths0",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -14786,8 +14788,8 @@
 	        "label": "Young adult population",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "ths0",
+	        "formatAxis": "ths0",
 	        "summary": {
 	          "metro": null,
 	          "micro": null,
@@ -15831,6 +15833,15 @@
 	        color_scale: function(d){return "#e0e0e0"}
 	    };
 
+	    if(geolevel=="state" || geolevel=="rural"){
+	        var blues = palette.blues4;
+	        var reds = palette.reds4;
+	    }
+	    else{
+	        var blues = palette.blues6;
+	        var reds = palette.reds6;        
+	    }
+
 	    try{
 	        if(metric_object == null){throw new Error("No data")}
 
@@ -15855,7 +15866,7 @@
 	                }
 	            }
 	            else{
-	                r = all;
+	                r = all.slice(0);
 	            }
 	            return r;
 	        };
@@ -15867,6 +15878,7 @@
 	        d.get = function(g){
 	            return arguments.length > 0 ? null : [];
 	        };
+	        d.formatAxis = function(v){return v};
 	    }
 
 	    //use summary to populate all and to build scales
@@ -15882,13 +15894,23 @@
 	            }
 	        
 	            //color scales
-	            var min = d.summary.min;
-	            var max = d.summary.max;
+	            var sliced = all.slice(0).sort(function(a,b){
+	                d3.ascending(a.value, b.value);
+	            });
+	            //remove min and max
+	            sliced.pop();
+	            sliced.shift();
+
+	            var min = d3.min(sliced, function(d){return d.value});
+	            var max = d3.max(sliced, function(d){return d.value});
+
+	            //var min = d.summary.min;
+	            //var max = d.summary.max;
 
 	            if(min < 0 && max > 0){
 	                var maxabs = Math.max(Math.abs(min), max);
-	                var blue_scale = d3.scaleQuantize().domain([0, maxabs]).range(palette.blues);
-	                var red_scale = d3.scaleQuantize().domain([0, maxabs]).range(palette.reds);
+	                var blue_scale = d3.scaleQuantize().domain([0, maxabs]).range(blues);
+	                var red_scale = d3.scaleQuantize().domain([0, maxabs]).range(reds);
 	                d.color_scale = function(v){
 	                    if(v==null){
 	                        return palette.na;
@@ -15902,13 +15924,13 @@
 	                };
 	            }
 	            else if(min >= 0){
-	                var blue_scale = d3.scaleQuantize().domain([min, max]).range(palette.blues);
+	                var blue_scale = d3.scaleQuantize().domain([min, max]).range(blues);
 	                d.color_scale = function(v){
 	                    return v==null ? palette.na : blue_scale(v);
 	                };
 	            }
 	            else{
-	                var red_scale = d3.scaleQuantize().domain([max, min]).range(palette.reds);
+	                var red_scale = d3.scaleQuantize().domain([max, min]).range(reds);
 	                d.color_scale = function(v){
 	                    return v==null ? palette.na : red_scale(v);
 	                };
@@ -16015,6 +16037,10 @@
 	format.num1 = d3.format(",.1f");
 	format.num2 = d3.format(",.2f");
 	format.num3 = d3.format(",.3f");
+
+	//rounded to nearest 000s
+	format.ths0 = function(v){return format.num0(v/1000)};
+	format.ths1 = function(v){return format.num1(v/1000)};
 
 	//USD
 	format.doll0 = function(v){return "$" + format.num0(v)};
@@ -16172,35 +16198,35 @@
 	            .attr("stroke-width","0")
 	            ; 
 
-	        dots.filter(function(d){
-	            return d.geo === geo;
-	        })
-	        .attr("fill", palette.orange)
-	        .attr("fill-opacity","1")
-	        .attr("r","5")
-	        .attr("stroke","#ffffff")
-	        .attr("stroke-width","1")
-	        .raise();
-
-	        var annos_up = g_anno.selectAll("svg.anno-symbols").data(annotations);
+	        var annos_up = g_anno.selectAll("svg.anno-symbols").data(annotations, function(d){return d.id});
 	        annos_up.exit().remove();
 	        var annos_enter = annos_up.enter().append("svg").classed("anno-symbols",true).attr("width","10px").attr("height","20px").style("overflow","visible");
 	        //annos_enter.append("path").attr("d", "M5,"+ triangle_point + " L10," + triangle_top + " L0," + triangle_top + " Z").attr("stroke-width","1px"); //triangle point is at 5px to compensate for 5px shift of g_anno
 	        annos_enter.append("path").attr("d", "M5,2 L10,9.5 L0,9.5 Z").attr("stroke-width","1px"); 
-	        var annos = annos_enter.merge(annos_up).attr("x", function(d){return scale(d.value)+"%"});
+	        var annos = annos_enter.merge(annos_up);
 
 	        annos.select("path").attr("fill", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? "none" : "#aaaaaa")})
 	                            .attr("stroke", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? palette.green : "#aaaaaa")});
 
 
+	        annos.transition().duration(700)
+	            .attr("x", function(d){return scale(d.value)+"%"})
+	            .on("end", function(){
+	                dots.filter(function(d){
+	                    return d.geo === geo;
+	                })
+	                .attr("fill", palette.orange)
+	                .attr("fill-opacity","1")
+	                .attr("r","5")
+	                .attr("stroke","#ffffff")
+	                .attr("stroke-width","1")
+	                .raise();
+	            });
+
 	        var anno_text_up = g_labels.selectAll("text").data(annotations);
 	        anno_text_up.exit().remove();
 	        var anno_text_enter = anno_text_up.enter().append("text");
 	        anno_text_enter.merge(anno_text_up)
-	                       .attr("x", function(d){
-	                           return scale(d.value)+"%";
-	                       })
-	                       .attr("dx",function(d){return scale(d.value) > 50 ? "4" : "-4"})
 	                       .attr("y","40%").attr("dy","-7").style("font-size","13px")
 	                       .attr("fill", palette.orange)
 	                       //.attr("dy","-11px")
@@ -16210,7 +16236,12 @@
 	                       .text(function(d){
 	                           return format_(d.value);
 	                       })
-	                       .style("visibility", function(d){return d.id=="selected" ? "visible" : "hidden"});
+	                       .style("visibility", function(d){return d.id=="selected" ? "visible" : "hidden"})
+	                       .transition().duration(700)
+	                       .attr("x", function(d){
+	                            return scale(d.value)+"%";
+	                        })
+	                       .attr("dx",function(d){return scale(d.value) > 50 ? "4" : "-4"});
 
 	    };
 
@@ -16343,12 +16374,13 @@
 	    //hold bars/legend
 	    var map_bars_panel = map_wrap1.append("div")
 	                            .style("position","absolute")
-	                            .style("bottom","20px")
-	                            .style("right","20px")
+	                            .style("bottom","0px")
+	                            .style("right","0px")
 	                            .style("width","150px")
+	                            .style("height","100%")
 	                            .style("background-color","rgba(255,255,2552,0.7)")
 	                            .style("border","1px solid " + palette.green)
-	                            .style("border-width","1px 0px 0px 1px")
+	                            .style("border-width","0px 0px 0px 1px")
 	                            ; 
 	    
 
@@ -16415,7 +16447,7 @@
 
 	        //draw bars
 	        {
-	            var bars_width = scope.width*(scope.width > 1200 ? 0.3 : 0.2);
+	            var bars_width = scope.width*(scope.width > 1200 ? 0.35 : 0.3);
 	            map_bars_panel.style("width", bars_width+"px").style("height","100%");
 
 	            //amount of horizontal space on either side of heartland
@@ -16434,10 +16466,6 @@
 	        //bar chart as legend
 	        draw_bars();
 	        
-	        
-
-	        
-
 	        var state_accessor = function(d){return parseInt(d.properties.geo_id)+"";};
 
 	        var fill = function(geo_accessor){
@@ -16527,6 +16555,47 @@
 
 	    var bars_wrap1 = bars_wrap0.append("div").style("min-height","360px").style("width","100%").style("height","100%");
 	    var bars_svg = bars_wrap1.append("svg").attr("width","100%").attr("height","100%");
+	    var bars_grid = bars_svg.append("g");
+	    var bars_axis = bars_svg.append("g").attr("transform","translate(0,20)");
+	    var bars_main = bars_svg.append("g");
+	    var bars_front = bars_svg.append("g");
+
+	    //render axes and grid lines
+	    function draw_axis(scale, tickFormat){
+	        if(scale===null){
+	            var tickvals = [];
+	            scale = function(){return null};
+	            var fmt = function(){return "N/A"};
+
+	        }
+	        else{
+	            var tickvals = scale.ticks(3);
+	            var fmt = format.fn0(tickFormat);
+	            
+	        }
+
+	        var ticks = bars_axis.selectAll("line.tick-mark").data(tickvals);
+	        ticks.exit().remove();
+	        ticks.enter().append("line").classed("tick-mark",true).merge(ticks)
+	            .attr("x1", function(d){return scale(d)+"%"})
+	            .attr("x2", function(d){return scale(d)+"%"})
+	            .attr("y1","2").attr("y2","7").attr("stroke",palette.gray);
+
+	        var tickLabels = bars_axis.selectAll("text.tick-mark").data(tickvals);
+	        tickLabels.exit().remove();
+	        tickLabels.enter().append("text").classed("tick-mark",true).merge(tickLabels)
+	            .attr("x", function(d){return scale(d)+"%"}).attr("text-anchor","middle")
+	            .attr("y","0").attr("y2","0").attr("fill",palette.gray).style("font-size","13px")
+	            .text(function(d){return fmt(d)});
+
+	        var gridlines = bars_grid.selectAll("line.grid-line").data(tickvals);
+	        gridlines.exit().remove();
+	        gridlines.enter().append("line").classed("grid-line",true).merge(gridlines)
+	            .attr("x1", function(d){return scale(d)+"%"})
+	            .attr("x2", function(d){return scale(d)+"%"})
+	            .attr("y1","30").attr("y2","95%").attr("stroke","#dddddd");
+
+	    }
 
 	    //bar chart draw/redraw
 	    function draw_bars(){
@@ -16548,72 +16617,139 @@
 	        }
 	        
 
-	        if(false){
+	        /*if(false){
 	            //optional horizonal layout - TK
-	            if(true){
+	            if(extent !== null){
+	                var y = d3.scaleLinear().domain(extent).range([90,10]);
 	                var zero = y(0);
 	                var height = function(d){
-	                };
+	                    var v = d.value;
+	                    var h;
+	                    var ypos = y(v);
+	                    if(v < 0){
+	                        h = ypos - zero;
+	                    }
+	                    else{
+	                        h = zero - ypos;
+	                    }
+	                    return h + "%";
+	                }
 	            }
 	            else{
+	                var y = function(){return 0};
 	                var height = 0;
 	            }
 	            
 	        
-	        }
-	        else{
-	            if(extent !== null){
-	                var x = d3.scaleLinear().domain(extent).range([10,90]);
-	                var zero = x(0);
-	                var width = function(d){
-	                    var v = d.value;
-	                    var w;
-	                    var xpos = x(v);
-	                    if(v >= 0){
-	                        w = xpos - zero;
-	                    }
-	                    else{
-	                        w = zero - xpos;
-	                    }
-	                    return w + "%";
-	                };
-	            }
-	            else{
-	                var x = function(){return 0};
-	                var width = 0;
-	            }
+	        }*/
 
-	            //set height to accommodate all bars -- start with scope.height set by map
-	            var height = scope.height > 600 ? 600 : scope.height;
-	            var top_pad = 30;
-	            var bot_pad = 30;
-	            var bar_height = Math.floor((height-top_pad-bot_pad)/data.length);
-	            if(bar_height < 1){bar_height = 1;}
-	            
-	            //final height
-	            height = (bar_height * data.length) + top_pad + bot_pad;
-	            
-	            map_bars_panel.style("height", height+"px"); //.style("top", ((scope.height - height)/2)+"px");
+	        if(extent !== null){
+	            var x = d3.scaleLinear().domain(extent).range([10,90]);
+	            var zero = x(0);
+	            var width = function(d){
+	                var v = d.value;
+	                var w;
+	                var xpos = x(v);
+	                if(v >= 0){
+	                    w = xpos - zero;
+	                }
+	                else{
+	                    w = zero - xpos;
+	                }
+	                return w + "%";
+	            };
 
-	            var bars_u = bars_svg.selectAll("g.bar").data(data, function(d){return d.geo});
-	            bars_u.exit().remove();
-	            var bars_e = bars_u.enter().append("g").classed("bar",true);
-	            bars_e.append("rect");
-	            bars_e.append("text");
+	            draw_axis(x, scope.data.formatAxis);
 
-	            var bars = bars_e.merge(bars_u);
-	        
-	            bars.select("rect")
-	                .attr("width", width)
-	                .attr("height", bar_height)
-	                .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
-	                .attr("y","0")
-	                .attr("fill", function(d){return scope.data.color_scale(d.value)});
+	            var fmt = format.fn0(scope.data.format);
+	            var bar_group_data = data.map(function(d){
+	                return {value:d.value, geo:d.geo, color:scope.data.color_scale(d.value)}
+	            });
+	            var bar_groups = d3.nest().key(function(d){return d.color}).entries(bar_group_data)
+	                                    .map(function(d){
+	                                        if(d.values.length > 1){
+	                                            var extent = d3.extent(d.values, function(d){return d.value});
+	                                            var label = fmt(extent[0]) + " to " + fmt(extent[1]); 
+	                                            var min = extent[0];
+	                                        }
+	                                        else{
+	                                            var min = d.values[0].value;
+	                                            label = fmt(min);
+	                                        }
+	                                        return {
+	                                            label: label,
+	                                            min: min,
+	                                            bars: d.values.sort(function(a,b){
+	                                                return d3.descending(a.value, b.value);
+	                                            })
+	                                        }
+	                                    })
+	                                    .sort(function(a,b){return b.min - a.min});
 
-	            bars.interrupt().transition().attr("transform", function(d,i){
-	                return "translate(0," + ((i*bar_height) + top_pad) + ")";
+	            var prior_bars = 0;
+	            bar_groups.forEach(function(d){
+	                d.prior_bars = prior_bars;
+	                prior_bars = prior_bars + d.bars.length;
 	            });
 	        }
+	        else{
+	            var x = function(){return 0};
+	            var width = 0;
+	            draw_axis(null);
+	            var bar_groups = [];
+	        }
+
+	        //set height to accommodate all bars -- start with scope.height set by map
+	        var height = scope.height > 600 ? 600 : scope.height;
+	        var top_pad = 30;
+	        var bot_pad = 10;
+	        var group_pad = 30;
+	        var bar_height = Math.floor((height-top_pad-bot_pad-(group_pad*bar_groups.length))/data.length);
+	        if(bar_height < 1){bar_height = 1;}
+	        
+	        //final height
+	        height = (bar_height * data.length) + top_pad + bot_pad + group_pad*bar_groups.length;
+	        
+	        //map_bars_panel.style("height", height+"px"); //.style("top", ((scope.height - height)/2)+"px");
+
+	        //bar groups
+	        var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
+	        bars_u.exit().remove();
+	        var bars_e = bars_u.enter().append("g").classed("bar",true);
+	        bars_e.append("text");
+	        var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
+	            return "translate(0," + (top_pad + (i+1)*group_pad + d.prior_bars*bar_height) + ")";
+	        });
+
+	        var b_u = bars.selectAll("rect.bar").data(function(d){return d.bars});
+	        b_u.exit().remove();
+	        var b_e = b_u.enter().append("rect").classed("bar",true);
+	        var b = b_e.merge(b_u);
+	    
+	        b.attr("width", width)
+	            .attr("height", bar_height)
+	            .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
+	            .attr("y",function(d,i){return i*bar_height})
+	            .attr("fill", function(d){return d.color});
+
+	        var labels_u = bars.selectAll("text.label").data(function(d){return [d.label]});
+	        labels_u.exit().remove();
+	        var labels_e = labels_u.enter().append("text").classed("label",true);
+	        var labels = labels_e.merge(labels_u);
+	    
+	        labels.attr("x", zero+"%") 
+	            .attr("text-anchor","start")
+	            .attr("y",function(d,i){return 0})
+	            .attr("dy","-3")
+	            .text(function(d){return d})
+	            .attr("fill","#555555")
+	            .style("font-size","13px")
+	            ;
+
+	        //bars.interrupt().transition().duration(1000).attr("transform", function(d,i){
+	        //    return "translate(0," + ((i*bar_height) + top_pad) + ")";
+	        //});
+
 	    }
 
 	    //package all drawing in an update function
@@ -16999,7 +17135,7 @@
 
 	    var map_head = header(wrap_mp.node());
 	    map_head.title("Map module");
-	    map_head.subtitle("<span style='color:" + palette.orange + "'>TO DO: <br />[1] ADD SCALES AND ANNOTATION TO BAR CHART/LEGEND -- REVISE COLORS! <br/>[2] ENABLE TOOLTIPS (MAP HOVER FUNCTION), <br />[3] ADD TITLES TO MAPS</span> " + "<br />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
+	    map_head.subtitle("<span style='color:" + palette.orange + "'>TO DO: <br />[1] REVISE COLORS <br/>[2] ENABLE TOOLTIPS (MAP HOVER FUNCTION), <br />[3] ADD TITLES TO MAPS</span> " + "<br />Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
 
 	    var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
 

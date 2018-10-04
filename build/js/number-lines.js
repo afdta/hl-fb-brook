@@ -114,38 +114,39 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
             .attr("stroke-width","0")
             ; 
 
-        dots.filter(function(d){
-            return d.geo === geo;
-        })
-        .attr("fill", palette.orange)
-        .attr("fill-opacity","1")
-        .attr("r","5")
-        .attr("stroke","#ffffff")
-        .attr("stroke-width","1")
-        .raise();
 
         var triangle_top = (height/2) - 8.5;
         var triangle_point = (height/2) - 1;
 
-        var annos_up = g_anno.selectAll("svg.anno-symbols").data(annotations);
+        var annos_up = g_anno.selectAll("svg.anno-symbols").data(annotations, function(d){return d.id});
         annos_up.exit().remove();
         var annos_enter = annos_up.enter().append("svg").classed("anno-symbols",true).attr("width","10px").attr("height","20px").style("overflow","visible");
         //annos_enter.append("path").attr("d", "M5,"+ triangle_point + " L10," + triangle_top + " L0," + triangle_top + " Z").attr("stroke-width","1px"); //triangle point is at 5px to compensate for 5px shift of g_anno
         annos_enter.append("path").attr("d", "M5,2 L10,9.5 L0,9.5 Z").attr("stroke-width","1px"); 
-        var annos = annos_enter.merge(annos_up).attr("x", function(d){return scale(d.value)+"%"});
+        var annos = annos_enter.merge(annos_up);
 
         annos.select("path").attr("fill", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? "none" : "#aaaaaa")})
                             .attr("stroke", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? palette.green : "#aaaaaa")})
 
 
+        annos.transition().duration(700)
+            .attr("x", function(d){return scale(d.value)+"%"})
+            .on("end", function(){
+                dots.filter(function(d){
+                    return d.geo === geo;
+                })
+                .attr("fill", palette.orange)
+                .attr("fill-opacity","1")
+                .attr("r","5")
+                .attr("stroke","#ffffff")
+                .attr("stroke-width","1")
+                .raise();
+            });
+
         var anno_text_up = g_labels.selectAll("text").data(annotations);
         anno_text_up.exit().remove();
         var anno_text_enter = anno_text_up.enter().append("text");
         anno_text_enter.merge(anno_text_up)
-                       .attr("x", function(d){
-                           return scale(d.value)+"%";
-                       })
-                       .attr("dx",function(d){return scale(d.value) > 50 ? "4" : "-4"})
                        .attr("y","40%").attr("dy","-7").style("font-size","13px")
                        .attr("fill", palette.orange)
                        //.attr("dy","-11px")
@@ -155,7 +156,12 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
                        .text(function(d){
                            return format_(d.value);
                        })
-                       .style("visibility", function(d){return d.id=="selected" ? "visible" : "hidden"});
+                       .style("visibility", function(d){return d.id=="selected" ? "visible" : "hidden"})
+                       .transition().duration(700)
+                       .attr("x", function(d){
+                            return scale(d.value)+"%";
+                        })
+                       .attr("dx",function(d){return scale(d.value) > 50 ? "4" : "-4"});
 
     }
 

@@ -585,8 +585,8 @@ var all_data =
         "label": "Jobs",
         "years": [2010],
         "period": 2010,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "ths0",
+        "formatAxis": "ths0",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -1151,8 +1151,8 @@ var all_data =
         "label": "Jobs",
         "years": [2017],
         "period": 2017,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "ths0",
+        "formatAxis": "ths0",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -3998,8 +3998,8 @@ var all_data =
         "label": "Jobs at young firms",
         "years": [2010],
         "period": 2010,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "ths0",
+        "formatAxis": "ths0",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -4564,8 +4564,8 @@ var all_data =
         "label": "Jobs at young firms",
         "years": [2016],
         "period": 2016,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "ths0",
+        "formatAxis": "ths0",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -14039,8 +14039,8 @@ var all_data =
         "label": "Population",
         "years": [2017],
         "period": 2017,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "ths0",
+        "formatAxis": "ths0",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -14667,8 +14667,8 @@ var all_data =
         "label": "Young adult population",
         "years": [2016],
         "period": 2016,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "ths0",
+        "formatAxis": "ths0",
         "summary": {
           "metro": null,
           "micro": null,

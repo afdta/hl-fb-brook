@@ -7,8 +7,10 @@ var palette = {
     text:{
         orange:"#cc4619"
     },
-    reds:['#fee090','#fdae61','#f46d43','#d73027','#a50026'],
-    blues:['#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'],
+    blues6:['#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#084594'],
+    reds6:['#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#8c2d04'],
+    blues4:['#eff3ff','#bdd7e7','#6baed6','#2171b5'],
+    reds4:['#feedde','#fdbe85','#fd8d3c','#d94701'],
     na:"#dddddd"
 }
 
