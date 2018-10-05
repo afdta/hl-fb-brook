@@ -13,15 +13,6 @@ function lookup(indicator, metric, geolevel){
         color_scale: function(d){return "#e0e0e0"}
     };
 
-    if(geolevel=="state" || geolevel=="rural"){
-        var blues = palette.blues4;
-        var reds = palette.reds4;
-    }
-    else{
-        var blues = palette.blues6;
-        var reds = palette.reds6;        
-    }
-
     try{
         if(metric_object == null){throw new Error("No data")}
 
@@ -43,6 +34,7 @@ function lookup(indicator, metric, geolevel){
                 }
                 catch(e){
                     r = null;
+                    console.warn("Data not available");
                 }
             }
             else{
@@ -58,7 +50,8 @@ function lookup(indicator, metric, geolevel){
         d.get = function(g){
             return arguments.length > 0 ? null : [];
         }
-        d.formatAxis = function(v){return v}
+        d.formatAxis = null;
+        d.format = null;
     }
 
     //use summary to populate all and to build scales
@@ -72,14 +65,21 @@ function lookup(indicator, metric, geolevel){
                     }
                 }
             }
+
         
             //color scales
-            var sliced = all.slice(0).sort(function(a,b){
-                d3.ascending(a.value, b.value);
-            });
+            //var sliced = all.slice(0).sort(function(a,b){
+            //    d3.ascending(a.value, b.value);
+            //});
             //remove min and max
-            sliced.pop();
-            sliced.shift();
+            //sliced.pop();
+            //sliced.shift();
+            var plus3 = d.summary.mean + 3*d.summary.sd;
+            var minus3 = d.summary.mean - 3*d.summary.sd;
+
+            var sliced = all.slice(0).filter(function(d){
+                return d.value <= plus3 && d.value >= minus3;
+            })
 
             var min = d3.min(sliced, function(d){return d.value});
             var max = d3.max(sliced, function(d){return d.value});
@@ -87,8 +87,13 @@ function lookup(indicator, metric, geolevel){
             //var min = d.summary.min;
             //var max = d.summary.max;
 
-            if(min < 0 && max > 0){
+            //whether diverging must be determined based on actual min/max, not trimmed min/max (see change in poverty at state level)
+            if(d.summary.min < 0 && d.summary.max > 0){
                 var maxabs = Math.max(Math.abs(min), max);
+
+                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues4 : palette.blues4;
+                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds4 : palette.reds4;
+
                 var blue_scale = d3.scaleQuantize().domain([0, maxabs]).range(blues);
                 var red_scale = d3.scaleQuantize().domain([0, maxabs]).range(reds);
                 d.color_scale = function(v){
@@ -103,13 +108,19 @@ function lookup(indicator, metric, geolevel){
                     }
                 }
             }
-            else if(min >= 0){
+            else if(d.summary.min >= 0){
+
+                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues4 : palette.blues6;
+
                 var blue_scale = d3.scaleQuantize().domain([min, max]).range(blues);
                 d.color_scale = function(v){
                     return v==null ? palette.na : blue_scale(v);
                 }
             }
             else{
+
+                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds4 : palette.reds6;
+
                 var red_scale = d3.scaleQuantize().domain([max, min]).range(reds);
                 d.color_scale = function(v){
                     return v==null ? palette.na : red_scale(v);

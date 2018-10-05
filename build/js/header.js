@@ -5,13 +5,16 @@ import cbsa_geos from './cbsa-geos.js';
 import all_data from './all-data.js';
 
 export default function header(container){
-    var wrap = d3.select(container).append("div").classed("fb-center-col",true).style("padding","0px 15px");
+    var wrap = d3.select(container).append("div").style("padding","0px 15px").classed("fb-center-col",true).style("margin","0px auto");
 
     var title = wrap.append("p").classed("fb-header section-title",true).style("display","none");
-    var subtitle = wrap.append("p").classed("subtitle",true).style("display","none");
+    var subtitle = wrap.append("p").classed("subtitle",true).style("display","none").style("max-width","780px");
 
-    var dropdown_wrap = wrap.append("div").classed("c-fix", true);
+    var controls = wrap.append("div").classed("c-fix", true);
+    var legend_wrap = controls.append("div").classed("c-fix",true).style("display","none").style("padding","0px 0px 0px 0px");
+    var dropdown_wrap = controls.append("div").classed("c-fix", true).style("padding","0px 0px 0px 0px");
 
+    
     var select_wrap = {};
 
     select_wrap.geo = dropdown_wrap.append("div").classed("select-wrap",true).style("display","none");
@@ -31,6 +34,8 @@ export default function header(container){
                             .append("path").attr("d", "M0,0 L5,5 L10,0").attr("fill","none").attr("stroke", palette.green).attr("stroke-width","2px");
 
 
+
+
     var focus_in = function(){
         try{
             d3.select(this).select("select").focus();
@@ -42,29 +47,30 @@ export default function header(container){
     select_wrap.geo.on("mousedown", focus_in);                        
 
 
-    var legend_wrap = dropdown_wrap.append("div").classed("c-fix",true).style("display","none").style("float","right");
+    
 
-    var d_triangle = "M18,4 L23,11.5 L13,11.5 Z";
+    //"M5,2 L9,12.5 L1,12.5 Z"
+    var d_triangle = "M6,4 L10,14.5 L2,14.5 Z";
 
     var select_swatch = legend_wrap.append("div").classed("legend-swatch",true);
-    var select_swatch_svg = select_swatch.append("svg").attr("height","1rem").attr("width","28px").style("display","inline-block")
-        select_swatch_svg.append("circle").attr("r", 4).attr("fill", palette.orange).attr("cx","6").attr("cy","50%").attr("fill-opacity","1");
+    var select_swatch_svg = select_swatch.append("svg").attr("height","1rem").attr("width","23px").style("display","inline-block")
+        select_swatch_svg.append("circle").attr("r", 4).attr("fill", palette.orange).attr("cx","16").attr("cy","50%").attr("fill-opacity","1");
         select_swatch_svg.append("path").attr("d",d_triangle).attr("fill", palette.orange).attr("stroke", palette.orange);
     var select_swatch_geo = select_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Selected place").style("font-weight","bold");
 
     var place_swatch = legend_wrap.append("div").classed("legend-swatch",true);
-        place_swatch.append("svg").attr("height","1rem").attr("width","1rem").style("display","inline-block")
+        place_swatch.append("svg").attr("height","1rem").attr("width","15px").style("display","inline-block")
                     .append("circle").attr("r", 3.5).attr("fill", palette.green).attr("cx","50%").attr("cy","50%").attr("fill-opacity","0.7");
     var place_swatch_geolevel = place_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("States");
 
     var hl_swatch = legend_wrap.append("div").classed("legend-swatch",true);
-    var hl_swatch_svg = hl_swatch.append("svg").attr("height","1rem").attr("width","28px").style("display","inline-block")
+    var hl_swatch_svg = hl_swatch.append("svg").attr("height","1rem").attr("width","15px").style("display","inline-block")
         hl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", "none").attr("stroke", palette.green);
     hl_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Heartland avg.");
 
     var nhl_swatch = legend_wrap.append("div").classed("legend-swatch",true);
-    var nhl_swatch_svg = nhl_swatch.append("svg").attr("height","1rem").attr("width","28px").style("display","inline-block")
-        nhl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", "#aaaaaa").attr("stroke", "#aaaaaa");
+    var nhl_swatch_svg = nhl_swatch.append("svg").attr("height","1rem").attr("width","15px").style("display","inline-block")
+        nhl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", palette.mediumgray).attr("stroke", palette.mediumgray);
     nhl_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Non-Heartland avg.");
 
     //methods for building menu
@@ -130,11 +136,14 @@ export default function header(container){
 
         var update_legend = function(geolevel, geo){
 
+            controls.classed("two-columns", true);
+            dropdown_wrap.style("padding","0px 0px 0px 15px");
+
             var levels = {
-                metro: "Metropolitan areas",
-                micro: "Micropolitan areas",
-                state: "States",
-                rural: "Rural portion of states"
+                metro: "Other Heartland metro areas",
+                micro: "Other Heartland micro areas",
+                state: "Other Heartland states",
+                rural: "Other Heartland state rural portions"
             }
 
             var name = "";

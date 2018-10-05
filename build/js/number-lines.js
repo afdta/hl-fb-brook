@@ -51,7 +51,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     var line_ticks = g_axis.selectAll("line.tick").data(range).enter().append("line")
                             .classed("tick",true).attr("stroke",palette.green)
                             .style("shape-rendering","crispEdges")
-                            .attr("y1",0.5*height).attr("y2",10+(0.5*height))
+                            .attr("y1",0+0.5*height).attr("y2",12+(0.5*height))
                             .attr("x1",function(d){return d+"%"})
                             .attr("x2",function(d){return d+"%"})
                             ;
@@ -59,9 +59,9 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     //end one time
     
     var minanno = g_axis.append("text").attr("x", range[0]+"%").attr("text-anchor","start")
-                        .attr("dx","-3px").attr("y","50%").attr("dy","22").style("font-size","13px").attr("fill","#666666");
+                        .attr("dx","-3px").attr("y","50%").attr("dy","24").style("font-size","13px").attr("fill","#666666");
     var maxanno = g_axis.append("text").attr("x", range[1]+"%").attr("text-anchor","end")
-                        .attr("dx","3px").attr("y","50%").attr("dy","22").style("font-size","13px").attr("fill","#666666");
+                        .attr("dx","3px").attr("y","50%").attr("dy","24").style("font-size","13px").attr("fill","#666666");
  
     //update
     var update = function(metric, geolevel, geo){
@@ -78,8 +78,12 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
 
         if(data.summary==null){
             var dot_data = [];
-
             indicator_na.html(" (Not&nbsp;available)");
+
+            minanno.text("");
+            maxanno.text("");
+
+            wrap0.style("opacity","0.25");
         }
         else{
             indicator_na.html("");
@@ -87,19 +91,21 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
             var dot_data = data.get();
             var domain = [data.summary.min, data.summary.max];
 
+            scale.domain(domain).nice();
+
             format_ = format.fn0(data.format);
             formatAxis_ = format.fn0(data.formatAxis);
         
-            minanno.text( formatAxis_(domain[0]) );
-            maxanno.text( formatAxis_(domain[1]) );
+            minanno.text( formatAxis_(scale.domain()[0]) );
+            maxanno.text( formatAxis_(scale.domain()[1]) );
 
             annotations = [
                 {id:"nhl", value: data.nhl==null ? null : data.nhl},
                 {id:"selected", value: data.get(geo)},
                 {id:"hl", value: data.hl==null ? null : data.hl}
             ];
-    
-            scale.domain(domain);
+
+            wrap0.style("opacity","1");
         }
 
         var dots_u = g_dots.selectAll("circle").data(dot_data);
@@ -122,11 +128,11 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
         annos_up.exit().remove();
         var annos_enter = annos_up.enter().append("svg").classed("anno-symbols",true).attr("width","10px").attr("height","20px").style("overflow","visible");
         //annos_enter.append("path").attr("d", "M5,"+ triangle_point + " L10," + triangle_top + " L0," + triangle_top + " Z").attr("stroke-width","1px"); //triangle point is at 5px to compensate for 5px shift of g_anno
-        annos_enter.append("path").attr("d", "M5,2 L10,9.5 L0,9.5 Z").attr("stroke-width","1px"); 
+        annos_enter.append("path").attr("d", "M5,2 L9,12.5 L1,12.5 Z").attr("stroke-width","1px"); 
         var annos = annos_enter.merge(annos_up);
 
-        annos.select("path").attr("fill", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? "none" : "#aaaaaa")})
-                            .attr("stroke", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? palette.green : "#aaaaaa")})
+        annos.select("path").attr("fill", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? "none" : palette.mediumgray)})
+                            .attr("stroke", function(d){return d.id=="selected" ? palette.orange : (d.id=="hl" ? palette.green : palette.mediumgray)})
 
 
         annos.transition().duration(700)

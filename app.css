@@ -32,20 +32,22 @@ select, select option{
 
 .select-wrap{
     float:left;
-    border:3px solid #019966;
+    border:2px solid #019966;
+    border-width:0px 0px 2px 0px;
     border-radius:0px;
-    margin:0px 10px 10px 0px;
+    margin:0px 10px 15px 0px;
     padding-right:0px;
     position:relative;
     min-width:234px;
+    max-width:45%;
 }
 
 select{
     background:none;
     outline:none;
     border:none;
-    padding:12px 29px 12px 9px;
-    top:1px;
+    padding:4px 29px 4px 9px;
+    top:3px;
     position:relative;
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -58,6 +60,8 @@ select{
     margin:10px 15px 10px 0px;
 }
 
+.legend-swatch p{margin:0px;}
+
 /*expected use: class="fb-header [section-title | chart-title]"*/
 .fb-header, .fb-light-header, h1, h2, h3{
     font-family: 'Montserrat', sans-serif;
@@ -65,6 +69,7 @@ select{
     font-weight:900;
     margin:0rem 0rem 10px 0rem;
     line-height:1.3em;
+    letter-spacing: 0.01em;
 }
 .fb-light-header{
     font-weight:normal;
@@ -118,7 +123,7 @@ select{
 }
 
 .green-square-wrap > div{
-    border-width:3px;
+    border-width:2px;
     padding:15px 25px;
     border-style:solid;
     border-color:#019966;

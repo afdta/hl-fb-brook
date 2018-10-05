@@ -29,8 +29,13 @@ export default function map_module(container, init_indicator, init_metric, init_
         metric:"change",
         geolevel:"state",
         geo:"1",
-        data:null
+        geoselection:null,
+        data:null,
+        bars:null
     }
+
+    var format_;
+    var formatAxis_;
 
     //set selections, if any
     if(init_indicator != null){scope.indicator = init_indicator}
@@ -49,7 +54,7 @@ export default function map_module(container, init_indicator, init_metric, init_
     //var main_title = wrap0.append("p").text("Main title").classed("fb-header section-title",true);
     
     var wrap1 = wrap0.append("div").classed("green-square-wrap",true)
-                            .append("div").classed("c-fix", true).style("padding","0px");
+                            .append("div").classed("c-fix", true).style("padding","0px").style("overflow","visible");
 
     //map dom
     var map_wrap0 = wrap1.append("div");
@@ -65,7 +70,7 @@ export default function map_module(container, init_indicator, init_metric, init_
     filter.append("feBlend").attr("in","SourceGraphic").attr("in2","blurout").attr("mode","normal");
     
     //TWO MAP PANELS
-    var map_panel = map_wrap1.append("div"); //hold map
+    var map_panel = map_wrap1.append("div").style("position","relative"); //hold map
     
     //hold bars/legend
     var map_bars_panel = map_wrap1.append("div")
@@ -73,13 +78,34 @@ export default function map_module(container, init_indicator, init_metric, init_
                             .style("bottom","0px")
                             .style("right","0px")
                             .style("width","150px")
-                            .style("height","100%")
-                            .style("background-color","rgba(255,255,2552,0.7)")
+                            .style("background-color","#ffffff")
                             .style("border","1px solid " + palette.green)
                             .style("border-width","0px 0px 0px 1px")
                             ; 
-    
 
+    var tooltip = map_panel.append("div")
+                           .style("position","absolute")
+                           .style("min-width","200px")
+                           .style("max-width","500px")
+                           .style("min-height","100px")
+                           .style("pointer-events","none")
+                           .style("padding","0px 0px 0px 11px")
+                           ;
+
+    var tooltip_content = tooltip.append("div").style("padding","10px 15px 10px 10px").style("border","1px solid " + palette.mediumgray)
+                                .style("position","relative").style("z-index","10").style("background-color","#ffffff")
+                                .style("box-shadow","2px 3px 8px rgba(0,0,0,0.4)");
+
+        tooltip.append("div").style("width","12px").style("position","absolute")
+                            .style("left","0px").style("top","0px")
+                            .style("height","100px").style("z-index","11")
+                            .append("svg").attr("width","100%").attr("height","100%")
+                            .append("path").attr("d", "M12.5,12 L1,20 L12.5,28")
+                            .attr("stroke", palette.mediumgray)
+                            .attr("fill","#ffffff")
+                            .attr("filter","url(#feBlur)")
+                            ;
+    
     
     var map_svg = map_panel.append("svg").attr("width","100%").attr("height","100%");
     
@@ -91,11 +117,13 @@ export default function map_module(container, init_indicator, init_metric, init_
     var g_states = map_svg.append("g");
     var g_hl = map_svg.append("g"); //top heartland outline
 
-    var g_metros = map_svg.append("g");
-    var g_micros = map_svg.append("g");
+    var g_metros = map_svg.append("g").style("pointer-events","none");
+    var g_micros = map_svg.append("g").style("pointer-events","none");
+
+    var g_voro = map_svg.append("g");
     
     
-    var g_anno = map_svg.append("g");
+    var g_anno = map_svg.append("g").style("ponter-events","none");
 
     function obj2arr(){
         var micros = [];
@@ -118,6 +146,18 @@ export default function map_module(container, init_indicator, init_metric, init_
     //projection and path gen
     var proj = d3.geoAlbers();
     var path = d3.geoPath(proj);
+
+    //geo code accessor
+    var state_accessor = function(d){
+        try{
+            var geo_id = parseInt(d.properties.geo_id)+"";
+        }
+        catch(e){
+            var geo_id = null;
+        }
+        return geo_id;
+    }
+    var cbsa_accessor = function(d){return d.fips}
     
     //map draw/redraw fn
     function draw_map(){
@@ -166,8 +206,6 @@ export default function map_module(container, init_indicator, init_metric, init_
 
         //bar chart as legend
         draw_bars();
-        
-        var state_accessor = function(d){return parseInt(d.properties.geo_id)+"";}
 
         var fill = function(geo_accessor){
             if(arguments.length==0){
@@ -185,36 +223,83 @@ export default function map_module(container, init_indicator, init_metric, init_
         var state_shadow = draw_states(g_shadow, HLFC.features, {stroke:"#cccccc", "stroke-width":0.5, fill:"#cccccc"});
         var state_outline = draw_states(g_hl, [heartland_mesh], {stroke:"#666666", "stroke-width":1.5, fill:"none"});
         
+        //draw geoselection
         if(scope.geolevel=="state" || scope.geolevel=="rural"){
-            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:fill(state_accessor), "stroke-width":"0.5" });
-            
-            g_metros.style("visibility","hidden").style("pointer-events","none");
-            g_micros.style("visibility","hidden").style("pointer-events","none");
+            scope.geoselection = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:fill(state_accessor), "stroke-width":"0.5" }, true);
+            g_voro.selectAll("path").remove();
+            g_metros.style("visibility","hidden");
+            g_micros.style("visibility","hidden");
         }
         else if(scope.geolevel=="metro"){
-            var metros = draw_points(g_metros, cbsa_geos2.metro, {fill:fill(), r:5});
-            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
+            scope.geoselection = draw_points(g_metros, cbsa_geos2.metro, {fill:fill(), r:5}, true);
+            draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
            
-            g_metros.style("visibility","visible").style("pointer-events","all");
-            g_micros.style("visibility","hidden").style("pointer-events","none");
+            g_metros.style("visibility","visible");
+            g_micros.style("visibility","hidden");
         }
         else if(scope.geolevel=="micro"){
-            var micros = draw_points(g_micros, cbsa_geos2.micro, {fill:fill(), r:5});
-            var states = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
+            scope.geoselection = draw_points(g_micros, cbsa_geos2.micro, {fill:fill(), r:5}, true);
+            draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
 
-            g_micros.style("visibility","visible").style("pointer-events","all");
-            g_metros.style("visibility","hidden").style("pointer-events","none");
+            g_micros.style("visibility","visible");
+            g_metros.style("visibility","hidden");
         }
         else{
+            scope.geoselection = null;
+        }
+    }
 
+    var hide_timer;
+    function show_tooltip(geo, centroid){
+        clearTimeout(hide_timer);
+        tooltip_content.text("HERE")
+        
+        tooltip.style("left",(centroid[0]+3)+"px").style("top",(centroid[1]-20)+"px").style("display","block");
+
+        
+
+        if(scope.geolevel == "state" || scope.geolevel == "rural"){
+            var sel = d3.select(this);
+            var a = g_anno.selectAll("path").data([1]);
+            a.enter().append("path").merge(a).attr("d", sel.attr("d")).attr("stroke",palette.gray).attr("stroke-width","1.5")
+                        .style("pointer-events","none").attr("fill","none")
+                        //.attr("filter", "url(#feBlur)")
+                        ;
+            var name = HL[geo];
+        }
+        else{
+            var a = g_anno.selectAll("circle").data([1]);
+            a.enter().append("circle").merge(a).attr("cx", centroid[0])
+                            .attr("cy", centroid[1]).attr("r", 7).attr("stroke-width","1.5")
+                            .attr("stroke", palette.gray).attr("fill","none")
+                            .style("pointer-events","none")
+                            ;
+            var name = cbsa_geos[scope.geolevel][geo].name;
         }
 
+        var value = format_(scope.data.get(geo));
 
+        tooltip_content.html('<p class="fb-header" style="margin:0px 0px 5px 0px;">' + name + '</p>' + 
+                             '<p style="margin:0px;">' + value + '</p>');
+
+        scope.bars.style("opacity",function(d){return d.geo == geo ? 1 : 0.25});
+    
+    }
+
+    function hide_tooltip(){
+        clearTimeout(hide_timer);
+        hide_timer = setTimeout(function(){
+            g_anno.selectAll("path").remove();
+            g_anno.selectAll("circle").remove();
+            tooltip_content.html("");
+            tooltip.style("left","0px").style("top","0px").style("display","none");
+            scope.bars.style("opacity","1");
+        }, 150);
     }
 
     //TODO: add tooltip functionality
-    function draw_states(g, features, attrs){
-        var st_ = g.selectAll("path").data(features, function(d){return d.fips});
+    function draw_states(g, features, attrs, enable_tooltips){
+        var st_ = g.selectAll("path").data(features);
         st_.exit().remove();
         var st = st_.enter().append("path").merge(st_)
                     .attr("d", path)
@@ -228,16 +313,34 @@ export default function map_module(container, init_indicator, init_metric, init_
                 }
             }
         }
+
+        if(arguments.length > 3 && !!enable_tooltips){
+            st.on("mouseenter", function(d, i){
+                var that = this;
+                show_tooltip.call(that, state_accessor(d), path.centroid(d));
+            })
+            .on("mouseleave", hide_tooltip)
+            ;
+        }
+        else{
+            st.on("mouseenter", null).on("mouseleave", null);
+        }
         
         return st;    
     }
 
-    function draw_points(g, features, attrs){
-        var m_ = g.selectAll("circle").data(features, function(d){return d.fips});
+    //draw the points
+    function draw_points(g, features, attrs, enable_tooltips){
+        var projected_features = features.map(function(d){
+            var p = proj([d.lon, d.lat]);
+            return {x:p[0], y:p[1], fips:d.fips}
+        })
+
+        var m_ = g.selectAll("circle").data(projected_features, function(d){return d.fips});
         m_.exit().remove();
         var m = m_.enter().append("circle").merge(m_)
-                    .attr("cx", function(d){return proj([d.lon, d.lat])[0]})
-                    .attr("cy", function(d){return proj([d.lon, d.lat])[1]})
+                    .attr("cx", function(d){return d.x})
+                    .attr("cy", function(d){return d.y})
                     ;
 
         //apply attributes
@@ -248,34 +351,81 @@ export default function map_module(container, init_indicator, init_metric, init_
                 }
             }
         }
+
+        //run mouse events on voronoi - to do
+        var voro = d3.voronoi()
+                     .extent([[0,0], [scope.width, scope.height]])
+                     .x(function(d){return d.x})
+                     .y(function(d){return d.y})
+                     .polygons(projected_features)
+                     .map(function(d){
+                        var path;
+                        if(d!=null){
+                            path = "M" + d.join("L") + "Z";
+                        }
+                        else{
+                            path = "M0,0";
+                        }
+                        return {path:path, fips:d.data.fips, centroid:[d.data.x, d.data.y]}
+                     })
+                     ;
+
+        var mv_u = g_voro.selectAll("path").data(voro);
+        mv_u.exit().remove();
+        var mv = mv_u.enter().append("path").merge(mv_u)
+            .attr("d", function(d){
+                return d.path;
+            })
+            .attr("stroke","none")
+            .attr("fill","none")
+            .style("pointer-events","all");
+
+        if(arguments.length > 3 && !!enable_tooltips){
+            mv.on("mouseenter", function(d, i){
+                var that = this;
+                show_tooltip.call(that, cbsa_accessor(d), d.centroid);
+            })
+            .on("mouseleave", hide_tooltip)
+            ;
+        }
+        else{
+            mv.on("mouseenter", null).on("mouseleave", null);
+        }
         
         return m;
     }
 
     //bar chart dom
-    var bars_wrap0 = map_bars_panel.append("div").style("height","100%");
+    var bars_wrap0 = map_bars_panel.append("div");
         
-    //var bars_title = bars_wrap0.append("p").text("Bar chart title").classed("subtitle", true);
+    var bars_title = bars_wrap0.append("p")
+                    .text("")
+                    .style("margin","16px 5px 16px 5%");
 
-    var bars_wrap1 = bars_wrap0.append("div").style("min-height","360px").style("width","100%").style("height","100%");
+    var bars_wrap1 = bars_wrap0.append("div").style("min-height","300px").style("width","100%");
     var bars_svg = bars_wrap1.append("svg").attr("width","100%").attr("height","100%");
     var bars_grid = bars_svg.append("g");
     var bars_axis = bars_svg.append("g").attr("transform","translate(0,20)");
     var bars_main = bars_svg.append("g");
     var bars_front = bars_svg.append("g");
 
+    var bars_axis_line = bars_axis.append("line").classed("x-axis",true)
+             .attr("x1","5%")
+             .attr("x2","95%")
+             .attr("y1",3.5).attr("y2",3.5)
+             .attr("stroke",palette.gray)
+             .style("shape-rendering","crispEdges")
+             ;
+
     //render axes and grid lines
-    function draw_axis(scale, tickFormat){
+    function draw_axis(scale){
         if(scale===null){
             var tickvals = [];
-            scale = function(){return null}
-            var fmt = function(){return "N/A"}
-
+            var tickZero = []; //needs to be empty because scale can't be used below
         }
         else{
-            var tickvals = scale.ticks(3);
-            var fmt = format.fn0(tickFormat);
-            
+            var tickvals = scale.ticks(3);       
+            var tickZero = [1];     
         }
 
         var ticks = bars_axis.selectAll("line.tick-mark").data(tickvals);
@@ -283,27 +433,37 @@ export default function map_module(container, init_indicator, init_metric, init_
         ticks.enter().append("line").classed("tick-mark",true).merge(ticks)
             .attr("x1", function(d){return scale(d)+"%"})
             .attr("x2", function(d){return scale(d)+"%"})
-            .attr("y1","2").attr("y2","7").attr("stroke",palette.gray);
+            .attr("y1","3.5").attr("y2","12").attr("stroke",palette.gray)
+            .style("shape-rendering","crispEdges");
 
         var tickLabels = bars_axis.selectAll("text.tick-mark").data(tickvals);
         tickLabels.exit().remove();
         tickLabels.enter().append("text").classed("tick-mark",true).merge(tickLabels)
             .attr("x", function(d){return scale(d)+"%"}).attr("text-anchor","middle")
-            .attr("y","0").attr("y2","0").attr("fill",palette.gray).style("font-size","13px")
-            .text(function(d){return fmt(d)});
+            .attr("y","0").attr("fill",palette.gray).style("font-size","13px")
+            .text(function(d){return formatAxis_(d)});
 
-        var gridlines = bars_grid.selectAll("line.grid-line").data(tickvals);
+        var gridlines = bars_front.selectAll("line.grid-line").data(tickZero);
         gridlines.exit().remove();
         gridlines.enter().append("line").classed("grid-line",true).merge(gridlines)
             .attr("x1", function(d){return scale(d)+"%"})
             .attr("x2", function(d){return scale(d)+"%"})
-            .attr("y1","30").attr("y2","95%").attr("stroke","#dddddd");
+            .attr("y1","35").attr("y2","100%").attr("stroke",palette.gray)
+            .style("shape-rendering","crispEdges");
+
+        /*var gridlines = bars_grid.selectAll("line.grid-line").data(tickvals);
+        gridlines.exit().remove();
+        gridlines.enter().append("line").classed("grid-line",true).merge(gridlines)
+            .attr("x1", function(d){return scale(d)+"%"})
+            .attr("x2", function(d){return scale(d)+"%"})
+            .attr("y1","30").attr("y2","95%").attr("stroke","#dddddd");*/
 
     }
 
     //bar chart draw/redraw
     function draw_bars(){
         var data = scope.data.get().slice(0).sort(function(a,b){return b.value-a.value});
+        
         var extent = null;
 
         if(data.length > 0){
@@ -348,7 +508,7 @@ export default function map_module(container, init_indicator, init_metric, init_
         }*/
 
         if(extent !== null){
-            var x = d3.scaleLinear().domain(extent).range([10,90]);
+            var x = d3.scaleLinear().domain(extent).range([5,85]);
             var zero = x(0);
             var width = function(d){
                 var v = d.value;
@@ -363,9 +523,8 @@ export default function map_module(container, init_indicator, init_metric, init_
                 return w + "%";
             }
 
-            draw_axis(x, scope.data.formatAxis);
+            draw_axis(x);
 
-            var fmt = format.fn0(scope.data.format);
             var bar_group_data = data.map(function(d){
                 return {value:d.value, geo:d.geo, color:scope.data.color_scale(d.value)}
             });
@@ -373,15 +532,16 @@ export default function map_module(container, init_indicator, init_metric, init_
                                     .map(function(d){
                                         if(d.values.length > 1){
                                             var extent = d3.extent(d.values, function(d){return d.value});
-                                            var label = fmt(extent[0]) + " to " + fmt(extent[1]); 
+                                            var label = format_(extent[0]) + " to " + format_(extent[1]); 
                                             var min = extent[0];
                                         }
                                         else{
                                             var min = d.values[0].value;
-                                            label = fmt(min);
+                                            label = format_(min);
                                         }
                                         return {
                                             label: label,
+                                            n: d.values.length,
                                             min: min,
                                             bars: d.values.sort(function(a,b){
                                                 return d3.descending(a.value, b.value);
@@ -395,12 +555,21 @@ export default function map_module(container, init_indicator, init_metric, init_
                 d.prior_bars = prior_bars;
                 prior_bars = prior_bars + d.bars.length;
             });
+
+            map_bars_panel.style("background-color","#ffffff");
+            bars_title.html('<span class="fb-header">' + 
+                            scope.data.label + 
+                            '</span>&nbsp;<span class="fb-light-header">' + 
+                            scope.data.period +
+                            '</span>');
         }
         else{
             var x = function(){return 0};
             var width = 0;
             draw_axis(null);
             var bar_groups = [];
+            map_bars_panel.style("background-color","#e0e0e0")
+            bars_title.html('<p class="fb-header">Data not available</p>');
         }
 
         //set height to accommodate all bars -- start with scope.height set by map
@@ -413,8 +582,7 @@ export default function map_module(container, init_indicator, init_metric, init_
         
         //final height
         height = (bar_height * data.length) + top_pad + bot_pad + group_pad*bar_groups.length;
-        
-        //map_bars_panel.style("height", height+"px"); //.style("top", ((scope.height - height)/2)+"px");
+        bars_wrap1.style("height",height+"px");
 
         //bar groups
         var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
@@ -425,18 +593,50 @@ export default function map_module(container, init_indicator, init_metric, init_
             return "translate(0," + (top_pad + (i+1)*group_pad + d.prior_bars*bar_height) + ")";
         });
 
+        //actual rectangles
         var b_u = bars.selectAll("rect.bar").data(function(d){return d.bars});
         b_u.exit().remove();
         var b_e = b_u.enter().append("rect").classed("bar",true);
         var b = b_e.merge(b_u);
+
+        scope.bars = b; //make accessible
     
         b.attr("width", width)
             .attr("height", bar_height)
             .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
             .attr("y",function(d,i){return i*bar_height})
             .attr("fill", function(d){return d.color})
+            .attr("stroke", bar_height > 5 ? "#ffffff" : "none")
+            ;
 
-        var labels_u = bars.selectAll("text.label").data(function(d){return [d.label]});
+        //bar labels (states)
+        var bl_u = bars.selectAll("text.bar-label").data(function(d){
+            if(scope.geolevel == "state" || scope.geolevel == "rural"){
+                return d.bars;
+            }
+            else{
+                return [];
+            }
+        });
+        bl_u.exit().remove();
+        var bl_e = bl_u.enter().append("text").classed("bar-label",true);
+        var bl = bl_e.merge(bl_u);
+    
+        bl.attr("x", function(d){return d.value > 0 ? x(d.value)+"%" : zero+"%"}) 
+            .attr("y",function(d,i){return i*bar_height})
+            .attr("dy", bar_height*0.8)
+            .attr("dx",3)
+            .attr("fill", function(d){return palette.gray})
+            .text(function(d){return HL[d.geo]})
+            .style("font-size","13px")
+            ;
+
+        //group labels (ranges)
+        var labels_u = bars.selectAll("text.label").data(function(d,i){
+            //var lab = i==0 ? d.label + " (n=" + d.n + ")" : d.label + " (" + d.n + ")";
+            var lab = d.label + " (" + d.n + ")";
+            return [lab];
+        });
         labels_u.exit().remove();
         var labels_e = labels_u.enter().append("text").classed("label",true);
         var labels = labels_e.merge(labels_u);
@@ -445,6 +645,7 @@ export default function map_module(container, init_indicator, init_metric, init_
             .attr("text-anchor","start")
             .attr("y",function(d,i){return 0})
             .attr("dy","-3")
+            .attr("dx","3")
             .text(function(d){return d})
             .attr("fill","#555555")
             .style("font-size","13px")
@@ -467,11 +668,15 @@ export default function map_module(container, init_indicator, init_metric, init_
 
         scope.data = lookup(scope.indicator, scope.metric, scope.geolevel);
 
+        format_ = format.fn0(scope.data.format);
+        formatAxis_ = format.fn0(scope.data.formatAxis);
+
         var r_scale = d3.scaleQuantize().domain([0,1]).range([3,5,7]); //all cbsas on same scale?
 
         //define color scale -- should handle nulls
 
         draw_map();
+        hide_tooltip();
         
     }
 
