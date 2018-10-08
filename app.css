@@ -81,6 +81,34 @@ select{
 
 .subtitle{font-style:italic;line-height:1.5em}
 
+.more-info {
+    width:16px;
+    height:16px;
+    display:inline-block;
+    margin:3px 5px;
+    padding:0px 0px;
+    text-align:center;
+    font-size:9px;
+    line-height:16px;
+    border-radius:8px;
+    border:0px solid #aaaaaa;
+    background-color:#dddddd;
+    color:#999999;
+    box-sizing:border-box;
+    cursor:pointer;
+    vertical-align:top;
+}
+
+.level0{
+    position:relative;
+    z-index:0;
+}
+
+.level1{
+    position:relative;
+    z-index:1;
+}
+
 /*footnotes container for notes and sources*/
 .footnotes{
     margin:2rem 0rem 0rem 0rem;
@@ -109,6 +137,7 @@ select{
 .number-line-plot{
     overflow: visible;
     margin:1rem 0rem;
+    padding:0px 5px;
 }
 
 
@@ -124,10 +153,9 @@ select{
 
 .green-square-wrap > div{
     border-width:2px;
-    padding:15px 25px;
+    padding:15px 15px;
     border-style:solid;
     border-color:#019966;
-    overflow:hidden;
 }
 
 .two-columns > div{

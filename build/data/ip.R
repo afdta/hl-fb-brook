@@ -285,8 +285,8 @@ schema1$job$definition <- "Job numbers and their growth approximate the size of 
 schema1$job$source <- "Bureau of Labor Statistics, Quarterly Census of Employment and Wages"
 schema1$job$vars <- list()
 schema1$job$vars$change <- schema(outcomes, "emp_CAGR_10-17", "Percent change in jobs", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
-schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs (000s)", format="ths0", startYear=2010)
-schema1$job$vars$end <- schema(outcomes, "emp_2017", "Jobs (000s)", format="ths0", startYear=2017)  
+schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs (ths)", format="ths0", startYear=2010)
+schema1$job$vars$end <- schema(outcomes, "emp_2017", "Jobs (ths)", format="ths0", startYear=2017)  
 
 #gdp
 schema1$gdp <- list()
@@ -295,8 +295,8 @@ schema1$gdp$definition <- "Real gross domestic product (GDP) measures the total 
 schema1$gdp$source <- "Emsi 2017.4"
 schema1$gdp$vars <- list()
 schema1$gdp$vars$change <- schema(outcomes, "gdp_CAGR_10-16", "Percent change in GDP", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$gdp$vars$start <- schema(outcomes, "gdp_2010", "GDP (000s)", format="doll000", startYear=2010)
-schema1$gdp$vars$end <- schema(outcomes, "gdp_2016", "GDP (000s)", format="doll000", startYear=2016)
+schema1$gdp$vars$start <- schema(outcomes, "gdp_2010", "GDP ($ths)", format="doll000", startYear=2010)
+schema1$gdp$vars$end <- schema(outcomes, "gdp_2016", "GDP ($ths)", format="doll000", startYear=2016)
 
 #jyf
 schema1$jyf <- list()
@@ -305,8 +305,8 @@ schema1$jyf$definition <- "Changes in the total number of full- and part-time wa
 schema1$jyf$source <- "U.S. Census Bureau, Longitudinal Employer-Household Dynamics Program's Quarterly Workforce Indicators"
 schema1$jyf$vars <- list()
 schema1$jyf$vars$change <- schema(outcomes, "jyf_CAGR, 2010-16", "Percent change in jobs at young firms", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$jyf$vars$start <- schema(outcomes, "jyf_Employment, 2010:Q1", "Jobs at young firms", format="ths0", startYear=2010)
-schema1$jyf$vars$end <- schema(outcomes, "jyf_Employment, 2016:Q1", "Jobs at young firms", format="ths0", startYear=2016)
+schema1$jyf$vars$start <- schema(outcomes, "jyf_Employment, 2010:Q1", "Jobs at young firms (ths)", format="ths0", startYear=2010)
+schema1$jyf$vars$end <- schema(outcomes, "jyf_Employment, 2016:Q1", "Jobs at young firms (ths)", format="ths0", startYear=2016)
 
 #awg
 schema1$awg <- list()
@@ -315,8 +315,8 @@ schema1$awg$definition <- "Aggregate annual wages paid to workers divided by the
 schema1$awg$source <- 'U.S. Bureau of Economic Analysis, "Table SA25N Total Full-Time and Part-Time Employment by NAICS Industry"; U.S. Bureau of Economic Analysis, "Table SA7N Wages and Salaries by NAICS Industry"'
 schema1$awg$vars <- list()
 schema1$awg$vars$change <- schema(outcomes, "avgwage_CAGR_2010-16", "Percent change in average wage", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$awg$vars$start <- schema(outcomes, "avgwage_2010", "Average wage", format="doll000", startYear=2010)
-schema1$awg$vars$end <- schema(outcomes, "avgwage_2016", "Average wage", format="doll000", startYear=2016)
+schema1$awg$vars$start <- schema(outcomes, "avgwage_2010", "Average wage ($ths)", format="doll000", startYear=2010)
+schema1$awg$vars$end <- schema(outcomes, "avgwage_2016", "Average wage ($ths)", format="doll000", startYear=2016)
 
 
 #sol
@@ -326,8 +326,8 @@ schema1$sol$definition <- "Output, from above, divided by the total local popula
 schema1$sol$source <- "Emsi 2017.4; U.S. Census Bureau, Population Estimates Program"
 schema1$sol$vars <- list()
 schema1$sol$vars$change <- schema(outcomes, "sol_CAGR_10-16", "Percent change in standard of living", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$sol$vars$start <- schema(outcomes, "sol_2010", "Standard of living", format="doll000", startYear=2010)
-schema1$sol$vars$end <- schema(outcomes, "sol_2016", "Standard of living", format="doll000", startYear=2016)
+schema1$sol$vars$start <- schema(outcomes, "sol_2010", "Standard of living ($ths)", format="doll000", startYear=2010)
+schema1$sol$vars$end <- schema(outcomes, "sol_2016", "Standard of living ($ths)", format="doll000", startYear=2016)
 
 #prod
 schema1$pro <- list()
@@ -336,8 +336,8 @@ schema1$pro$definition <- "Output, as above, divided by the total number of loca
 schema1$pro$source <- "Bureau of Labor Statistics, Quarterly Census of Employment and Wages; Emsi 2017.4"
 schema1$pro$vars <- list()
 schema1$pro$vars$change <- schema(outcomes, "prod_CAGR_10-16", "Percent change in productivity", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$pro$vars$start <- schema(outcomes, "prod_2010", "Productivity", format="doll000", startYear=2010)
-schema1$pro$vars$end <- schema(outcomes, "prod_2016", "Productivity", format="doll000", startYear=2016)
+schema1$pro$vars$start <- schema(outcomes, "prod_2010", "Productivity ($ths)", format="doll000", startYear=2010)
+schema1$pro$vars$end <- schema(outcomes, "prod_2016", "Productivity ($ths)", format="doll000", startYear=2016)
 
 #med
 schema1$med <- list()
@@ -346,8 +346,8 @@ schema1$med$definition <- "The median wage measures the annual wage earned by a 
 schema1$med$source <- "U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Public Use Microdata Sample"
 schema1$med$vars <- list()
 schema1$med$vars$change <- schema(outcomes, "medearn_CAGR_10-16", "Percent change in median earnings", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016, asjson=FALSE)
-schema1$med$vars$start <- schema(outcomes, "medearn_2010", "Median earnings", format="doll000", startYear=2010)
-schema1$med$vars$end <- schema(outcomes, "medearn_2016", "Median earnings", format="doll000", startYear=2016)
+schema1$med$vars$start <- schema(outcomes, "medearn_2010", "Median earnings ($ths)", format="doll000", startYear=2010)
+schema1$med$vars$end <- schema(outcomes, "medearn_2016", "Median earnings ($ths)", format="doll000", startYear=2016)
 
 #LL <- schema(outcomes, "medearn_CAGR_10-16", "Percent change in median earnings", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016, asjson=FALSE)
 
@@ -402,7 +402,7 @@ schema1$pop$source <- "U.S. Census Bureau, Population Estimates Program"
 schema1$pop$vars <- list()
 schema1$pop$vars$change <- schema(drivers, "pop_CAGR_2010-17", "Percent change in population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
 schema1$pop$vars$start <- unbox(NA)
-schema1$pop$vars$end <- schema(drivers, "pop_2017", "Population (000s)", format="ths0", startYear=2017)
+schema1$pop$vars$end <- schema(drivers, "pop_2017", "Population (ths)", format="ths0", startYear=2017)
 
 #ya pop
 schema1$ya <- list()
@@ -412,7 +412,7 @@ schema1$ya$source <- "U.S. Census Bureau, 2010 and 2016 American Community Surve
 schema1$ya$vars <- list()
 schema1$ya$vars$change <- schema(drivers, "ya_YAs_CAGR_10-16", "Percent change in young adult population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
 schema1$ya$vars$start <- unbox(NA)
-schema1$ya$vars$end <- schema(drivers, "ya_YAs_16", "Young adult population", format="ths0", startYear=2016)
+schema1$ya$vars$end <- schema(drivers, "ya_YAs_16", "Young adult population (ths)", format="ths0", startYear=2016)
 
 #edu
 schema1$edu <- list()
@@ -442,7 +442,7 @@ schema1$utt$source <- "Ross DeVol, Joe Lee, and Minoli Ratnatunga, “Concept to
 schema1$utt$vars <- list()
 schema1$utt$vars$change <- unbox(NA)
 schema1$utt$vars$start <- unbox(NA)
-schema1$utt$vars$end <- schema(drivers, "utt_Universities_Top100_17", "University tech transfer ranking", format="num0", startYear=2017)
+schema1$utt$vars$end <- schema(drivers, "utt_Universities_Top100_17", "Number of top 100 universities for tech transfer", format="num0", startYear=2017)
 
 #home prices
 schema1$hp <- list()
@@ -452,7 +452,7 @@ schema1$hp$source <- "U.S. Census Bureau, 2010 and 2016 American Community Surve
 schema1$hp$vars <- list()
 schema1$hp$vars$change <- schema(drivers, "hp_CAGR_10-16", "Percent change in home values", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
 schema1$hp$vars$start <- unbox(NA)
-schema1$hp$vars$end <- schema(drivers, "hp_2016", "Home values", format="doll000", startYear=2016)
+schema1$hp$vars$end <- schema(drivers, "hp_2016", "Home values ($ths)", format="doll000", startYear=2016)
 
 #broadband
 schema1$bb <- list()

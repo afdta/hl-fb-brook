@@ -132,9 +132,9 @@
 	    "infrastructure": ["hp", "bb"]
 	  },
 	  "job": {
-	    "label": ["job"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Jobs"],
+	    "definition": ["Job numbers and their growth approximate the size of the economy and the level of labor demand by measuring the number of full- and part-time positions in a regional economy."],
+	    "source": ["Bureau of Labor Statistics, Quarterly Census of Employment and Wages"],
 	    "vars": {
 	      "change": {
 	        "var": "emp_CAGR_10-17",
@@ -704,7 +704,7 @@
 	      },
 	      "start": {
 	        "var": "emp_2010",
-	        "label": "Jobs",
+	        "label": "Jobs (ths)",
 	        "years": [2010],
 	        "period": 2010,
 	        "format": "ths0",
@@ -1270,7 +1270,7 @@
 	      },
 	      "end": {
 	        "var": "emp_2017",
-	        "label": "Jobs",
+	        "label": "Jobs (ths)",
 	        "years": [2017],
 	        "period": 2017,
 	        "format": "ths0",
@@ -1838,8 +1838,8 @@
 	  },
 	  "gdp": {
 	    "label": ["GDP"],
-	    "definition": [""],
-	    "source": [""],
+	    "definition": ["Real gross domestic product (GDP) measures the total value of the goods and services produced in a region, including wages and profits—a standard of economic output."],
+	    "source": ["Emsi 2017.4"],
 	    "vars": {
 	      "change": {
 	        "var": "gdp_CAGR_10-16",
@@ -2410,11 +2410,11 @@
 	      },
 	      "start": {
 	        "var": "gdp_2010",
-	        "label": "GDP",
+	        "label": "GDP ($ths)",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -2977,11 +2977,11 @@
 	      },
 	      "end": {
 	        "var": "gdp_2016",
-	        "label": "GDP",
+	        "label": "GDP ($ths)",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "num0",
-	        "formatAxis": "num0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -3545,9 +3545,9 @@
 	    }
 	  },
 	  "jyf": {
-	    "label": ["jyf"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Jobs at young firms"],
+	    "definition": ["Changes in the total number of full- and part-time wage and salaried jobs at young, private-sector firms age five years or less measures the impact of entrepreneurship in a regional economy."],
+	    "source": ["U.S. Census Bureau, Longitudinal Employer-Household Dynamics Program's Quarterly Workforce Indicators"],
 	    "vars": {
 	      "change": {
 	        "var": "jyf_CAGR, 2010-16",
@@ -4117,7 +4117,7 @@
 	      },
 	      "start": {
 	        "var": "jyf_Employment, 2010:Q1",
-	        "label": "Jobs at young firms",
+	        "label": "Jobs at young firms (ths)",
 	        "years": [2010],
 	        "period": 2010,
 	        "format": "ths0",
@@ -4683,7 +4683,7 @@
 	      },
 	      "end": {
 	        "var": "jyf_Employment, 2016:Q1",
-	        "label": "Jobs at young firms",
+	        "label": "Jobs at young firms (ths)",
 	        "years": [2016],
 	        "period": 2016,
 	        "format": "ths0",
@@ -5250,9 +5250,9 @@
 	    }
 	  },
 	  "awg": {
-	    "label": ["awg"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Average wage"],
+	    "definition": ["Aggregate annual wages paid to workers divided by the total number of jobs yields the average annual wage per job in a location."],
+	    "source": ["U.S. Bureau of Economic Analysis, \"Table SA25N Total Full-Time and Part-Time Employment by NAICS Industry\"; U.S. Bureau of Economic Analysis, \"Table SA7N Wages and Salaries by NAICS Industry\""],
 	    "vars": {
 	      "change": {
 	        "var": "avgwage_CAGR_2010-16",
@@ -5822,11 +5822,11 @@
 	      },
 	      "start": {
 	        "var": "avgwage_2010",
-	        "label": "Average annual wage",
+	        "label": "Average wage ($ths)",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -6388,11 +6388,11 @@
 	      },
 	      "end": {
 	        "var": "avgwage_2016",
-	        "label": "Average annual wage",
+	        "label": "Average wage ($ths)",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -6955,9 +6955,9 @@
 	    }
 	  },
 	  "sol": {
-	    "label": ["sol"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Standard of living"],
+	    "definition": ["Output, from above, divided by the total local population yields output per capita, which reflects place's average standard of living."],
+	    "source": ["Emsi 2017.4; U.S. Census Bureau, Population Estimates Program"],
 	    "vars": {
 	      "change": {
 	        "var": "sol_CAGR_10-16",
@@ -7527,11 +7527,11 @@
 	      },
 	      "start": {
 	        "var": "sol_2010",
-	        "label": "Standard of living",
+	        "label": "Standard of living ($ths)",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -8093,11 +8093,11 @@
 	      },
 	      "end": {
 	        "var": "sol_2016",
-	        "label": "Standard of living",
+	        "label": "Standard of living ($ths)",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -8660,9 +8660,9 @@
 	    }
 	  },
 	  "pro": {
-	    "label": ["pro"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Productivity"],
+	    "definition": ["Output, as above, divided by the total number of local jobs, as above, yields the output per job, which is a basic measure of a place's productivity."],
+	    "source": ["Bureau of Labor Statistics, Quarterly Census of Employment and Wages; Emsi 2017.4"],
 	    "vars": {
 	      "change": {
 	        "var": "prod_CAGR_10-16",
@@ -9232,11 +9232,11 @@
 	      },
 	      "start": {
 	        "var": "prod_2010",
-	        "label": "Productivity",
+	        "label": "Productivity ($ths)",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -9798,11 +9798,11 @@
 	      },
 	      "end": {
 	        "var": "prod_2016",
-	        "label": "Productivity",
+	        "label": "Productivity ($ths)",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -10365,9 +10365,9 @@
 	    }
 	  },
 	  "med": {
-	    "label": ["med"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Median earnings"],
+	    "definition": ["The median wage measures the annual wage earned by a person in the middle of an area’s income distribution (among people at least 16 years old)."],
+	    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Public Use Microdata Sample"],
 	    "vars": {
 	      "change": {
 	        "var": "medearn_CAGR_10-16",
@@ -10582,11 +10582,11 @@
 	      },
 	      "start": {
 	        "var": "medearn_2010",
-	        "label": "Median earnings",
+	        "label": "Median earnings ($ths)",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -10793,11 +10793,11 @@
 	      },
 	      "end": {
 	        "var": "medearn_2016",
-	        "label": "Median earnings",
+	        "label": "Median earnings ($ths)",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -11008,13 +11008,13 @@
 	    }
 	  },
 	  "epo": {
-	    "label": ["epo"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Employment rate"],
+	    "definition": ["The employment-to-population ratio measures the share of individuals age 18 to 64 who are currently employed."],
+	    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"],
 	    "vars": {
 	      "change": {
 	        "var": "epop_2010-16",
-	        "label": "Percentage point change in employment to pop. ratio",
+	        "label": "Percentage point change in the employment rate",
 	        "years": [2010, 2016],
 	        "period": "2010–2016",
 	        "format": "shch1",
@@ -11225,7 +11225,7 @@
 	      },
 	      "start": {
 	        "var": "epop_2010",
-	        "label": "Emp. to pop. ratio",
+	        "label": "Employment rate",
 	        "years": [2010],
 	        "period": 2010,
 	        "format": "num2",
@@ -11436,7 +11436,7 @@
 	      },
 	      "end": {
 	        "var": "epop_2016",
-	        "label": "Emp. to pop. ratio",
+	        "label": "Employment rate",
 	        "years": [2016],
 	        "period": 2016,
 	        "format": "num2",
@@ -11651,9 +11651,9 @@
 	    }
 	  },
 	  "pov": {
-	    "label": ["pov"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Poverty rate"],
+	    "definition": ["The poverty rate measures the share of local individuals who received income less than the federal poverty threshold."],
+	    "source": ["U.S. Census Bureau, Small Area Income and Poverty Estimates (SAIPE) Program"],
 	    "vars": {
 	      "change": {
 	        "var": "povrate_2010-16",
@@ -13356,9 +13356,9 @@
 	    }
 	  },
 	  "ai": {
-	    "label": ["ai"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Share of jobs in advanced industries"],
+	    "definition": ["R&D- and STEM worker-intensive advanced industries—ranging from automotive manufacturing to renewable energy to digital services—anchor regional economies with their high-productivity, good-paying innovation and export activity."],
+	    "source": ["Emsi 2017.4 and 2018.2"],
 	    "vars": {
 	      "change": {
 	        "var": "ai_CAGR_Emp_10-16",
@@ -13470,9 +13470,9 @@
 	    }
 	  },
 	  "ex": {
-	    "label": ["ex"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Export share of output"],
+	    "definition": ["Exports generate financial inflows for states and communities and also expand firms’ customer bases, increase firms’ competitiveness, and support good-paying jobs."],
+	    "source": ["Nick Marchio and Joseph Parilla, “Export Monitor 2018” (Washington: Brookings Institution, 2018)"],
 	    "vars": {
 	      "change": {
 	        "var": "ex_RealExports_CAGR_10-17",
@@ -13584,9 +13584,9 @@
 	    }
 	  },
 	  "pop": {
-	    "label": ["pop"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Population"],
+	    "definition": ["Population growth bolsters labor supply and enhances consumer demand. It also serves as a signal of local success, as individuals move to areas with stronger economic opportunity."],
+	    "source": ["U.S. Census Bureau, Population Estimates Program"],
 	    "vars": {
 	      "change": {
 	        "var": "pop_CAGR_2010-17",
@@ -14158,7 +14158,7 @@
 	      "start": null,
 	      "end": {
 	        "var": "pop_2017",
-	        "label": "Population",
+	        "label": "Population (ths)",
 	        "years": [2017],
 	        "period": 2017,
 	        "format": "ths0",
@@ -14726,9 +14726,9 @@
 	    }
 	  },
 	  "ya": {
-	    "label": ["ya"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Young adult population"],
+	    "definition": ["Adults aged 18-to-34 are the largest segment of the U.S. workforce and an important consumer market. As a result, they are a sought-after source of state in-migration."],
+	    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"],
 	    "vars": {
 	      "change": {
 	        "var": "ya_YAs_CAGR_10-16",
@@ -14786,7 +14786,7 @@
 	      "start": null,
 	      "end": {
 	        "var": "ya_YAs_16",
-	        "label": "Young adult population",
+	        "label": "Young adult population (ths)",
 	        "years": [2016],
 	        "period": 2016,
 	        "format": "ths0",
@@ -14840,9 +14840,9 @@
 	    }
 	  },
 	  "edu": {
-	    "label": ["edu"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["BA attainment share"],
+	    "definition": ["A bachelor’s degree leads to higher wages, better health, and greater job security, and regions with higher college graduation rates see stronger productivity, output, and consumption."],
+	    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"],
 	    "vars": {
 	      "change": {
 	        "var": "edu_BA_ShareChange_10-16",
@@ -14954,9 +14954,9 @@
 	    }
 	  },
 	  "rd": {
-	    "label": ["rd"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["R&D spending share of gross product"],
+	    "definition": ["R&D spending, measured by the percent of gross domestic product spent on R&D, generates new products and processes that boost productivity and support economic growth."],
+	    "source": ["National Science Foundation, State Indicators 2018, R&D as a Percentage of Gross Domestic Product; National Science Foundation, State Indicators 2018, Business-Performed R&D as a Percentage of Private-Industry Output"],
 	    "vars": {
 	      "change": {
 	        "var": "rd_CAGR_1015",
@@ -15068,15 +15068,15 @@
 	    }
 	  },
 	  "utt": {
-	    "label": ["utt"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Number of top 100 universities for tech transfer"],
+	    "definition": ["These rankings measure which universities are most effective at converting research into commercial and intellectual property, an important source of product and industry innovations."],
+	    "source": ["Ross DeVol, Joe Lee, and Minoli Ratnatunga, “Concept to Commercialization: The Best Universities for Technology Transfer” (Santa Monica, Calif.: Milken Institute, 2017)"],
 	    "vars": {
 	      "change": null,
 	      "start": null,
 	      "end": {
 	        "var": "utt_Universities_Top100_17",
-	        "label": "University tech transfer ranking",
+	        "label": "Number of top 100 universities for tech transfer",
 	        "years": [2017],
 	        "period": 2017,
 	        "format": "num0",
@@ -15130,13 +15130,13 @@
 	    }
 	  },
 	  "hp": {
-	    "label": ["hp"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Home values"],
+	    "definition": ["The Heartland’s relatively low housing values bolster households’ disposable income, boost consumer spending, and help attract in-migration, but can also make it more difficult for homeowners to build wealth."],
+	    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Public Use Microdata Sample"],
 	    "vars": {
 	      "change": {
 	        "var": "hp_CAGR_10-16",
-	        "label": "Percent change in home prices",
+	        "label": "Percent change in home values",
 	        "years": [2010, 2016],
 	        "period": "2010–2016",
 	        "format": "pct1",
@@ -15190,11 +15190,11 @@
 	      "start": null,
 	      "end": {
 	        "var": "hp_2016",
-	        "label": "Home prices",
+	        "label": "Home values ($ths)",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "doll0",
-	        "formatAxis": "doll0",
+	        "format": "doll000",
+	        "formatAxis": "doll000",
 	        "summary": {
 	          "metro": null,
 	          "micro": null,
@@ -15244,15 +15244,15 @@
 	    }
 	  },
 	  "bb": {
-	    "label": ["bb"],
-	    "definition": [""],
-	    "source": [""],
+	    "label": ["Share of population without high-speed broadband access"],
+	    "definition": ["Broadband is essential to work, study, and remain connected in the 21st-century economy. Gaps in access to affordable, high-speed broadband hurt workers’ well-being as well as undercut regions’ productivity, output, and growth."],
+	    "source": ["Federal Communications Commission, Fixed Broadband Deployment"],
 	    "vars": {
 	      "change": null,
 	      "start": null,
 	      "end": {
 	        "var": "bb_NoHiSpeed_Share_16",
-	        "label": "Share of population without broadband access",
+	        "label": "Share of population without high-speed broadband access",
 	        "years": [2016],
 	        "period": 2016,
 	        "format": "sh1",
@@ -15823,8 +15823,9 @@
 	;
 
 	//missing data:
-	//altogether: metric_object will be null -- no data for metric -- for all geos
-	//no valid data for selected geo -- summary will be null, lookup will return null or empty array
+	//altogether: metric_object will be null -- no data for metric -- for all geolevelss
+	//no valid data for selected geolevel -- summary will be null, lookup will return null or empty array
+	//no valid data for a place - get(geo) will return null
 
 	//metric is one of ["change","start","end"]
 	function lookup(indicator, metric, geolevel){
@@ -15833,6 +15834,7 @@
 	    var d = {
 	        color_scale: function(d){return "#e0e0e0"}
 	    };
+	    d.defs = {label:all_data[indicator].label[0], definition:all_data[indicator].definition[0], source:all_data[indicator].source[0]};
 
 	    try{
 	        if(metric_object == null){throw new Error("No data")}
@@ -15875,7 +15877,12 @@
 	        d.format = null;
 	    }
 
-	    //use summary to populate all and to build scales
+	    var universe = 0;
+	    var missings = 0;
+	    console.log("+++++++++++");
+	    console.log(indicator);
+
+	    //use summary to populate "all" array and to build color scales
 	    try{
 	        if(d.summary != null){
 	            var data = metric_object.lookup[geolevel];
@@ -15884,17 +15891,16 @@
 	                    if(data[g] != null){
 	                        all.push({value:data[g], geo:g});
 	                    }
+	                    else{
+	                        missings++;
+	                    }
 	                }
+	                universe++;
 	            }
 
 	        
 	            //color scales
-	            //var sliced = all.slice(0).sort(function(a,b){
-	            //    d3.ascending(a.value, b.value);
-	            //});
-	            //remove min and max
-	            //sliced.pop();
-	            //sliced.shift();
+
 	            var plus3 = d.summary.mean + 3*d.summary.sd;
 	            var minus3 = d.summary.mean - 3*d.summary.sd;
 
@@ -15949,11 +15955,18 @@
 	            }
 
 	        }
+	        else{
+	            console.log("summary is null, lookup for geolevel is " + metric_object.lookup[geolevel]);
+	        }
 	    }
 	    catch(e){
-	        //no-op
+	        console.log(e);
 	        all = [];
+	        d.color_scale = function(d){return "#e0e0e0"};
 	    }
+
+	    console.log("universe size: " + universe + " | valid data for: " + all.length + " | missings: " + missings);
+	    console.log("..........");
 
 	    return d;
 	}
@@ -16058,6 +16071,7 @@
 	format.doll0 = function(v){return "$" + format.num0(v)};
 	format.doll1 = function(v){return "$" + format.num1(v)};
 	format.doll2 = function(v){return "$" + format.num2(v)};
+	format.doll000 = function(v){return "$" + format.num0(v/1000)};
 
 	format.dolle30 = function(v){return "$" + format.num0(v*1000)};
 
@@ -16108,12 +16122,13 @@
 	function number_line(container, indicator, metric_, geolevel_, geo_){
 	    var height = 50;
 	    //one-time setup
-	    var wrap0 = d3.select(container).classed("number-line-plot", true);
+	    var wrap0 = d3.select(container).classed("number-line-plot level0", true);
 
-	    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%");
+	    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%").style("position","relative");
 	    var indicator_title0 = tbox.append("p")
 	                              .style("margin","3px 0px 1px 0px")
 	                              .classed("fb-header", true)
+	                              .style("vertical-align","top")
 	                              ;
 
 	    var indicator_title = indicator_title0.append("span");
@@ -16122,8 +16137,22 @@
 
 	    var indicator_na = indicator_title0.append("span").classed("fb-light-header subtitle",true);
 
+	    var more_info = indicator_title0.append("span").classed("more-info",true).text("i");
+
+	    var def_box = tbox.append("div").style("position","absolute").style("top","100%").style("left","0%").style("width","100%").style("padding","10px 1% 0px 10px")
+	        .style("background-color","#eeeeee").style("display","none");
+
+	    more_info.on("mouseenter", function(){
+	        wrap0.classed("level1",true);
+	        def_box.style("display","block").style("opacity","0")
+	            .transition().duration(400).style("opacity","1");
+	    }).on("mouseleave", function(){
+	        def_box.style("display","none").interrupt().transition(0).style("opacity","0");
+	        wrap0.classed("level1",false);
+	    });
+
 	    var svg_wrap = wrap0.append("div").style("height",height+"px").style("width","100%");
-	    var svg = svg_wrap.append("svg").attr("width","100%").attr("height","100%").style("overflow","visible");
+	    var svg = svg_wrap.append("svg").attr("width","100%").attr("height","100%");
 	    
 	    var g_axis = svg.append("g");
 	    var g_dots = svg.append("g");
@@ -16163,9 +16192,14 @@
 	    var update = function(metric, geolevel, geo){
 	        var data = lookup(indicator, metric, geolevel);
 	        var annotations = [];
+	        console.log(data.defs);
+
+	        def_box.html('<p style="line-height:1.3em">' + data.defs.definition + '</p><p class="subtitle" style="line-height:1.3em">Source: ' + data.defs.source + '</p>' );
 
 	        var format_ = function(v){return v};
 	        var formatAxis_ = function(v){return v};
+
+
 
 	        indicator_title.html(data.label != null ? data.label + "&nbsp;" : "");
 	        indicator_period.html(data.period != null ? data.period : "");
@@ -16182,7 +16216,25 @@
 	            wrap0.style("opacity","0.25");
 	        }
 	        else{
-	            indicator_na.html("");
+	            if(data.nhl != null){
+	                annotations.push({id:"nhl", value: data.nhl});
+	            }
+
+	            if(data.hl != null){
+	                annotations.push({id:"hl", value: data.hl});
+	            }
+
+	            if(data.get(geo) != null){
+	                annotations.push({id:"selected", value: data.get(geo)});
+	                indicator_na.html("");
+	                wrap0.style("opacity","1");
+	            }
+	            else{
+	                indicator_na.html(" (Not&nbsp;available)");
+	                wrap0.style("opacity","0.25");
+	            }
+
+	            
 
 	            var dot_data = data.get();
 	            var domain = [data.summary.min, data.summary.max];
@@ -16195,13 +16247,6 @@
 	            minanno.text( formatAxis_(scale.domain()[0]) );
 	            maxanno.text( formatAxis_(scale.domain()[1]) );
 
-	            annotations = [
-	                {id:"nhl", value: data.nhl==null ? null : data.nhl},
-	                {id:"selected", value: data.get(geo)},
-	                {id:"hl", value: data.hl==null ? null : data.hl}
-	            ];
-
-	            wrap0.style("opacity","1");
 	        }
 
 	        var dots_u = g_dots.selectAll("circle").data(dot_data);

@@ -10,9 +10,9 @@ var all_data =
     "infrastructure": ["hp", "bb"]
   },
   "job": {
-    "label": ["job"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Jobs"],
+    "definition": ["Job numbers and their growth approximate the size of the economy and the level of labor demand by measuring the number of full- and part-time positions in a regional economy."],
+    "source": ["Bureau of Labor Statistics, Quarterly Census of Employment and Wages"],
     "vars": {
       "change": {
         "var": "emp_CAGR_10-17",
@@ -582,7 +582,7 @@ var all_data =
       },
       "start": {
         "var": "emp_2010",
-        "label": "Jobs",
+        "label": "Jobs (ths)",
         "years": [2010],
         "period": 2010,
         "format": "ths0",
@@ -1148,7 +1148,7 @@ var all_data =
       },
       "end": {
         "var": "emp_2017",
-        "label": "Jobs",
+        "label": "Jobs (ths)",
         "years": [2017],
         "period": 2017,
         "format": "ths0",
@@ -1716,8 +1716,8 @@ var all_data =
   },
   "gdp": {
     "label": ["GDP"],
-    "definition": [""],
-    "source": [""],
+    "definition": ["Real gross domestic product (GDP) measures the total value of the goods and services produced in a region, including wages and profits—a standard of economic output."],
+    "source": ["Emsi 2017.4"],
     "vars": {
       "change": {
         "var": "gdp_CAGR_10-16",
@@ -2288,11 +2288,11 @@ var all_data =
       },
       "start": {
         "var": "gdp_2010",
-        "label": "GDP",
+        "label": "GDP ($ths)",
         "years": [2010],
         "period": 2010,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -2855,11 +2855,11 @@ var all_data =
       },
       "end": {
         "var": "gdp_2016",
-        "label": "GDP",
+        "label": "GDP ($ths)",
         "years": [2016],
         "period": 2016,
-        "format": "num0",
-        "formatAxis": "num0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -3423,9 +3423,9 @@ var all_data =
     }
   },
   "jyf": {
-    "label": ["jyf"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Jobs at young firms"],
+    "definition": ["Changes in the total number of full- and part-time wage and salaried jobs at young, private-sector firms age five years or less measures the impact of entrepreneurship in a regional economy."],
+    "source": ["U.S. Census Bureau, Longitudinal Employer-Household Dynamics Program's Quarterly Workforce Indicators"],
     "vars": {
       "change": {
         "var": "jyf_CAGR, 2010-16",
@@ -3995,7 +3995,7 @@ var all_data =
       },
       "start": {
         "var": "jyf_Employment, 2010:Q1",
-        "label": "Jobs at young firms",
+        "label": "Jobs at young firms (ths)",
         "years": [2010],
         "period": 2010,
         "format": "ths0",
@@ -4561,7 +4561,7 @@ var all_data =
       },
       "end": {
         "var": "jyf_Employment, 2016:Q1",
-        "label": "Jobs at young firms",
+        "label": "Jobs at young firms (ths)",
         "years": [2016],
         "period": 2016,
         "format": "ths0",
@@ -5128,9 +5128,9 @@ var all_data =
     }
   },
   "awg": {
-    "label": ["awg"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Average wage"],
+    "definition": ["Aggregate annual wages paid to workers divided by the total number of jobs yields the average annual wage per job in a location."],
+    "source": ["U.S. Bureau of Economic Analysis, \"Table SA25N Total Full-Time and Part-Time Employment by NAICS Industry\"; U.S. Bureau of Economic Analysis, \"Table SA7N Wages and Salaries by NAICS Industry\""],
     "vars": {
       "change": {
         "var": "avgwage_CAGR_2010-16",
@@ -5700,11 +5700,11 @@ var all_data =
       },
       "start": {
         "var": "avgwage_2010",
-        "label": "Average annual wage",
+        "label": "Average wage ($ths)",
         "years": [2010],
         "period": 2010,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -6266,11 +6266,11 @@ var all_data =
       },
       "end": {
         "var": "avgwage_2016",
-        "label": "Average annual wage",
+        "label": "Average wage ($ths)",
         "years": [2016],
         "period": 2016,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -6833,9 +6833,9 @@ var all_data =
     }
   },
   "sol": {
-    "label": ["sol"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Standard of living"],
+    "definition": ["Output, from above, divided by the total local population yields output per capita, which reflects place's average standard of living."],
+    "source": ["Emsi 2017.4; U.S. Census Bureau, Population Estimates Program"],
     "vars": {
       "change": {
         "var": "sol_CAGR_10-16",
@@ -7405,11 +7405,11 @@ var all_data =
       },
       "start": {
         "var": "sol_2010",
-        "label": "Standard of living",
+        "label": "Standard of living ($ths)",
         "years": [2010],
         "period": 2010,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -7971,11 +7971,11 @@ var all_data =
       },
       "end": {
         "var": "sol_2016",
-        "label": "Standard of living",
+        "label": "Standard of living ($ths)",
         "years": [2016],
         "period": 2016,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -8538,9 +8538,9 @@ var all_data =
     }
   },
   "pro": {
-    "label": ["pro"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Productivity"],
+    "definition": ["Output, as above, divided by the total number of local jobs, as above, yields the output per job, which is a basic measure of a place's productivity."],
+    "source": ["Bureau of Labor Statistics, Quarterly Census of Employment and Wages; Emsi 2017.4"],
     "vars": {
       "change": {
         "var": "prod_CAGR_10-16",
@@ -9110,11 +9110,11 @@ var all_data =
       },
       "start": {
         "var": "prod_2010",
-        "label": "Productivity",
+        "label": "Productivity ($ths)",
         "years": [2010],
         "period": 2010,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -9676,11 +9676,11 @@ var all_data =
       },
       "end": {
         "var": "prod_2016",
-        "label": "Productivity",
+        "label": "Productivity ($ths)",
         "years": [2016],
         "period": 2016,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -10243,9 +10243,9 @@ var all_data =
     }
   },
   "med": {
-    "label": ["med"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Median earnings"],
+    "definition": ["The median wage measures the annual wage earned by a person in the middle of an area’s income distribution (among people at least 16 years old)."],
+    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Public Use Microdata Sample"],
     "vars": {
       "change": {
         "var": "medearn_CAGR_10-16",
@@ -10460,11 +10460,11 @@ var all_data =
       },
       "start": {
         "var": "medearn_2010",
-        "label": "Median earnings",
+        "label": "Median earnings ($ths)",
         "years": [2010],
         "period": 2010,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -10671,11 +10671,11 @@ var all_data =
       },
       "end": {
         "var": "medearn_2016",
-        "label": "Median earnings",
+        "label": "Median earnings ($ths)",
         "years": [2016],
         "period": 2016,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -10886,13 +10886,13 @@ var all_data =
     }
   },
   "epo": {
-    "label": ["epo"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Employment rate"],
+    "definition": ["The employment-to-population ratio measures the share of individuals age 18 to 64 who are currently employed."],
+    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"],
     "vars": {
       "change": {
         "var": "epop_2010-16",
-        "label": "Percentage point change in employment to pop. ratio",
+        "label": "Percentage point change in the employment rate",
         "years": [2010, 2016],
         "period": "2010–2016",
         "format": "shch1",
@@ -11103,7 +11103,7 @@ var all_data =
       },
       "start": {
         "var": "epop_2010",
-        "label": "Emp. to pop. ratio",
+        "label": "Employment rate",
         "years": [2010],
         "period": 2010,
         "format": "num2",
@@ -11314,7 +11314,7 @@ var all_data =
       },
       "end": {
         "var": "epop_2016",
-        "label": "Emp. to pop. ratio",
+        "label": "Employment rate",
         "years": [2016],
         "period": 2016,
         "format": "num2",
@@ -11529,9 +11529,9 @@ var all_data =
     }
   },
   "pov": {
-    "label": ["pov"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Poverty rate"],
+    "definition": ["The poverty rate measures the share of local individuals who received income less than the federal poverty threshold."],
+    "source": ["U.S. Census Bureau, Small Area Income and Poverty Estimates (SAIPE) Program"],
     "vars": {
       "change": {
         "var": "povrate_2010-16",
@@ -13234,9 +13234,9 @@ var all_data =
     }
   },
   "ai": {
-    "label": ["ai"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Share of jobs in advanced industries"],
+    "definition": ["R&D- and STEM worker-intensive advanced industries—ranging from automotive manufacturing to renewable energy to digital services—anchor regional economies with their high-productivity, good-paying innovation and export activity."],
+    "source": ["Emsi 2017.4 and 2018.2"],
     "vars": {
       "change": {
         "var": "ai_CAGR_Emp_10-16",
@@ -13348,9 +13348,9 @@ var all_data =
     }
   },
   "ex": {
-    "label": ["ex"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Export share of output"],
+    "definition": ["Exports generate financial inflows for states and communities and also expand firms’ customer bases, increase firms’ competitiveness, and support good-paying jobs."],
+    "source": ["Nick Marchio and Joseph Parilla, “Export Monitor 2018” (Washington: Brookings Institution, 2018)"],
     "vars": {
       "change": {
         "var": "ex_RealExports_CAGR_10-17",
@@ -13462,9 +13462,9 @@ var all_data =
     }
   },
   "pop": {
-    "label": ["pop"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Population"],
+    "definition": ["Population growth bolsters labor supply and enhances consumer demand. It also serves as a signal of local success, as individuals move to areas with stronger economic opportunity."],
+    "source": ["U.S. Census Bureau, Population Estimates Program"],
     "vars": {
       "change": {
         "var": "pop_CAGR_2010-17",
@@ -14036,7 +14036,7 @@ var all_data =
       "start": null,
       "end": {
         "var": "pop_2017",
-        "label": "Population",
+        "label": "Population (ths)",
         "years": [2017],
         "period": 2017,
         "format": "ths0",
@@ -14604,9 +14604,9 @@ var all_data =
     }
   },
   "ya": {
-    "label": ["ya"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Young adult population"],
+    "definition": ["Adults aged 18-to-34 are the largest segment of the U.S. workforce and an important consumer market. As a result, they are a sought-after source of state in-migration."],
+    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"],
     "vars": {
       "change": {
         "var": "ya_YAs_CAGR_10-16",
@@ -14664,7 +14664,7 @@ var all_data =
       "start": null,
       "end": {
         "var": "ya_YAs_16",
-        "label": "Young adult population",
+        "label": "Young adult population (ths)",
         "years": [2016],
         "period": 2016,
         "format": "ths0",
@@ -14718,9 +14718,9 @@ var all_data =
     }
   },
   "edu": {
-    "label": ["edu"],
-    "definition": [""],
-    "source": [""],
+    "label": ["BA attainment share"],
+    "definition": ["A bachelor’s degree leads to higher wages, better health, and greater job security, and regions with higher college graduation rates see stronger productivity, output, and consumption."],
+    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"],
     "vars": {
       "change": {
         "var": "edu_BA_ShareChange_10-16",
@@ -14832,9 +14832,9 @@ var all_data =
     }
   },
   "rd": {
-    "label": ["rd"],
-    "definition": [""],
-    "source": [""],
+    "label": ["R&D spending share of gross product"],
+    "definition": ["R&D spending, measured by the percent of gross domestic product spent on R&D, generates new products and processes that boost productivity and support economic growth."],
+    "source": ["National Science Foundation, State Indicators 2018, R&D as a Percentage of Gross Domestic Product; National Science Foundation, State Indicators 2018, Business-Performed R&D as a Percentage of Private-Industry Output"],
     "vars": {
       "change": {
         "var": "rd_CAGR_1015",
@@ -14946,15 +14946,15 @@ var all_data =
     }
   },
   "utt": {
-    "label": ["utt"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Number of top 100 universities for tech transfer"],
+    "definition": ["These rankings measure which universities are most effective at converting research into commercial and intellectual property, an important source of product and industry innovations."],
+    "source": ["Ross DeVol, Joe Lee, and Minoli Ratnatunga, “Concept to Commercialization: The Best Universities for Technology Transfer” (Santa Monica, Calif.: Milken Institute, 2017)"],
     "vars": {
       "change": null,
       "start": null,
       "end": {
         "var": "utt_Universities_Top100_17",
-        "label": "University tech transfer ranking",
+        "label": "Number of top 100 universities for tech transfer",
         "years": [2017],
         "period": 2017,
         "format": "num0",
@@ -15008,13 +15008,13 @@ var all_data =
     }
   },
   "hp": {
-    "label": ["hp"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Home values"],
+    "definition": ["The Heartland’s relatively low housing values bolster households’ disposable income, boost consumer spending, and help attract in-migration, but can also make it more difficult for homeowners to build wealth."],
+    "source": ["U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Public Use Microdata Sample"],
     "vars": {
       "change": {
         "var": "hp_CAGR_10-16",
-        "label": "Percent change in home prices",
+        "label": "Percent change in home values",
         "years": [2010, 2016],
         "period": "2010–2016",
         "format": "pct1",
@@ -15068,11 +15068,11 @@ var all_data =
       "start": null,
       "end": {
         "var": "hp_2016",
-        "label": "Home prices",
+        "label": "Home values ($ths)",
         "years": [2016],
         "period": 2016,
-        "format": "doll0",
-        "formatAxis": "doll0",
+        "format": "doll000",
+        "formatAxis": "doll000",
         "summary": {
           "metro": null,
           "micro": null,
@@ -15122,15 +15122,15 @@ var all_data =
     }
   },
   "bb": {
-    "label": ["bb"],
-    "definition": [""],
-    "source": [""],
+    "label": ["Share of population without high-speed broadband access"],
+    "definition": ["Broadband is essential to work, study, and remain connected in the 21st-century economy. Gaps in access to affordable, high-speed broadband hurt workers’ well-being as well as undercut regions’ productivity, output, and growth."],
+    "source": ["Federal Communications Commission, Fixed Broadband Deployment"],
     "vars": {
       "change": null,
       "start": null,
       "end": {
         "var": "bb_NoHiSpeed_Share_16",
-        "label": "Share of population without broadband access",
+        "label": "Share of population without high-speed broadband access",
         "years": [2016],
         "period": 2016,
         "format": "sh1",

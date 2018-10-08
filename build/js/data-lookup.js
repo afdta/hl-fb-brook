@@ -2,8 +2,9 @@ import all_data from './all-data.js';
 import palette from './palette.js';
 
 //missing data:
-//altogether: metric_object will be null -- no data for metric -- for all geos
-//no valid data for selected geo -- summary will be null, lookup will return null or empty array
+//altogether: metric_object will be null -- no data for metric -- for all geolevelss
+//no valid data for selected geolevel -- summary will be null, lookup will return null or empty array
+//no valid data for a place - get(geo) will return null
 
 //metric is one of ["change","start","end"]
 function lookup(indicator, metric, geolevel){
@@ -12,6 +13,7 @@ function lookup(indicator, metric, geolevel){
     var d = {
         color_scale: function(d){return "#e0e0e0"}
     };
+    d.defs = {label:all_data[indicator].label[0], definition:all_data[indicator].definition[0], source:all_data[indicator].source[0]}
 
     try{
         if(metric_object == null){throw new Error("No data")}
@@ -54,7 +56,12 @@ function lookup(indicator, metric, geolevel){
         d.format = null;
     }
 
-    //use summary to populate all and to build scales
+    var universe = 0;
+    var missings = 0;
+    console.log("+++++++++++");
+    console.log(indicator);
+
+    //use summary to populate "all" array and to build color scales
     try{
         if(d.summary != null){
             var data = metric_object.lookup[geolevel];
@@ -63,17 +70,16 @@ function lookup(indicator, metric, geolevel){
                     if(data[g] != null){
                         all.push({value:data[g], geo:g});
                     }
+                    else{
+                        missings++;
+                    }
                 }
+                universe++;
             }
 
         
             //color scales
-            //var sliced = all.slice(0).sort(function(a,b){
-            //    d3.ascending(a.value, b.value);
-            //});
-            //remove min and max
-            //sliced.pop();
-            //sliced.shift();
+
             var plus3 = d.summary.mean + 3*d.summary.sd;
             var minus3 = d.summary.mean - 3*d.summary.sd;
 
@@ -128,11 +134,18 @@ function lookup(indicator, metric, geolevel){
             }
 
         }
+        else{
+            console.log("summary is null, lookup for geolevel is " + metric_object.lookup[geolevel]);
+        }
     }
     catch(e){
-        //no-op
+        console.log(e);
         all = [];
+        d.color_scale = function(d){return "#e0e0e0"};
     }
+
+    console.log("universe size: " + universe + " | valid data for: " + all.length + " | missings: " + missings);
+    console.log("..........")
 
     return d;
 }

@@ -12,12 +12,13 @@ import format from '../../../js-modules/formats.js';
 function number_line(container, indicator, metric_, geolevel_, geo_){
     var height = 50;
     //one-time setup
-    var wrap0 = d3.select(container).classed("number-line-plot", true);
+    var wrap0 = d3.select(container).classed("number-line-plot level0", true);
 
-    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%");
+    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%").style("position","relative");
     var indicator_title0 = tbox.append("p")
                               .style("margin","3px 0px 1px 0px")
                               .classed("fb-header", true)
+                              .style("vertical-align","top")
                               ;
 
     var indicator_title = indicator_title0.append("span");
@@ -26,8 +27,22 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
 
     var indicator_na = indicator_title0.append("span").classed("fb-light-header subtitle",true);
 
+    var more_info = indicator_title0.append("span").classed("more-info",true).text("i");
+
+    var def_box = tbox.append("div").style("position","absolute").style("top","100%").style("left","0%").style("width","100%").style("padding","10px 1% 0px 10px")
+        .style("background-color","#eeeeee").style("display","none");
+
+    more_info.on("mouseenter", function(){
+        wrap0.classed("level1",true);
+        def_box.style("display","block").style("opacity","0")
+            .transition().duration(400).style("opacity","1");
+    }).on("mouseleave", function(){
+        def_box.style("display","none").interrupt().transition(0).style("opacity","0");
+        wrap0.classed("level1",false);
+    })
+
     var svg_wrap = wrap0.append("div").style("height",height+"px").style("width","100%");
-    var svg = svg_wrap.append("svg").attr("width","100%").attr("height","100%").style("overflow","visible");
+    var svg = svg_wrap.append("svg").attr("width","100%").attr("height","100%");
     
     var g_axis = svg.append("g");
     var g_dots = svg.append("g");
@@ -67,9 +82,14 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     var update = function(metric, geolevel, geo){
         var data = lookup(indicator, metric, geolevel);
         var annotations = [];
+        console.log(data.defs);
+
+        def_box.html('<p style="line-height:1.3em">' + data.defs.definition + '</p><p class="subtitle" style="line-height:1.3em">Source: ' + data.defs.source + '</p>' );
 
         var format_ = function(v){return v};
         var formatAxis_ = function(v){return v};
+
+
 
         indicator_title.html(data.label != null ? data.label + "&nbsp;" : "");
         indicator_period.html(data.period != null ? data.period : "");
@@ -86,7 +106,25 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
             wrap0.style("opacity","0.25");
         }
         else{
-            indicator_na.html("");
+            if(data.nhl != null){
+                annotations.push({id:"nhl", value: data.nhl});
+            }
+
+            if(data.hl != null){
+                annotations.push({id:"hl", value: data.hl});
+            }
+
+            if(data.get(geo) != null){
+                annotations.push({id:"selected", value: data.get(geo)});
+                indicator_na.html("");
+                wrap0.style("opacity","1");
+            }
+            else{
+                indicator_na.html(" (Not&nbsp;available)");
+                wrap0.style("opacity","0.25");
+            }
+
+            
 
             var dot_data = data.get();
             var domain = [data.summary.min, data.summary.max];
@@ -99,13 +137,6 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
             minanno.text( formatAxis_(scale.domain()[0]) );
             maxanno.text( formatAxis_(scale.domain()[1]) );
 
-            annotations = [
-                {id:"nhl", value: data.nhl==null ? null : data.nhl},
-                {id:"selected", value: data.get(geo)},
-                {id:"hl", value: data.hl==null ? null : data.hl}
-            ];
-
-            wrap0.style("opacity","1");
         }
 
         var dots_u = g_dots.selectAll("circle").data(dot_data);
@@ -120,6 +151,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
             .attr("stroke-width","0")
             ; 
 
+        //console.log(indicator + " null: " + scale(null));
 
         var triangle_top = (height/2) - 8.5;
         var triangle_point = (height/2) - 1;
