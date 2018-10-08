@@ -280,29 +280,29 @@ schema1$map <- list(growth=c("job", "jyf", "gdp"),
 
 #job TODO: unbox() these props: label, definition, source
 schema1$job <- list()
-schema1$job$label <- "job" 
-schema1$job$definition <- ""
-schema1$job$source <- ""
+schema1$job$label <- "Jobs" 
+schema1$job$definition <- "Job numbers and their growth approximate the size of the economy and the level of labor demand by measuring the number of full- and part-time positions in a regional economy."
+schema1$job$source <- "Bureau of Labor Statistics, Quarterly Census of Employment and Wages"
 schema1$job$vars <- list()
 schema1$job$vars$change <- schema(outcomes, "emp_CAGR_10-17", "Percent change in jobs", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
-schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs", format="ths0", startYear=2010)
-schema1$job$vars$end <- schema(outcomes, "emp_2017", "Jobs", format="ths0", startYear=2017)  
+schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs (000s)", format="ths0", startYear=2010)
+schema1$job$vars$end <- schema(outcomes, "emp_2017", "Jobs (000s)", format="ths0", startYear=2017)  
 
 #gdp
 schema1$gdp <- list()
 schema1$gdp$label <- "GDP"
-schema1$gdp$definition <- ""
-schema1$gdp$source <- ""
+schema1$gdp$definition <- "Real gross domestic product (GDP) measures the total value of the goods and services produced in a region, including wages and profits—a standard of economic output."
+schema1$gdp$source <- "Emsi 2017.4"
 schema1$gdp$vars <- list()
 schema1$gdp$vars$change <- schema(outcomes, "gdp_CAGR_10-16", "Percent change in GDP", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$gdp$vars$start <- schema(outcomes, "gdp_2010", "GDP", format="num0", startYear=2010)
-schema1$gdp$vars$end <- schema(outcomes, "gdp_2016", "GDP", format="num0", startYear=2016)
+schema1$gdp$vars$start <- schema(outcomes, "gdp_2010", "GDP (000s)", format="doll000", startYear=2010)
+schema1$gdp$vars$end <- schema(outcomes, "gdp_2016", "GDP (000s)", format="doll000", startYear=2016)
 
 #jyf
 schema1$jyf <- list()
-schema1$jyf$label <- "jyf"
-schema1$jyf$definition <- ""
-schema1$jyf$source <- ""
+schema1$jyf$label <- "Jobs at young firms"
+schema1$jyf$definition <- "Changes in the total number of full- and part-time wage and salaried jobs at young, private-sector firms age five years or less measures the impact of entrepreneurship in a regional economy."
+schema1$jyf$source <- "U.S. Census Bureau, Longitudinal Employer-Household Dynamics Program's Quarterly Workforce Indicators"
 schema1$jyf$vars <- list()
 schema1$jyf$vars$change <- schema(outcomes, "jyf_CAGR, 2010-16", "Percent change in jobs at young firms", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
 schema1$jyf$vars$start <- schema(outcomes, "jyf_Employment, 2010:Q1", "Jobs at young firms", format="ths0", startYear=2010)
@@ -310,62 +310,62 @@ schema1$jyf$vars$end <- schema(outcomes, "jyf_Employment, 2016:Q1", "Jobs at you
 
 #awg
 schema1$awg <- list()
-schema1$awg$label <- "awg"
-schema1$awg$definition <- ""
-schema1$awg$source <- ""
+schema1$awg$label <- "Average wage"
+schema1$awg$definition <- "Aggregate annual wages paid to workers divided by the total number of jobs yields the average annual wage per job in a location."
+schema1$awg$source <- 'U.S. Bureau of Economic Analysis, "Table SA25N Total Full-Time and Part-Time Employment by NAICS Industry"; U.S. Bureau of Economic Analysis, "Table SA7N Wages and Salaries by NAICS Industry"'
 schema1$awg$vars <- list()
 schema1$awg$vars$change <- schema(outcomes, "avgwage_CAGR_2010-16", "Percent change in average wage", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$awg$vars$start <- schema(outcomes, "avgwage_2010", "Average annual wage", format="doll0", startYear=2010)
-schema1$awg$vars$end <- schema(outcomes, "avgwage_2016", "Average annual wage", format="doll0", startYear=2016)
+schema1$awg$vars$start <- schema(outcomes, "avgwage_2010", "Average wage", format="doll000", startYear=2010)
+schema1$awg$vars$end <- schema(outcomes, "avgwage_2016", "Average wage", format="doll000", startYear=2016)
 
 
 #sol
 schema1$sol <- list()
-schema1$sol$label <- "sol"
-schema1$sol$definition <- ""
-schema1$sol$source <- ""
+schema1$sol$label <- "Standard of living"
+schema1$sol$definition <- "Output, from above, divided by the total local population yields output per capita, which reflects place's average standard of living."
+schema1$sol$source <- "Emsi 2017.4; U.S. Census Bureau, Population Estimates Program"
 schema1$sol$vars <- list()
 schema1$sol$vars$change <- schema(outcomes, "sol_CAGR_10-16", "Percent change in standard of living", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$sol$vars$start <- schema(outcomes, "sol_2010", "Standard of living", format="doll0", startYear=2010)
-schema1$sol$vars$end <- schema(outcomes, "sol_2016", "Standard of living", format="doll0", startYear=2016)
+schema1$sol$vars$start <- schema(outcomes, "sol_2010", "Standard of living", format="doll000", startYear=2010)
+schema1$sol$vars$end <- schema(outcomes, "sol_2016", "Standard of living", format="doll000", startYear=2016)
 
 #prod
 schema1$pro <- list()
-schema1$pro$label <- "pro"
-schema1$pro$definition <- ""
-schema1$pro$source <- ""
+schema1$pro$label <- "Productivity"
+schema1$pro$definition <- "Output, as above, divided by the total number of local jobs, as above, yields the output per job, which is a basic measure of a place's productivity."
+schema1$pro$source <- "Bureau of Labor Statistics, Quarterly Census of Employment and Wages; Emsi 2017.4"
 schema1$pro$vars <- list()
 schema1$pro$vars$change <- schema(outcomes, "prod_CAGR_10-16", "Percent change in productivity", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$pro$vars$start <- schema(outcomes, "prod_2010", "Productivity", format="doll0", startYear=2010)
-schema1$pro$vars$end <- schema(outcomes, "prod_2016", "Productivity", format="doll0", startYear=2016)
+schema1$pro$vars$start <- schema(outcomes, "prod_2010", "Productivity", format="doll000", startYear=2010)
+schema1$pro$vars$end <- schema(outcomes, "prod_2016", "Productivity", format="doll000", startYear=2016)
 
 #med
 schema1$med <- list()
-schema1$med$label <- "med"
-schema1$med$definition <- ""
-schema1$med$source <- ""
+schema1$med$label <- "Median earnings"
+schema1$med$definition <- "The median wage measures the annual wage earned by a person in the middle of an area’s income distribution (among people at least 16 years old)."
+schema1$med$source <- "U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Public Use Microdata Sample"
 schema1$med$vars <- list()
 schema1$med$vars$change <- schema(outcomes, "medearn_CAGR_10-16", "Percent change in median earnings", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016, asjson=FALSE)
-schema1$med$vars$start <- schema(outcomes, "medearn_2010", "Median earnings", format="doll0", startYear=2010)
-schema1$med$vars$end <- schema(outcomes, "medearn_2016", "Median earnings", format="doll0", startYear=2016)
+schema1$med$vars$start <- schema(outcomes, "medearn_2010", "Median earnings", format="doll000", startYear=2010)
+schema1$med$vars$end <- schema(outcomes, "medearn_2016", "Median earnings", format="doll000", startYear=2016)
 
 #LL <- schema(outcomes, "medearn_CAGR_10-16", "Percent change in median earnings", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016, asjson=FALSE)
 
 #epo
 schema1$epo <- list()
-schema1$epo$label <- "epo"
-schema1$epo$definition <- ""
-schema1$epo$source <- ""
+schema1$epo$label <- "Employment rate"
+schema1$epo$definition <- "The employment-to-population ratio measures the share of individuals age 18 to 64 who are currently employed."
+schema1$epo$source <- "U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"
 schema1$epo$vars <- list()
-schema1$epo$vars$change <- schema(outcomes, "epop_2010-16", "Percentage point change in employment to pop. ratio", format="shch1", formatAxis="shch0", startYear=2010, endYear=2016, asjson=FALSE)
-schema1$epo$vars$start <- schema(outcomes, "epop_2010", "Emp. to pop. ratio", format="num2", formatAxis = "num1", startYear=2010)
-schema1$epo$vars$end <- schema(outcomes, "epop_2016", "Emp. to pop. ratio", format="num2", formatAxis = "num1", startYear=2016)
+schema1$epo$vars$change <- schema(outcomes, "epop_2010-16", "Percentage point change in the employment rate", format="shch1", formatAxis="shch0", startYear=2010, endYear=2016, asjson=FALSE)
+schema1$epo$vars$start <- schema(outcomes, "epop_2010", "Employment rate", format="num2", formatAxis = "num1", startYear=2010)
+schema1$epo$vars$end <- schema(outcomes, "epop_2016", "Employment rate", format="num2", formatAxis = "num1", startYear=2016)
 
 #pov
 schema1$pov <- list()
-schema1$pov$label <- "pov"
-schema1$pov$definition <- ""
-schema1$pov$source <- ""
+schema1$pov$label <- "Poverty rate"
+schema1$pov$definition <- "The poverty rate measures the share of local individuals who received income less than the federal poverty threshold."
+schema1$pov$source <- "U.S. Census Bureau, Small Area Income and Poverty Estimates (SAIPE) Program"
 schema1$pov$vars <- list()
 schema1$pov$vars$change <- schema(outcomes, "povrate_2010-16", "Change in poverty rate", format="shch1", formatAxis="shch0", startYear=2010, endYear=2016)
 schema1$pov$vars$start <- schema(outcomes, "povrate_2010", "Poverty rate", format="sh1", formatAxis = "sh0", startYear=2010)
@@ -375,9 +375,9 @@ schema1$pov$vars$end <- schema(outcomes, "povrate_2016", "Poverty rate", format=
 
 #ai
 schema1$ai <- list()
-schema1$ai$label <- "ai"
-schema1$ai$definition <- ""
-schema1$ai$source <- ""
+schema1$ai$label <- "Share of jobs in advanced industries"
+schema1$ai$definition <- "R&D- and STEM worker-intensive advanced industries—ranging from automotive manufacturing to renewable energy to digital services—anchor regional economies with their high-productivity, good-paying innovation and export activity."
+schema1$ai$source <- "Emsi 2017.4 and 2018.2"
 schema1$ai$vars <- list()
 schema1$ai$vars$change <- schema(drivers, "ai_CAGR_Emp_10-16", "Percent change in advanced industry employment", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
 #schema1$ai$vars$start <- schema(drivers, "", "Average annual wage", format="doll0", startYear=2010)
@@ -386,9 +386,9 @@ schema1$ai$vars$end <- schema(drivers, "ai_EmpShare_16", "Share of jobs in advan
 
 #exports
 schema1$ex <- list()
-schema1$ex$label <- "ex"
-schema1$ex$definition <- ""
-schema1$ex$source <- ""
+schema1$ex$label <- "Export share of output"
+schema1$ex$definition <- "Exports generate financial inflows for states and communities and also expand firms’ customer bases, increase firms’ competitiveness, and support good-paying jobs."
+schema1$ex$source <- "Nick Marchio and Joseph Parilla, “Export Monitor 2018” (Washington: Brookings Institution, 2018)"
 schema1$ex$vars <- list()
 schema1$ex$vars$change <- schema(drivers, "ex_RealExports_CAGR_10-17", "Percent change in exports output", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
 schema1$ex$vars$start <- unbox(NA)
@@ -396,19 +396,19 @@ schema1$ex$vars$end <- schema(drivers, "ex_ExportShare_17", "Export share of out
 
 #pop
 schema1$pop <- list()
-schema1$pop$label <- "pop"
-schema1$pop$definition <- ""
-schema1$pop$source <- ""
+schema1$pop$label <- "Population"
+schema1$pop$definition <- "Population growth bolsters labor supply and enhances consumer demand. It also serves as a signal of local success, as individuals move to areas with stronger economic opportunity."
+schema1$pop$source <- "U.S. Census Bureau, Population Estimates Program"
 schema1$pop$vars <- list()
 schema1$pop$vars$change <- schema(drivers, "pop_CAGR_2010-17", "Percent change in population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
 schema1$pop$vars$start <- unbox(NA)
-schema1$pop$vars$end <- schema(drivers, "pop_2017", "Population", format="ths0", startYear=2017)
+schema1$pop$vars$end <- schema(drivers, "pop_2017", "Population (000s)", format="ths0", startYear=2017)
 
 #ya pop
 schema1$ya <- list()
-schema1$ya$label <- "ya"
-schema1$ya$definition <- ""
-schema1$ya$source <- ""
+schema1$ya$label <- "Young adult population"
+schema1$ya$definition <- "Adults aged 18-to-34 are the largest segment of the U.S. workforce and an important consumer market. As a result, they are a sought-after source of state in-migration."
+schema1$ya$source <- "U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"
 schema1$ya$vars <- list()
 schema1$ya$vars$change <- schema(drivers, "ya_YAs_CAGR_10-16", "Percent change in young adult population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
 schema1$ya$vars$start <- unbox(NA)
@@ -416,9 +416,9 @@ schema1$ya$vars$end <- schema(drivers, "ya_YAs_16", "Young adult population", fo
 
 #edu
 schema1$edu <- list()
-schema1$edu$label <- "edu"
-schema1$edu$definition <- ""
-schema1$edu$source <- ""
+schema1$edu$label <- "BA attainment share"
+schema1$edu$definition <- "A bachelor’s degree leads to higher wages, better health, and greater job security, and regions with higher college graduation rates see stronger productivity, output, and consumption."
+schema1$edu$source <- "U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Estimates"
 schema1$edu$vars <- list()
 schema1$edu$vars$change <- schema(drivers, "edu_BA_ShareChange_10-16", "Change in BA attainment share", format="shch1", formatAxis="shch0", startYear=2010, endYear=2016)
 schema1$edu$vars$start <- unbox(NA)
@@ -426,9 +426,9 @@ schema1$edu$vars$end <- schema(drivers, "edu_BA_Share_16", "BA attainment share"
 
 #R&D
 schema1$rd <- list()
-schema1$rd$label <- "rd"
-schema1$rd$definition <- ""
-schema1$rd$source <- ""
+schema1$rd$label <- "R&D spending share of gross product"
+schema1$rd$definition <- "R&D spending, measured by the percent of gross domestic product spent on R&D, generates new products and processes that boost productivity and support economic growth."
+schema1$rd$source <- "National Science Foundation, State Indicators 2018, R&D as a Percentage of Gross Domestic Product; National Science Foundation, State Indicators 2018, Business-Performed R&D as a Percentage of Private-Industry Output"
 schema1$rd$vars <- list()
 schema1$rd$vars$change <- schema(drivers, "rd_CAGR_1015", "Percent change in R&D spending", format="pct1", formatAxis="pct0", startYear=2010, endYear=2015)
 schema1$rd$vars$start <- unbox(NA)
@@ -436,9 +436,9 @@ schema1$rd$vars$end <- schema(drivers, "rd_RD_ShareGSP_15", "R&D spending share 
 
 #Univ. tech transfer
 schema1$utt <- list()
-schema1$utt$label <- "utt"
-schema1$utt$definition <- ""
-schema1$utt$source <- ""
+schema1$utt$label <- "Number of top 100 universities for tech transfer"
+schema1$utt$definition <- "These rankings measure which universities are most effective at converting research into commercial and intellectual property, an important source of product and industry innovations."
+schema1$utt$source <- "Ross DeVol, Joe Lee, and Minoli Ratnatunga, “Concept to Commercialization: The Best Universities for Technology Transfer” (Santa Monica, Calif.: Milken Institute, 2017)"
 schema1$utt$vars <- list()
 schema1$utt$vars$change <- unbox(NA)
 schema1$utt$vars$start <- unbox(NA)
@@ -446,23 +446,23 @@ schema1$utt$vars$end <- schema(drivers, "utt_Universities_Top100_17", "Universit
 
 #home prices
 schema1$hp <- list()
-schema1$hp$label <- "hp"
-schema1$hp$definition <- ""
-schema1$hp$source <- ""
+schema1$hp$label <- "Home values"
+schema1$hp$definition <- "The Heartland’s relatively low housing values bolster households’ disposable income, boost consumer spending, and help attract in-migration, but can also make it more difficult for homeowners to build wealth."
+schema1$hp$source <- "U.S. Census Bureau, 2010 and 2016 American Community Survey 1-Year Public Use Microdata Sample"
 schema1$hp$vars <- list()
-schema1$hp$vars$change <- schema(drivers, "hp_CAGR_10-16", "Percent change in home prices", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
+schema1$hp$vars$change <- schema(drivers, "hp_CAGR_10-16", "Percent change in home values", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
 schema1$hp$vars$start <- unbox(NA)
-schema1$hp$vars$end <- schema(drivers, "hp_2016", "Home prices", format="doll0", startYear=2016)
+schema1$hp$vars$end <- schema(drivers, "hp_2016", "Home values", format="doll000", startYear=2016)
 
 #broadband
 schema1$bb <- list()
-schema1$bb$label <- "bb"
-schema1$bb$definition <- ""
-schema1$bb$source <- ""
+schema1$bb$label <- "Share of population without high-speed broadband access"
+schema1$bb$definition <- "Broadband is essential to work, study, and remain connected in the 21st-century economy. Gaps in access to affordable, high-speed broadband hurt workers’ well-being as well as undercut regions’ productivity, output, and growth."
+schema1$bb$source <- "Federal Communications Commission, Fixed Broadband Deployment"
 schema1$bb$vars <- list()
 schema1$bb$vars$change <- unbox(NA)
 schema1$bb$vars$start <- unbox(NA)
-schema1$bb$vars$end <- schema(drivers, "bb_NoHiSpeed_Share_16", "Share of population without broadband access", format="sh1", formatAxis="sh0", startYear=2016)
+schema1$bb$vars$end <- schema(drivers, "bb_NoHiSpeed_Share_16", "Share of population without high-speed broadband access", format="sh1", formatAxis="sh0", startYear=2016)
 
 JSON <- toJSON(schema1, digits=5, na="null", pretty=TRUE)
 
