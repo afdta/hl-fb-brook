@@ -2413,8 +2413,8 @@
 	        "label": "GDP ($ths)",
 	        "years": [2010],
 	        "period": 2010,
-	        "format": "doll000",
-	        "formatAxis": "doll000",
+	        "format": "doll0",
+	        "formatAxis": "doll0",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -2980,8 +2980,8 @@
 	        "label": "GDP ($ths)",
 	        "years": [2016],
 	        "period": 2016,
-	        "format": "doll000",
-	        "formatAxis": "doll000",
+	        "format": "doll0",
+	        "formatAxis": "doll0",
 	        "summary": {
 	          "metro": {
 	              "geo": "metro",
@@ -16140,7 +16140,7 @@
 	    var more_info = indicator_title0.append("span").classed("more-info",true).text("i");
 
 	    var def_box = tbox.append("div").style("position","absolute").style("top","100%").style("left","0%").style("width","100%").style("padding","10px 1% 0px 10px")
-	        .style("background-color","#eeeeee").style("display","none");
+	        .style("background-color","#e0e0e0").style("display","none").style("border-radius","5px");
 
 	    more_info.on("mouseenter", function(){
 	        wrap0.classed("level1",true);

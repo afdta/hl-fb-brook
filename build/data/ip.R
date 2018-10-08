@@ -295,8 +295,8 @@ schema1$gdp$definition <- "Real gross domestic product (GDP) measures the total 
 schema1$gdp$source <- "Emsi 2017.4"
 schema1$gdp$vars <- list()
 schema1$gdp$vars$change <- schema(outcomes, "gdp_CAGR_10-16", "Percent change in GDP", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$gdp$vars$start <- schema(outcomes, "gdp_2010", "GDP ($ths)", format="doll000", startYear=2010)
-schema1$gdp$vars$end <- schema(outcomes, "gdp_2016", "GDP ($ths)", format="doll000", startYear=2016)
+schema1$gdp$vars$start <- schema(outcomes, "gdp_2010", "GDP ($ths)", format="doll0", startYear=2010)
+schema1$gdp$vars$end <- schema(outcomes, "gdp_2016", "GDP ($ths)", format="doll0", startYear=2016)
 
 #jyf
 schema1$jyf <- list()

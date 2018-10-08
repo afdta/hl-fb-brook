@@ -30,7 +30,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     var more_info = indicator_title0.append("span").classed("more-info",true).text("i");
 
     var def_box = tbox.append("div").style("position","absolute").style("top","100%").style("left","0%").style("width","100%").style("padding","10px 1% 0px 10px")
-        .style("background-color","#eeeeee").style("display","none");
+        .style("background-color","#e0e0e0").style("display","none").style("border-radius","5px");
 
     more_info.on("mouseenter", function(){
         wrap0.classed("level1",true);

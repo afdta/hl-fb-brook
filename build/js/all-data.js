@@ -2291,8 +2291,8 @@ var all_data =
         "label": "GDP ($ths)",
         "years": [2010],
         "period": 2010,
-        "format": "doll000",
-        "formatAxis": "doll000",
+        "format": "doll0",
+        "formatAxis": "doll0",
         "summary": {
           "metro": {
               "geo": "metro",
@@ -2858,8 +2858,8 @@ var all_data =
         "label": "GDP ($ths)",
         "years": [2016],
         "period": 2016,
-        "format": "doll000",
-        "formatAxis": "doll000",
+        "format": "doll0",
+        "formatAxis": "doll0",
         "summary": {
           "metro": {
               "geo": "metro",
