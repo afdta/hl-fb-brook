@@ -17120,23 +17120,23 @@
 	    var swatch_group2 = legend_wrap.append("div").classed("c-fix",true).style("float","left");
 
 	    var select_swatch = swatch_group1.append("div").classed("legend-swatch",true);
-	    var select_swatch_svg = select_swatch.append("svg").attr("height","1rem").attr("width","23px").style("display","inline-block");
+	    var select_swatch_svg = select_swatch.append("svg").attr("height","18px").attr("width","23px").style("display","inline-block");
 	        select_swatch_svg.append("circle").attr("r", 4).attr("fill", palette.orange).attr("cx","16").attr("cy","50%").attr("fill-opacity","1");
 	        select_swatch_svg.append("path").attr("d",d_triangle).attr("fill", palette.orange).attr("stroke", palette.orange);
 	    var select_swatch_geo = select_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Selected place").style("font-weight","bold");
 
 	    var place_swatch = swatch_group1.append("div").classed("legend-swatch",true);
-	        place_swatch.append("svg").attr("height","1rem").attr("width","15px").style("display","inline-block")
+	        place_swatch.append("svg").attr("height","18px").attr("width","15px").style("display","inline-block")
 	                    .append("circle").attr("r", 3.5).attr("fill", palette.green).attr("cx","50%").attr("cy","50%").attr("fill-opacity","0.7");
 	    var place_swatch_geolevel = place_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("States");
 
 	    var hl_swatch = swatch_group2.append("div").classed("legend-swatch",true);
-	    var hl_swatch_svg = hl_swatch.append("svg").attr("height","1rem").attr("width","15px").style("display","inline-block");
+	    var hl_swatch_svg = hl_swatch.append("svg").attr("height","18px").attr("width","15px").style("display","inline-block");
 	        hl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", "none").attr("stroke", palette.green);
 	    hl_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Heartland avg.");
 
 	    var nhl_swatch = swatch_group2.append("div").classed("legend-swatch",true);
-	    var nhl_swatch_svg = nhl_swatch.append("svg").attr("height","1rem").attr("width","15px").style("display","inline-block");
+	    var nhl_swatch_svg = nhl_swatch.append("svg").attr("height","18px").attr("width","15px").style("display","inline-block");
 	        nhl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", palette.mediumgray).attr("stroke", palette.mediumgray);
 	    nhl_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Non-Heartland avg.");
 
