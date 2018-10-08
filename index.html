@@ -69,5 +69,27 @@
 
 </div>
 
+<canvas id="info"><</canvas>
+<script>
+  var canvas = document.getElementById("info");
+  canvas.height = "18";
+  canvas.width = "18";
+  var context = canvas.getContext('2d');
+
+  var img = new Image();
+  img.src = 'build/design/information.png';
+
+  setTimeout(function(){
+    context.drawImage(img, 0, 0);
+    var img64 = canvas.toDataURL();
+    console.log(img64);
+  },1000)
+  
+
+
+  
+
+</script>
+
 </body>
 </html>
