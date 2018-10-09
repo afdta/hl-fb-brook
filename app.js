@@ -16137,6 +16137,8 @@
 
 	    var indicator_period = indicator_title0.append("span").classed("fb-light-header",true).style("white-space", "nowrap").style("font-size","1em");
 
+	    var indicator_units = indicator_title0.append("span").classed("fb-light-header",true);
+
 	    var indicator_na = indicator_title0.append("span").classed("fb-light-header subtitle",true);
 
 	    var more_info = indicator_title0.append("span").classed("more-info",true).html("&nbsp;");
@@ -16201,10 +16203,25 @@
 	        var format_ = function(v){return v};
 	        var formatAxis_ = function(v){return v};
 
+	        var data_label = "";
+	        var data_units = "";
+
+	        if(data.label != null){
+	            var ths = data.label.search(/\s*(\(thousands\)|\(\$thousands\))/);
+	            if(ths > -1){
+	                data_label = data.label.substring(0,ths);
+	                data_units = data.label.substring(ths).replace(/^\s/, "&nbsp;");
+	            }
+	            else{
+	                data_label = data.label;
+	                data_units = "";
+	            }
+	        }
 
 
-	        indicator_title.html(data.label != null ? data.label + "&nbsp;" : "");
-	        indicator_period.html(data.period != null ? data.period : "");
+	        indicator_title.html(data_label);
+	        indicator_units.html(data_units);
+	        indicator_period.html(data.period != null ? "&nbsp;" + data.period : "");
 
 	        wrap0.style("display", data.invalid_metric ? "none" : "block");
 
