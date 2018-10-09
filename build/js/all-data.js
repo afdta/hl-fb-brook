@@ -2288,7 +2288,7 @@ var all_data =
       },
       "start": {
         "var": "gdp_2010",
-        "label": "GDP ($ths)",
+        "label": "GDP ($thousands)",
         "years": [2010],
         "period": 2010,
         "format": "doll0",
@@ -2855,7 +2855,7 @@ var all_data =
       },
       "end": {
         "var": "gdp_2016",
-        "label": "GDP ($ths)",
+        "label": "GDP ($thousands)",
         "years": [2016],
         "period": 2016,
         "format": "doll0",
@@ -5700,7 +5700,7 @@ var all_data =
       },
       "start": {
         "var": "avgwage_2010",
-        "label": "Average wage ($ths)",
+        "label": "Average wage ($thousands)",
         "years": [2010],
         "period": 2010,
         "format": "doll000",
@@ -6266,7 +6266,7 @@ var all_data =
       },
       "end": {
         "var": "avgwage_2016",
-        "label": "Average wage ($ths)",
+        "label": "Average wage ($thousands)",
         "years": [2016],
         "period": 2016,
         "format": "doll000",
@@ -7405,7 +7405,7 @@ var all_data =
       },
       "start": {
         "var": "sol_2010",
-        "label": "Standard of living ($ths)",
+        "label": "Standard of living ($thousands)",
         "years": [2010],
         "period": 2010,
         "format": "doll000",
@@ -7971,7 +7971,7 @@ var all_data =
       },
       "end": {
         "var": "sol_2016",
-        "label": "Standard of living ($ths)",
+        "label": "Standard of living ($thousands)",
         "years": [2016],
         "period": 2016,
         "format": "doll000",
@@ -9110,7 +9110,7 @@ var all_data =
       },
       "start": {
         "var": "prod_2010",
-        "label": "Productivity ($ths)",
+        "label": "Productivity ($thousands)",
         "years": [2010],
         "period": 2010,
         "format": "doll000",
@@ -9676,7 +9676,7 @@ var all_data =
       },
       "end": {
         "var": "prod_2016",
-        "label": "Productivity ($ths)",
+        "label": "Productivity ($thousands)",
         "years": [2016],
         "period": 2016,
         "format": "doll000",
@@ -10460,7 +10460,7 @@ var all_data =
       },
       "start": {
         "var": "medearn_2010",
-        "label": "Median earnings ($ths)",
+        "label": "Median earnings ($thousands)",
         "years": [2010],
         "period": 2010,
         "format": "doll000",
@@ -10671,7 +10671,7 @@ var all_data =
       },
       "end": {
         "var": "medearn_2016",
-        "label": "Median earnings ($ths)",
+        "label": "Median earnings ($thousands)",
         "years": [2016],
         "period": 2016,
         "format": "doll000",
@@ -15068,7 +15068,7 @@ var all_data =
       "start": null,
       "end": {
         "var": "hp_2016",
-        "label": "Home values ($ths)",
+        "label": "Home values ($thousands)",
         "years": [2016],
         "period": 2016,
         "format": "doll000",
