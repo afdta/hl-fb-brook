@@ -97,8 +97,8 @@ function lookup(indicator, metric, geolevel){
             if(d.summary.min < 0 && d.summary.max > 0){
                 var maxabs = Math.max(Math.abs(min), max);
 
-                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues4 : palette.blues4;
-                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds4 : palette.reds4;
+                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues5 : palette.blues5;
+                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds5 : palette.reds5;
 
                 var blue_scale = d3.scaleQuantize().domain([0, maxabs]).range(blues);
                 var red_scale = d3.scaleQuantize().domain([0, maxabs]).range(reds);
@@ -116,7 +116,7 @@ function lookup(indicator, metric, geolevel){
             }
             else if(d.summary.min >= 0){
 
-                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues4 : palette.blues6;
+                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues5 : palette.blues5;
 
                 var blue_scale = d3.scaleQuantize().domain([min, max]).range(blues);
                 d.color_scale = function(v){
@@ -125,7 +125,7 @@ function lookup(indicator, metric, geolevel){
             }
             else{
 
-                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds4 : palette.reds6;
+                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds5 : palette.reds5;
 
                 var red_scale = d3.scaleQuantize().domain([max, min]).range(reds);
                 d.color_scale = function(v){

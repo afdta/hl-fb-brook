@@ -4,7 +4,11 @@ var state_mesh = topojson.mesh(state_topo, state_topo.objects.geos);
 
 
 //19 heartland states, keys==numeric fips
-var HL = {"1":"Alabama","5":"Arkansas","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri","31":"Nebraska","38":"North Dakota","39":"Ohio","40":"Oklahoma","46":"South Dakota","47":"Tennessee","55":"Wisconsin"};    
+var HL = {"1":"Alabama","5":"Arkansas","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri","31":"Nebraska","38":"North Dakota","39":"Ohio","40":"Oklahoma","46":"South Dakota","47":"Tennessee","55":"Wisconsin"}; 
+
+var HLUSPS = {"1":"AL","5":"AR","17":"IL","18":"IN","19":"IA","20":"KS",
+              "21":"KY","22":"LA","26":"MI","27":"MN","28":"MS","29":"MO",
+              "31":"NE","38":"ND","39":"OH","40":"OK","46":"SD","47":"TN","55":"WI"};  
     
 var heartland_mesh = topojson.mesh(state_topo, state_topo.objects.geos, function(a, b) { 
     var a_heart = HL.hasOwnProperty( (parseInt(a.properties.geo_id)+"") );
@@ -13,4 +17,4 @@ var heartland_mesh = topojson.mesh(state_topo, state_topo.objects.geos, function
     return a_heart != b_heart || (a_heart && b_heart && a===b); 
 });
 
-export {HL, state_geos, state_mesh, heartland_mesh};
+export {HL, HLUSPS, state_geos, state_mesh, heartland_mesh};

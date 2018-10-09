@@ -1,5 +1,5 @@
 import {lookup} from './data-lookup.js';
-import {HL, state_geos, state_mesh, heartland_mesh} from './state-geos';
+import {HL, HLUSPS, state_geos, state_mesh, heartland_mesh} from './state-geos';
 import cbsa_geos from './cbsa-geos';
 import palette from './palette.js';
 import format from '../../../js-modules/formats.js';
@@ -422,10 +422,12 @@ export default function map_module(container, init_indicator, init_metric, init_
         if(scale===null){
             var tickvals = [];
             var tickZero = []; //needs to be empty because scale can't be used below
+            bars_axis.style("visibility","hidden");
         }
         else{
             var tickvals = scale.ticks(3);       
             var tickZero = [1];     
+            bars_axis.style("visibility",null);
         }
 
         var ticks = bars_axis.selectAll("line.tick-mark").data(tickvals);
@@ -532,7 +534,9 @@ export default function map_module(container, init_indicator, init_metric, init_
                                     .map(function(d){
                                         if(d.values.length > 1){
                                             var extent = d3.extent(d.values, function(d){return d.value});
-                                            var label = format_(extent[0]) + " to " + format_(extent[1]); 
+                                            var minfmt = format_(extent[0]);
+                                            var maxfmt = format_(extent[1]);
+                                            var label = minfmt===maxfmt ? maxfmt : minfmt + " to " + maxfmt;
                                             var min = extent[0];
                                         }
                                         else{
@@ -576,84 +580,139 @@ export default function map_module(container, init_indicator, init_metric, init_
         var height = scope.height > 600 ? 600 : scope.height;
         var top_pad = 30;
         var bot_pad = 10;
-        var group_pad = 30;
-        var bar_height = Math.floor((height-top_pad-bot_pad-(group_pad*bar_groups.length))/data.length);
-        if(bar_height < 1){bar_height = 1}
+        var group_pad = 30;        
+
+        if(is_mobile){
+            bars_axis.style("visibility","hidden");
+
+            var bar_height = 10;
+            
+            //final height
+            height = top_pad + bot_pad + (group_pad+bar_height)*bar_groups.length;
+            bars_wrap1.style("height",height+"px");
+
+            //bar groups
+            var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
+            bars_u.exit().remove();
+            var bars_e = bars_u.enter().append("g").classed("bar",true);
+            bars_e.append("text");
+            var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
+                return "translate(0," + (top_pad + (i+1)*group_pad + i*bar_height) + ")";
+            });
+
+            //actual rectangles
+            var b_u = bars.selectAll("rect.bar").data(function(d){return [d.bars[0]]});
+            b_u.exit().remove();
+            var b_e = b_u.enter().append("rect").classed("bar",true);
+            var b = b_e.merge(b_u);
+
+            scope.bars = b; //make accessible
+
+            b.attr("width", "40px").attr("height", "10px")
+                .attr("x", "10").attr("y","0")
+                .attr("fill", function(d){return d.color})
+                .attr("stroke", "#ffffff");
+
+            //bar labels (states)
+            var bl_u = bars.selectAll("text.bar-label").data([]);
+            bl_u.exit().remove();
+            var bl_e = bl_u.enter().append("text").classed("bar-label",true);
+            var bl = bl_e.merge(bl_u);
+
+            //group labels (ranges)
+            var labels_u = bars.selectAll("text.label").data(function(d,i){
+                var lab = d.label + " (" + d.n + ")";
+                return [lab];
+            });
+            labels_u.exit().remove();
+            var labels_e = labels_u.enter().append("text").classed("label",true);
+            var labels = labels_e.merge(labels_u);
+
+            labels.attr("x", "10px") 
+                .attr("text-anchor","start")
+                .attr("y","25px")
+                .text(function(d){return d})
+                .attr("fill","#555555")
+                .style("font-size","13px")
+                ;
+
+        }
+        else{
+
+            var bar_height = Math.floor((height-top_pad-bot_pad-(group_pad*bar_groups.length))/data.length);
+            if(bar_height < 1){bar_height = 1}
+            
+            //final height
+            height = (bar_height * data.length) + top_pad + bot_pad + group_pad*bar_groups.length;
+            bars_wrap1.style("height",height+"px");
+
+            //bar groups
+            var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
+            bars_u.exit().remove();
+            var bars_e = bars_u.enter().append("g").classed("bar",true);
+            bars_e.append("text");
+            var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
+                return "translate(0," + (top_pad + (i+1)*group_pad + d.prior_bars*bar_height) + ")";
+            });
+
+            //actual rectangles
+            var b_u = bars.selectAll("rect.bar").data(function(d){return d.bars});
+            b_u.exit().remove();
+            var b_e = b_u.enter().append("rect").classed("bar",true);
+            var b = b_e.merge(b_u);
+
+            scope.bars = b; //make accessible
         
-        //final height
-        height = (bar_height * data.length) + top_pad + bot_pad + group_pad*bar_groups.length;
-        bars_wrap1.style("height",height+"px");
+            b.attr("width", width)
+                .attr("height", bar_height)
+                .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
+                .attr("y",function(d,i){return i*bar_height})
+                .attr("fill", function(d){return d.color})
+                .attr("stroke", bar_height > 5 ? "#ffffff" : "none")
+                ;
 
-        //bar groups
-        var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
-        bars_u.exit().remove();
-        var bars_e = bars_u.enter().append("g").classed("bar",true);
-        bars_e.append("text");
-        var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
-            return "translate(0," + (top_pad + (i+1)*group_pad + d.prior_bars*bar_height) + ")";
-        });
+            //bar labels (states)
+            var bl_u = bars.selectAll("text.bar-label").data(function(d){
+                if(scope.geolevel == "state" || scope.geolevel == "rural"){
+                    return d.bars;
+                }
+                else{
+                    return [];
+                }
+            });
+            bl_u.exit().remove();
+            var bl_e = bl_u.enter().append("text").classed("bar-label",true);
+            var bl = bl_e.merge(bl_u);
+        
+            bl.attr("x", function(d){return d.value > 0 ? x(d.value)+"%" : zero+"%"}) 
+                .attr("y",function(d,i){return i*bar_height})
+                .attr("dy", bar_height*0.8)
+                .attr("dx",3)
+                .attr("fill", function(d){return palette.gray})
+                .text(function(d){return HLUSPS[d.geo]})
+                .style("font-size","13px")
+                ;
 
-        //actual rectangles
-        var b_u = bars.selectAll("rect.bar").data(function(d){return d.bars});
-        b_u.exit().remove();
-        var b_e = b_u.enter().append("rect").classed("bar",true);
-        var b = b_e.merge(b_u);
-
-        scope.bars = b; //make accessible
-    
-        b.attr("width", width)
-            .attr("height", bar_height)
-            .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
-            .attr("y",function(d,i){return i*bar_height})
-            .attr("fill", function(d){return d.color})
-            .attr("stroke", bar_height > 5 ? "#ffffff" : "none")
-            ;
-
-        //bar labels (states)
-        var bl_u = bars.selectAll("text.bar-label").data(function(d){
-            if(scope.geolevel == "state" || scope.geolevel == "rural"){
-                return d.bars;
-            }
-            else{
-                return [];
-            }
-        });
-        bl_u.exit().remove();
-        var bl_e = bl_u.enter().append("text").classed("bar-label",true);
-        var bl = bl_e.merge(bl_u);
-    
-        bl.attr("x", function(d){return d.value > 0 ? x(d.value)+"%" : zero+"%"}) 
-            .attr("y",function(d,i){return i*bar_height})
-            .attr("dy", bar_height*0.8)
-            .attr("dx",3)
-            .attr("fill", function(d){return palette.gray})
-            .text(function(d){return HL[d.geo]})
-            .style("font-size","13px")
-            ;
-
-        //group labels (ranges)
-        var labels_u = bars.selectAll("text.label").data(function(d,i){
-            //var lab = i==0 ? d.label + " (n=" + d.n + ")" : d.label + " (" + d.n + ")";
-            var lab = d.label + " (" + d.n + ")";
-            return [lab];
-        });
-        labels_u.exit().remove();
-        var labels_e = labels_u.enter().append("text").classed("label",true);
-        var labels = labels_e.merge(labels_u);
-    
-        labels.attr("x", zero+"%") 
-            .attr("text-anchor","start")
-            .attr("y",function(d,i){return 0})
-            .attr("dy","-3")
-            .attr("dx","3")
-            .text(function(d){return d})
-            .attr("fill","#555555")
-            .style("font-size","13px")
-            ;
-
-        //bars.interrupt().transition().duration(1000).attr("transform", function(d,i){
-        //    return "translate(0," + ((i*bar_height) + top_pad) + ")";
-        //});
+            //group labels (ranges)
+            var labels_u = bars.selectAll("text.label").data(function(d,i){
+                //var lab = i==0 ? d.label + " (n=" + d.n + ")" : d.label + " (" + d.n + ")";
+                var lab = d.label + " (" + d.n + ")";
+                return [lab];
+            });
+            labels_u.exit().remove();
+            var labels_e = labels_u.enter().append("text").classed("label",true);
+            var labels = labels_e.merge(labels_u);
+        
+            labels.attr("x", zero+"%") 
+                .attr("text-anchor","start")
+                .attr("y",function(d,i){return 0})
+                .attr("dy","-3")
+                .attr("dx","3")
+                .text(function(d){return d})
+                .attr("fill","#555555")
+                .style("font-size","13px")
+                ;
+        }
 
     }
 
