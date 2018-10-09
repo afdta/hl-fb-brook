@@ -285,8 +285,8 @@ schema1$job$definition <- "Job numbers and their growth approximate the size of 
 schema1$job$source <- "Bureau of Labor Statistics, Quarterly Census of Employment and Wages"
 schema1$job$vars <- list()
 schema1$job$vars$change <- schema(outcomes, "emp_CAGR_10-17", "Percent change in jobs", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
-schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs (ths)", format="ths0", startYear=2010)
-schema1$job$vars$end <- schema(outcomes, "emp_2017", "Jobs (ths)", format="ths0", startYear=2017)  
+schema1$job$vars$start <- schema(outcomes, "emp_2010", "Jobs (thousands)", format="ths0", startYear=2010)
+schema1$job$vars$end <- schema(outcomes, "emp_2017", "Jobs (thousands)", format="ths0", startYear=2017)  
 
 #gdp
 schema1$gdp <- list()
@@ -305,8 +305,8 @@ schema1$jyf$definition <- "Changes in the total number of full- and part-time wa
 schema1$jyf$source <- "U.S. Census Bureau, Longitudinal Employer-Household Dynamics Program's Quarterly Workforce Indicators"
 schema1$jyf$vars <- list()
 schema1$jyf$vars$change <- schema(outcomes, "jyf_CAGR, 2010-16", "Percent change in jobs at young firms", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
-schema1$jyf$vars$start <- schema(outcomes, "jyf_Employment, 2010:Q1", "Jobs at young firms (ths)", format="ths0", startYear=2010)
-schema1$jyf$vars$end <- schema(outcomes, "jyf_Employment, 2016:Q1", "Jobs at young firms (ths)", format="ths0", startYear=2016)
+schema1$jyf$vars$start <- schema(outcomes, "jyf_Employment, 2010:Q1", "Jobs at young firms (thousands)", format="ths0", startYear=2010)
+schema1$jyf$vars$end <- schema(outcomes, "jyf_Employment, 2016:Q1", "Jobs at young firms (thousands)", format="ths0", startYear=2016)
 
 #awg
 schema1$awg <- list()
@@ -402,7 +402,7 @@ schema1$pop$source <- "U.S. Census Bureau, Population Estimates Program"
 schema1$pop$vars <- list()
 schema1$pop$vars$change <- schema(drivers, "pop_CAGR_2010-17", "Percent change in population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2017)
 schema1$pop$vars$start <- unbox(NA)
-schema1$pop$vars$end <- schema(drivers, "pop_2017", "Population (ths)", format="ths0", startYear=2017)
+schema1$pop$vars$end <- schema(drivers, "pop_2017", "Population (thousands)", format="ths0", startYear=2017)
 
 #ya pop
 schema1$ya <- list()
@@ -412,7 +412,7 @@ schema1$ya$source <- "U.S. Census Bureau, 2010 and 2016 American Community Surve
 schema1$ya$vars <- list()
 schema1$ya$vars$change <- schema(drivers, "ya_YAs_CAGR_10-16", "Percent change in young adult population", format="pct1", formatAxis="pct0", startYear=2010, endYear=2016)
 schema1$ya$vars$start <- unbox(NA)
-schema1$ya$vars$end <- schema(drivers, "ya_YAs_16", "Young adult population (ths)", format="ths0", startYear=2016)
+schema1$ya$vars$end <- schema(drivers, "ya_YAs_16", "Young adult population (thousands)", format="ths0", startYear=2016)
 
 #edu
 schema1$edu <- list()

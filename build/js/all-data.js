@@ -582,7 +582,7 @@ var all_data =
       },
       "start": {
         "var": "emp_2010",
-        "label": "Jobs (ths)",
+        "label": "Jobs (thousands)",
         "years": [2010],
         "period": 2010,
         "format": "ths0",
@@ -1148,7 +1148,7 @@ var all_data =
       },
       "end": {
         "var": "emp_2017",
-        "label": "Jobs (ths)",
+        "label": "Jobs (thousands)",
         "years": [2017],
         "period": 2017,
         "format": "ths0",
@@ -3995,7 +3995,7 @@ var all_data =
       },
       "start": {
         "var": "jyf_Employment, 2010:Q1",
-        "label": "Jobs at young firms (ths)",
+        "label": "Jobs at young firms (thousands)",
         "years": [2010],
         "period": 2010,
         "format": "ths0",
@@ -4561,7 +4561,7 @@ var all_data =
       },
       "end": {
         "var": "jyf_Employment, 2016:Q1",
-        "label": "Jobs at young firms (ths)",
+        "label": "Jobs at young firms (thousands)",
         "years": [2016],
         "period": 2016,
         "format": "ths0",
@@ -14036,7 +14036,7 @@ var all_data =
       "start": null,
       "end": {
         "var": "pop_2017",
-        "label": "Population (ths)",
+        "label": "Population (thousands)",
         "years": [2017],
         "period": 2017,
         "format": "ths0",
@@ -14664,7 +14664,7 @@ var all_data =
       "start": null,
       "end": {
         "var": "ya_YAs_16",
-        "label": "Young adult population (ths)",
+        "label": "Young adult population (thousands)",
         "years": [2016],
         "period": 2016,
         "format": "ths0",
