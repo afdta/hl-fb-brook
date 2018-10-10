@@ -56,7 +56,11 @@
 .fb-interactive .legend-swatch div{width:1em; height:1em; display:inline-block; vertical-align:middle; margin:0rem 5px 0rem 0rem;}
 
 /*expected use: class="fb-header [section-title | chart-title]"*/
-.fb-interactive .fb-header, .fb-interactive .fb-light-header{
+.fb-interactive .fb-header, 
+.fb-interactive .fb-header *,
+.fb-interactive .fb-light-header,
+.fb-interactive .fb-light-header *
+{
     font-family: 'Montserrat', 'PT Serif', sans-serif;
     color:#0d2c6c;
     font-weight:900;
