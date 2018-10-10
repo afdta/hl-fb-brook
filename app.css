@@ -180,7 +180,8 @@
     z-index:5;
     float:left;
     width:30%;
-    left:-2px;
+    width:calc(30% - 5px);
+    left:5px;
 }
 
 .fb-interactive .two-columns > div{
@@ -270,9 +271,6 @@
     }
     
     .fb-interactive .map-bars-container{
-        float:left;
-        width:30%;
-        left:-2px;
         display:block;
     }
 
