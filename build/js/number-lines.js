@@ -49,7 +49,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     var g_dots = svg.append("g");
 
     //anno symbols are shiftd left by 5px
-    var g_anno = svg.append("svg").attr("width","100%").attr("height","50%").attr("x","-5px").attr("y","50%").style("overflow","visible");
+    var g_anno = svg.append("svg").attr("width","100%").attr("height","50%").attr("x","-5px").attr("y","50%");
 
     var g_labels = svg.append("g");
 

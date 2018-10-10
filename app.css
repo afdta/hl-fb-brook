@@ -136,7 +136,7 @@
 
 /*number line plots*/
 .fb-interactive .number-line-plot{
-    overflow: hidden;
+    overflow: visible;
     margin:10px 0rem;
     padding:5px 15px;
 }
