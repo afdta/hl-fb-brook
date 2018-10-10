@@ -54,7 +54,7 @@ function lookup(indicator, metric, geolevel){
         }
 
         //update label and units
-        var ths = d.label.search(/\s*(\(thousands\)|\(\$thousands\))/);
+        var ths = d.label.search(/\s*(\(thousands\)|\(\$thousands\)|\(\$millions\))/);
         if(ths > -1){
             d.units = d.label.substring(ths); //.replace(/^\s/, "&nbsp;");
             d.label = d.label.substring(0,ths);
