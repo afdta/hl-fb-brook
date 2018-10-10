@@ -5,14 +5,17 @@ import cbsa_geos from './cbsa-geos.js';
 import all_data from './all-data.js';
 
 export default function header(container){
-    var wrap = d3.select(container).append("div").style("padding","0px 15px").classed("fb-center-col",true).style("margin","0px auto");
+    var wrap = d3.select(container).append("div").style("padding","0px 0px").classed("fb-center-col",true);
 
-    var title = wrap.append("p").classed("fb-header section-title",true).style("display","none");
-    var subtitle = wrap.append("p").classed("subtitle",true).style("display","none").style("max-width","780px");
+    var title_box = wrap.append("div").style("padding","0px 15px");
+
+    var title = title_box.append("p").classed("fb-header section-title",true).style("display","none");
+    var subtitle = title_box.append("p").classed("subtitle half-width",true).style("display","none").style("max-width","780px");
 
     var controls = wrap.append("div").classed("c-fix", true);
-    var legend_wrap = controls.append("div").classed("c-fix",true).style("display","none").style("padding","0px 0px 0px 0px");
-    var dropdown_wrap = controls.append("div").classed("c-fix", true).style("padding","0px 0px 0px 0px");
+
+    var dropdown_wrap = controls.append("div").classed("c-fix", true).style("padding","0px 15px");
+    var legend_wrap = controls.append("div").classed("c-fix",true).style("display","none");
 
     
     var select_wrap = {};
@@ -139,8 +142,8 @@ export default function header(container){
 
         var update_legend = function(geolevel, geo){
 
-            controls.classed("two-columns", true);
-            dropdown_wrap.style("padding","0px 0px 0px 15px");
+            controls.classed("two-column-header", true);
+            //dropdown_wrap.style("padding","0px 0px 0px 15px");
 
             var levels = {
                 metro: "Other Heartland metro areas",

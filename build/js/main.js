@@ -39,8 +39,8 @@ function main(){
     wrap_nl.selectAll("p.rm").remove();
 
     var dash_head = header(wrap_nl.node());
-    dash_head.title("Heartland dashboard");
-    dash_head.subtitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
+    dash_head.title("Check out your place");
+    dash_head.subtitle("Use the menus below to explore how your place performs on these important indicators of economic performance.");
 
     //args: container, metric [change|start|end], geolevel [state|metro|micro|rural], geocode [fips]
     var update_nl = number_lines(wrap_nl.node(), nl_state.metric, nl_state.geolevel, nl_state.geo);    
@@ -82,8 +82,8 @@ function main(){
     //var update_legend = dash_head.legend();
 
     var map_head = header(wrap_mp.node());
-    map_head.title("Map module");
-    map_head.subtitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
+    map_head.title("Map the Heartland");
+    map_head.subtitle("Visualize how Heartland states, metropolitan, micropolitan, and rural areas compare with one another across an array of indicators");
 
     var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
 

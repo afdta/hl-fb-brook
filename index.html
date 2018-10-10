@@ -13,59 +13,63 @@
 
 <body>
 
-<div >
-
-  <div class="fb-center-col" style="padding:30px 15px; margin:4rem auto 8rem auto;">
-    <p class="fb-header section-title" style="margin-bottom:20px;">Development status: Final round of updates</p>
-    <div class="two-columns c-fix">
-      <div>
-        <p class="fb-header">TO DO</p>
-        <ul>
-          <li>Fix map legend for mobile</li>
-          <li>Time permitting: Convert place dropdown to search + dropdown; convert other dropdowns to buttons where applicable</li>
-          <li>Integrate code into factbook website</li>
-          <li>Data validation</li>
-          <li>Final code review</li>
-        </ul>
-      </div>
-      <div>
-          <p class="fb-header">DONE</p>
-          <ul>
-              <li>Improved map legend/scales/colors. Scales are still equal width (in terms of values) except at the extremes. Values +/-3 standard deviations from mean are bundled with top/bottom groups</li>
-              <li>Map hover information. For CBSAs, nearest metro/micro to cursor is highlighted</li>
-              <li>Value on bar chart is highlighted upon map hover</li>
-              <li>Added map titles</li>
-              <li>Padded and rounded ranges of axes on number lines</li>
-              <li>Rounded to nearest 1000</li>
-              <li>Thinner borders, cleaner menus</li>
-              <li>Darker colors for non-Heartland marker on number lines</li>
-              <li>Pumped up letter spacing of titles to improve legibility</li>
-              <li>On dashboard, "gray out" indicators where data are missing</li>
-              <li>Remove transparency of legend wrapper</li>
-              <li>Revised indicator titles</li>
-              <li>Add "more information" boxes to number lines</li>
-              <li>Round dollar values to nearest 1000? Add "$" to GDP</li>
-              <li>Abbreviate state labels on map bar chart</li>
-              <li>Color match the PDF</li>
-          </ul>
-      </div>
-    </div>
+  <div class="fb-center-col">
+    <p class="fb-header">Development <a href="#dev-status">to dos/changelog »</a></p>
   </div>
 
-  <div id="heartland-fb-nl" style="margin:4rem auto;">
+  <!--Heartland Factbook interactive modules-->
+  <div id="heartland-fb-nl" class="fb-interactive" style="margin:4rem auto;">
     <div id="number-lines">
       <p class="rm">...</p>
     </div>
   </div>
 
-  <div id="heartland-fb-mp" style="margin:16rem auto;">
+  <div id="heartland-fb-mp" class="fb-interactive" style="margin:4rem auto;">
     <div id="map-module">
       <p class="rm">...</p>
     </div>
   </div>
+  <!--end interactives-->
 
+  <div class="fb-center-col" style="padding:30px 15px; margin:4rem auto 8rem auto;" id="dev-status">
+      <p class="fb-header section-title" style="margin-bottom:20px;">Development status: Final round of updates</p>
+      <div class="two-columns c-fix">
+        <div>
+          <p class="fb-header">TO DO</p>
+          <ul>
+            <li>Handle tooltips on mobile</li>
+            <li>Handle mobile text</li>
+            <li>Time permitting: Convert place dropdown to search + dropdown; convert other dropdowns to buttons where applicable</li>
+            <li>Integrate code into factbook website</li>
+            <li>Data validation</li>
+            <li>Final code review</li>
+          </ul>
+        </div>
+        <div>
+            <p class="fb-header">DONE</p>
+            <ul>
+                <li>Improved map legend/scales/colors. Scales are still equal width (in terms of values) except at the extremes. Values +/-3 standard deviations from mean are bundled with top/bottom groups</li>
+                <li>Map hover information. For CBSAs, nearest metro/micro to cursor is highlighted</li>
+                <li>Value on bar chart is highlighted upon map hover</li>
+                <li>Added map titles</li>
+                <li>Padded and rounded ranges of axes on number lines</li>
+                <li>Rounded to nearest 1000</li>
+                <li>Thinner borders, cleaner menus</li>
+                <li>Darker colors for non-Heartland marker on number lines</li>
+                <li>Pumped up letter spacing of titles to improve legibility</li>
+                <li>On dashboard, "gray out" indicators where data are missing</li>
+                <li>Remove transparency of legend wrapper</li>
+                <li>Revised indicator titles</li>
+                <li>Add "more information" boxes to number lines</li>
+                <li>Round dollar values to nearest 1000? Add "$" to GDP</li>
+                <li>Abbreviate state labels on map bar chart</li>
+                <li>Color match the PDF</li>
+                <li></li>
+            </ul>
+        </div>
+      </div>
+    </div>
 
-</div>
 
 <canvas id="info"><</canvas>
 <script>
@@ -83,10 +87,6 @@
     console.log(img64);
   },1000)
   
-
-
-  
-
 </script>
 
 </body>

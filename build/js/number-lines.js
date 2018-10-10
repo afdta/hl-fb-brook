@@ -14,7 +14,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     //one-time setup
     var wrap0 = d3.select(container).classed("number-line-plot level0", true);
 
-    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%").style("position","relative");
+    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 2px").style("position","relative");
     var indicator_title0 = tbox.append("p")
                               .style("margin","3px 0px 1px 0px")
                               .classed("fb-header", true)
@@ -31,8 +31,7 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
 
     var more_info = indicator_title0.append("span").classed("more-info",true).html("&nbsp;");
 
-    var def_box = tbox.append("div").style("position","absolute").style("top","100%").style("left","0%").style("width","100%").style("padding","10px 1% 0px 10px")
-        .style("background-color","#e0e0e0").style("display","none").style("border-radius","5px");
+    var def_box = tbox.append("div").style("display","none").style("border-radius","5px").classed("definitions-box",true);
 
     more_info.on("mouseenter", function(){
         wrap0.classed("level1",true);
@@ -86,29 +85,13 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
         var annotations = [];
         console.log(data.defs);
 
-        def_box.html('<p style="line-height:1.3em">' + data.defs.definition + '</p><p class="subtitle" style="line-height:1.3em">Source: ' + data.defs.source + '</p>' );
+        def_box.html('<p>' + data.defs.definition + '</p><p class="subtitle">Source: ' + data.defs.source + '</p>' );
 
         var format_ = function(v){return v};
         var formatAxis_ = function(v){return v};
 
-        var data_label = "";
-        var data_units = "";
-
-        if(data.label != null){
-            var ths = data.label.search(/\s*(\(thousands\)|\(\$thousands\))/);
-            if(ths > -1){
-                data_label = data.label.substring(0,ths);
-                data_units = data.label.substring(ths).replace(/^\s/, "&nbsp;");
-            }
-            else{
-                data_label = data.label;
-                data_units = "";
-            }
-        }
-
-
-        indicator_title.html(data_label);
-        indicator_units.html(data_units);
+        indicator_title.html(data.label);
+        indicator_units.html(data.units);
         indicator_period.html(data.period != null ? "&nbsp;" + data.period : "");
 
         wrap0.style("display", data.invalid_metric ? "none" : "block");
@@ -229,14 +212,15 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
 
 export default function number_lines(container, metric_, geolevel_, geo_){
     //one-time setup
-    var wrap0 = d3.select(container).append("div").classed("c-fix two-columns fb-center-col",true);
+    var wrap0 = d3.select(container).append("div").classed("fb-center-col",true)
+                                    .append("div").classed("c-fix two-columns",true);
 
     var wrap_outcomes = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
     var wrap_drivers = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
-    wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true);
-    wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true);
+    wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true).style("padding","0px 15px");
+    wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true).style("padding","0px 15px");
 
     
     var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,

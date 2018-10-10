@@ -1,13 +1,4 @@
-html{
-    font-size:16px;
-}
-
-body{
-    min-width:420px;
-    margin:0px;
-}
-
-div, select{
+.fb-interactive div, .fb-interactive select{
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -15,7 +6,7 @@ div, select{
 
 /* >>> headers and text <<< */
 
-p, li, text, td{
+.fb-interactive p, .fb-interactive li, .fb-interactive text, .fb-interactive td{
     font-family: 'Open Sans', sans-serif;
     color:#0d2c6c;
     margin:0rem 0rem 1rem 0rem;
@@ -23,14 +14,14 @@ p, li, text, td{
     font-size:16px;
 }
 
-select, select option{
+.fb-interactive select, .fb-interactive select option{
     font-family: 'Open Sans', sans-serif;
     color:#0d2c6c;
     line-height:1.5em;
     font-size:16px;
 }
 
-.select-wrap{
+.fb-interactive .select-wrap{
     float:left;
     border:2px solid #019966;
     border-width:0px 0px 2px 0px;
@@ -38,10 +29,9 @@ select, select option{
     margin:0px 10px 15px 0px;
     padding-right:0px;
     position:relative;
-    max-width:45%;
 }
 
-select{
+.fb-interactive select{
     background:none;
     outline:none;
     border:none;
@@ -54,50 +44,37 @@ select{
     width:100%;
 }
 
-.legend-swatch{
+.fb-interactive .legend-swatch{
     float:left;
     margin:10px 15px 10px 0px;
+    vertical-align:middle;
+    line-height:1em;
 }
 
-.legend-swatch p{margin:0px;}
+.fb-interactive .legend-swatch p{margin:0px; display:inline-block; line-height:1em; vertical-align:middle;}
+
+.fb-interactive .legend-swatch div{width:1em; height:1em; display:inline-block; vertical-align:middle; margin:0rem 5px 0rem 0rem;}
 
 /*expected use: class="fb-header [section-title | chart-title]"*/
-.fb-header, .fb-light-header, h1, h2, h3{
+.fb-interactive .fb-header, .fb-interactive .fb-light-header{
     font-family: 'Montserrat', sans-serif;
     color:#0d2c6c;
     font-weight:900;
-    margin:0rem 0rem 10px 0rem;
+    margin:0rem 0rem 15px 0rem;
     line-height:1.3em;
     letter-spacing: 0.01em;
 }
-.fb-light-header{
+.fb-interactive .fb-light-header{
     font-weight:normal;
 }
 
-.section-title{font-size:2.25rem;}
-.group-title{font-size:1.75rem;}
-.chart-title{font-size:1.25rem;}
+.fb-interactive .section-title{font-size:2.25rem;}
+.fb-interactive .group-title{font-size:1.75rem;}
+.fb-interactive .chart-title{font-size:1.25rem;}
 
-.subtitle{font-style:italic;line-height:1.5em}
+.fb-interactive .subtitle{font-style:italic;line-height:1.5em}
 
-/*.more-info {
-    width:16px;
-    height:16px;
-    display:inline-block;
-    margin:3px 5px;
-    padding:0px 0px;
-    text-align:center;
-    font-size:9px;
-    line-height:16px;
-    border-radius:8px;
-    border:0px solid #aaaaaa;
-    background-color:#dddddd;
-    color:#999999;
-    box-sizing:border-box;
-    cursor:pointer;
-    vertical-align:top;
-}*/
-.more-info:after{
+.fb-interactive .more-info:after{
     background-image:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACG0lEQVQ4T32Uz4tSURTHv0fcKCkmgQttEVgJrgQlEWaccgIX72mr+Qf68T810z9Qq/TpwsmKaRZmCIL4Y6BEcXCjOGG5UMR74r7ReMp7nt0953s+995z7rkEE8vlcs9tNtsJgAMAgbXkGsAlEX1QFKW8m0ZGR7FYfLRarc6I6NBsA4PvAsBrVVV/bnz/QcVi8VAI8RHAXSPE6XQiGo1CCIFarYb5fL4J/yairKIol9Khg+RJhBDfdyEyFgwGEQqF9ORWq4Ver2fc50YI8SSbzf7SQZqmfQHw1Ow6brcb8XgczIxKpYLZbLYlY+ZvmUwmSevCnu+rCdFtBSTMwo6pUCi8Y+aXZgKPxwO73a6HlsslptOpKYeZT0nTtCsAj80UxvoMh0PU63WrE11J0F8Ad8wULpcLyWRSD3U6HXS7XSvQbC/I7/cjEonoydVqFePx2Ar0Z+/VZNvl9aSVy2XjG9oFdiToDMArs61isRh8Pp9e6FKpZNlYInoru3bMzJ/MVKlUCg6HA5PJRH9DVsbMqc2D/AzgmVEo255Op3VXv99Hs9m04lyoqnqkg/L5/AMi+gHg3kbt9XqRSCT0ZaPRwGAwMANtj4hUFAqFA2aWQ+uV60AggHA4rCcvFgu0222MRiMj7IaIXmwN7SaqadpDAKcAjiwLchv4KoR4I4d1o9v6jwzAFDOfEJH82O6v/dfMLL+M95lMRg75lv0Dh17eH5aL5fwAAAAASUVORK5CYII=);
     background-size: 100% 100%;
@@ -113,137 +90,202 @@ select{
     cursor:help;
 }
 
-.level0{
+.fb-interactive .level0{
     position:relative;
     z-index:0;
 }
 
-.level1{
+.fb-interactive .level1{
     position:relative;
     z-index:1;
 }
 
 /*footnotes container for notes and sources*/
-.footnotes{
+.fb-interactive .footnotes{
     margin:2rem 0rem 0rem 0rem;
     position:relative;
 }
-.footnotes:before{
+.fb-interactive .footnotes:before{
     content:"";
     position:absolute;
     width:200px;
     height:1px;
     border-top:1px solid #aaaaaa;
 }
-.footnotes > *{
+.fb-interactive .footnotes > *{
     font-style:italic;
     color:#555555;
 }
 
-/*longer text sections*/
-.reading > *{
-    line-height:1.7em;
+.fb-interactive .definitions-box{
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    width:100%;
+    padding: 10px 1% 0px 10px;
+    background-color:#e0e0e0;
+    border-radius:10px;
+    border:2px solid #ffffff;
+    border-width:2px 2px;
 }
 
-/* >>> graphics <<<
+.fb-interactive .definitions-box > p{
+    font-size:0.9em;
+    line-height:1.4em;
+}
 
 /*number line plots*/
-.number-line-plot{
+.fb-interactive .number-line-plot{
     overflow: visible;
     margin:1rem 0rem;
-    padding:0px 5px;
-}
-
-
-/*columns*/
-.fb-center-col{
-    max-width:1400px;
-    margin:0px auto;
-}
-
-.green-square-wrap{
     padding:0px 15px;
 }
 
-.green-square-wrap > div{
+/*columns*/
+.fb-interactive .fb-center-col{
+    max-width:1400px;
+    margin:15px auto;
+}
+
+.fb-interactive .green-square-wrap{
+    padding:0px 15px;
+}
+
+.fb-interactive .green-square-wrap > div{
     border-width:2px;
-    padding:15px 15px;
+    padding:15px 0px;
     border-style:solid;
     border-color:#019966;
 }
 
-.two-columns > div{
+.fb-interactive .green-border{
+    border-width:2px;
+    border-style:solid;
+    border-color:#019966;    
+}
+
+.fb-interactive .map-container{
+    position:relative;
+    z-index:10;
+    float:left;
+    width:70%;
+}
+
+.fb-interactive .map-bars-container{
+    position:relative;
+    z-index:5;
+    float:left;
+    width:30%;
+    left:-2px;
+}
+
+.fb-interactive .two-columns > div{
     float:left;
     width:50%;
     min-width:320px;
 }
 
-.hl-map-split{
-    position:relative;
-}
-
-.hl-map-split > div{
-    /*float:left;
-    width:25%;*/
-    min-height:100%;
-    border:1px solid #019966;
-    border-width:0px 0px 0px 0px;
-}
-/*.hl-map-split > div:first-child{
-    width:75%;
-    border-width:0px 1px 0px 0px;
-}*/
-
-.hl-map-split > div:last-child{
-    position:absolute;
-    right:0px;
-    top:0px;
-    min-width:120px;
-    max-width:205px;
-    width:15%;
-}
-
-.hl-map-split.hl-mobile > div{
-    width:auto;
-    float:none;
-    border-width:0px;
-}
-
 /*clearfix*/
-.c-fix:after {
+.fb-interactive .c-fix:after {
   content: "";
   display: table;
   clear: both;
 }
 
-.no-data-available > div{
-    /*display:none;*/
-}
-
-.no-data-available > div:first-child:after{
+.fb-interactive .no-data-available > div:first-child:after{
     content:"Not available";
     font-family: 'Open Sans', 'PT Serif', sans-serif;
 }
 
+.fb-interactive .two-column-header > div{
+    float:right;
+    width:50%;
+    padding:0px 15px;
+}
+
 
 @media (min-width:0px){
-    .two-columns > div{
+    .fb-interactive .two-columns > div{
+        float:none;
+        width:auto;
+        margin:0rem 0rem 1rem 0rem;
+    }
+
+    .fb-interactive .two-column-header > div{
         float:none;
         width:auto;
     }
 
-    .select-wrap{
+    .fb-interactive .half-width{
+        width:auto;
+        padding:0px;
+        box-sizing:border-box;
+    }
+
+    .fb-interactive .map-container{
+        width:auto;
         float:none;
+        left:auto;
+    }
+    
+    .fb-interactive .map-bars-container{
+        display:none;
+    }
+
+    .fb-interactive .fb-mobile-view{
+        display:block;
     }
 }
 
 @media (min-width:780px){
-    .two-columns > div{
+    .fb-interactive .two-columns > div{
         float:left;
         width:50%;
+        margin:0rem 0rem 1rem 0rem;
     }
-    .select-wrap{
+
+    .fb-interactive .two-column-header > div{
+        float:right;
+        width:50%;
+    }
+
+    .fb-interactive .select-wrap{
         float:left;
+    }
+
+    .fb-interactive .half-width{
+        width:70%;
+        padding:0px;
+    }
+}
+
+@media (min-width:1000px){
+    .fb-interactive .map-container{
+        float:left;
+        width:70%;
+    }
+    
+    .fb-interactive .map-bars-container{
+        float:left;
+        width:30%;
+        left:-2px;
+        display:block;
+    }
+
+    .fb-interactive .fb-mobile-view{
+        display:none;
+    }
+
+    .fb-interactive .half-width{
+        width:60%;
+        padding:0px;
+    }
+}
+
+@media (min-width:1400px){
+    .fb-interactive .half-width{
+        width:50%;
+        padding:0px 25px 0px 0px;
     }
 }
 

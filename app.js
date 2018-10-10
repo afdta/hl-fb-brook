@@ -113,12 +113,10 @@
 	    text:{
 	        orange:"#cc4619"
 	    },
-	    //blues6:['#b7d1f7', '#8bade7', '#638bd0', '#4069b4', '#224993', '#0d2b6b'],
-	    //reds6:['#fdd0a2','#fdae6b','#fd8d3c','#f16913','#d94801','#8c2d04'],
-	    //blues4:['#c3dafa', '#80a4e2', '#4971bc', '#1b4289'],
-	    //reds4:['#ffdabb', '#ffa15b', '#da5919', '#8b0000'],
 	    blues5:['#dbe0eb', '#b3deff', '#82c2ff', '#2b80e3', '#0d2b6b'],
+	    //blues5:['#dbe0eb', '#75b4f8', '#4883d4', '#2555a2', '#0d2b6b'],
 	    reds5:['#fee5d9', '#f4b5a4', '#e5612c', '#de2d26', '#9b000c'],
+	    //reds5:['#fee5d9','#f7ae95','#eb7547','#cf3521','#9b000c'],
 	    na:"#dddddd"
 	};
 
@@ -15838,6 +15836,11 @@
 	    };
 	    d.defs = {label:all_data[indicator].label[0], definition:all_data[indicator].definition[0], source:all_data[indicator].source[0]};
 
+	    var flip_scale = false;
+	    if(indicator in {"pov":1, "hp":1, "bb":1}){
+	        flip_scale = true;
+	    }
+
 	    try{
 	        if(metric_object == null){throw new Error("No data")}
 
@@ -15845,7 +15848,8 @@
 	        d.invalid_metric = false;
 	        d.hl = metric_object.summary.heartland;
 	        d.nhl = metric_object.summary.non_heartland;
-	        d.label = metric_object.label;
+	        d.label = metric_object.label != null ? metric_object.label : "";
+	        d.units = "";
 	        d.period = metric_object.period;
 	        d.format = metric_object.format;
 	        d.formatAxis = metric_object.formatAxis;
@@ -15867,6 +15871,13 @@
 	            }
 	            return r;
 	        };
+
+	        //update label and units
+	        var ths = d.label.search(/\s*(\(thousands\)|\(\$thousands\))/);
+	        if(ths > -1){
+	            d.units = d.label.substring(ths); //.replace(/^\s/, "&nbsp;");
+	            d.label = d.label.substring(0,ths);
+	        }
 
 	    }
 	    catch(e){
@@ -15916,15 +15927,17 @@
 	            //var min = d.summary.min;
 	            //var max = d.summary.max;
 
+	            var blues = geolevel=="state" || geolevel=="rural" ? palette.blues5 : palette.blues5;
+	            var reds = geolevel=="state" || geolevel=="rural" ? palette.reds5 : palette.reds5;
+
 	            //whether diverging must be determined based on actual min/max, not trimmed min/max (see change in poverty at state level)
 	            if(d.summary.min < 0 && d.summary.max > 0){
 	                var maxabs = Math.max(Math.abs(min), max);
 
-	                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues5 : palette.blues5;
-	                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds5 : palette.reds5;
 
-	                var blue_scale = d3.scaleQuantize().domain([0, maxabs]).range(blues);
-	                var red_scale = d3.scaleQuantize().domain([0, maxabs]).range(reds);
+
+	                var blue_scale = d3.scaleQuantize().domain([0, maxabs]).range(flip_scale ? reds : blues);
+	                var red_scale = d3.scaleQuantize().domain([0, maxabs]).range(flip_scale ? blues : reds);
 	                d.color_scale = function(v){
 	                    if(v==null){
 	                        return palette.na;
@@ -15939,18 +15952,14 @@
 	            }
 	            else if(d.summary.min >= 0){
 
-	                var blues = geolevel=="state" || geolevel=="rural" ? palette.blues5 : palette.blues5;
-
-	                var blue_scale = d3.scaleQuantize().domain([min, max]).range(blues);
+	                var blue_scale = d3.scaleQuantize().domain([min, max]).range(flip_scale ? reds : blues);
 	                d.color_scale = function(v){
 	                    return v==null ? palette.na : blue_scale(v);
 	                };
 	            }
 	            else{
 
-	                var reds = geolevel=="state" || geolevel=="rural" ? palette.reds5 : palette.reds5;
-
-	                var red_scale = d3.scaleQuantize().domain([max, min]).range(reds);
+	                var red_scale = d3.scaleQuantize().domain([max, min]).range(flip_scale ? blues : reds);
 	                d.color_scale = function(v){
 	                    return v==null ? palette.na : red_scale(v);
 	                };
@@ -16126,7 +16135,7 @@
 	    //one-time setup
 	    var wrap0 = d3.select(container).classed("number-line-plot level0", true);
 
-	    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 1%").style("position","relative");
+	    var tbox = wrap0.append("div").classed("c-fix",true).style("padding","0px 2px").style("position","relative");
 	    var indicator_title0 = tbox.append("p")
 	                              .style("margin","3px 0px 1px 0px")
 	                              .classed("fb-header", true)
@@ -16143,8 +16152,7 @@
 
 	    var more_info = indicator_title0.append("span").classed("more-info",true).html("&nbsp;");
 
-	    var def_box = tbox.append("div").style("position","absolute").style("top","100%").style("left","0%").style("width","100%").style("padding","10px 1% 0px 10px")
-	        .style("background-color","#e0e0e0").style("display","none").style("border-radius","5px");
+	    var def_box = tbox.append("div").style("display","none").style("border-radius","5px").classed("definitions-box",true);
 
 	    more_info.on("mouseenter", function(){
 	        wrap0.classed("level1",true);
@@ -16198,29 +16206,13 @@
 	        var annotations = [];
 	        console.log(data.defs);
 
-	        def_box.html('<p style="line-height:1.3em">' + data.defs.definition + '</p><p class="subtitle" style="line-height:1.3em">Source: ' + data.defs.source + '</p>' );
+	        def_box.html('<p>' + data.defs.definition + '</p><p class="subtitle">Source: ' + data.defs.source + '</p>' );
 
 	        var format_ = function(v){return v};
 	        var formatAxis_ = function(v){return v};
 
-	        var data_label = "";
-	        var data_units = "";
-
-	        if(data.label != null){
-	            var ths = data.label.search(/\s*(\(thousands\)|\(\$thousands\))/);
-	            if(ths > -1){
-	                data_label = data.label.substring(0,ths);
-	                data_units = data.label.substring(ths).replace(/^\s/, "&nbsp;");
-	            }
-	            else{
-	                data_label = data.label;
-	                data_units = "";
-	            }
-	        }
-
-
-	        indicator_title.html(data_label);
-	        indicator_units.html(data_units);
+	        indicator_title.html(data.label);
+	        indicator_units.html(data.units);
 	        indicator_period.html(data.period != null ? "&nbsp;" + data.period : "");
 
 	        wrap0.style("display", data.invalid_metric ? "none" : "block");
@@ -16336,14 +16328,15 @@
 
 	function number_lines(container, metric_, geolevel_, geo_){
 	    //one-time setup
-	    var wrap0 = d3.select(container).append("div").classed("c-fix two-columns fb-center-col",true);
+	    var wrap0 = d3.select(container).append("div").classed("fb-center-col",true)
+	                                    .append("div").classed("c-fix two-columns",true);
 
 	    var wrap_outcomes = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
 	    var wrap_drivers = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
-	    wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true);
-	    wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true);
+	    wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true).style("padding","0px 15px");
+	    wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true).style("padding","0px 15px");
 
 	    
 	    var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,
@@ -16439,20 +16432,18 @@
 	    if(init_geo != null){scope.geo = init_geo;}
 	    
 	    //outer wrap
-	    var wrap0 = d3.select(container).append("div").classed("fb-center-col",true);
-
-	    //var main_title = wrap0.append("p").text("Main title").classed("fb-header section-title",true);
-	    
-	    var wrap1 = wrap0.append("div").classed("green-square-wrap",true)
-	                            .append("div").classed("c-fix", true).style("padding","0px").style("overflow","visible");
+	    var wrap0 = d3.select(container).append("div").classed("fb-center-col c-fix",true).style("padding","0px 15px");
 
 	    //map dom
-	    var map_wrap0 = wrap1.append("div");
-	    
-	    var map_wrap1 = map_wrap0.append("div").style("position","relative");
+	    var map_wrap0 = wrap0.append("div").style("position","relative").classed("map-container green-border",true);
+
+	    //mobile map legend
+	    var mobile_legend = map_wrap0.append("div").style("padding","15px").classed("fb-mobile-view",true);
+	    var mobile_title = mobile_legend.append("p").style("margin","0px");
+	    var mobile_swatches = mobile_legend.append("div").classed("c-fix",true);
 
 	    //build svg filters
-	    var defs = wrap1.append("div").style("height","0px").append("svg").append("defs");
+	    var defs = wrap0.append("div").style("height","0px").append("svg").append("defs");
 	    var filter = defs.append("filter").attr("id","feBlur").attr("width","150%").attr("height","150%");
 	    filter.append("feOffset").attr("result","offsetout").attr("in","SourceGraphic").attr("dx","6").attr("dy","6");
 	    filter.append("feColorMatrix").attr("result","matrixout").attr("in","offsetout").attr("type","matrix").attr("values","0.25 0 0 0 0 0 0.25 0 0 0 0 0 0.25 0 0 0 0 0 1 0");
@@ -16460,18 +16451,10 @@
 	    filter.append("feBlend").attr("in","SourceGraphic").attr("in2","blurout").attr("mode","normal");
 	    
 	    //TWO MAP PANELS
-	    var map_panel = map_wrap1.append("div").style("position","relative"); //hold map
+	    var map_panel = map_wrap0.append("div").style("position","relative"); //hold map
 	    
 	    //hold bars/legend
-	    var map_bars_panel = map_wrap1.append("div")
-	                            .style("position","absolute")
-	                            .style("bottom","0px")
-	                            .style("right","0px")
-	                            .style("width","150px")
-	                            .style("background-color","#ffffff")
-	                            .style("border","1px solid " + palette.green)
-	                            .style("border-width","0px 0px 0px 1px")
-	                            ; 
+	    var map_bars_panel = wrap0.append("div").classed("map-bars-container green-border",true).style("padding-bottom","15px");
 
 	    var tooltip = map_panel.append("div")
 	                           .style("position","absolute")
@@ -16497,7 +16480,12 @@
 	                            ;
 	    
 	    
-	    var map_svg = map_panel.append("svg").attr("width","100%").attr("height","100%");
+	    var map_svg = map_panel.append("div").style("width","100%")
+	                                         .style("height","100%")
+	                                         .style("overflow","hidden")
+	                                         .append("svg")
+	                                         .attr("width","100%")
+	                                         .attr("height","100%");
 	    
 	    //map <g>roups
 	    var g_back = map_svg.append("g"); //all states
@@ -16562,8 +16550,8 @@
 	        }
 
 	        //aspect ratio of heartland
-	        var max_height = 800;
-	        var min_height = 400;
+	        var max_height = 700;
+	        var min_height = 300;
 	        var hl_height = scope.width * scope.aspect;
 
 	        //set height
@@ -16571,23 +16559,8 @@
 	                        hl_height < min_height ? min_height : hl_height;
 	        map_panel.style("height", scope.height+"px");
 
-	        //draw bars
-	        {
-	            var bars_width = scope.width*(scope.width > 1200 ? 0.35 : 0.3);
-	            map_bars_panel.style("width", bars_width+"px").style("height","100%");
+	        proj.fitExtent([[10, 10], [scope.width - 10, scope.height-10]], HLFC);  
 
-	            //amount of horizontal space on either side of heartland
-	            //var bars_width_available = ((scope.width - (scope.height/scope.aspect))/2) - 10;
-	            //console.log(bars_width_available);
-
-	            proj.fitExtent([[10, 10], 
-	                            [scope.width-bars_width - 40, scope.height-10]], HLFC);            
-
-	            //proj.fitExtent([[(bars_width_available > bars_width ? 10 : bars_width - bars_width_available + 40), 10], 
-	            //                [scope.width-10, scope.height-10]], HLFC);
-	        }
-	        
-	        
 
 	        //bar chart as legend
 	        draw_bars();
@@ -16600,6 +16573,17 @@
 	                var geo_code = geo_accessor(d);
 	                var v = scope.data.get(geo_code);
 	                return scope.data.color_scale(v);
+	            }
+	        };
+
+	        var stroke = function(geo_accessor){
+	            if(arguments.length==0){
+	                geo_accessor = function(d){return d.fips};
+	            }
+	            return function(d){
+	                var geo_code = geo_accessor(d);
+	                var v = scope.data.get(geo_code);
+	                return d3.color(scope.data.color_scale(v)).darker();
 	            }
 	        };
 
@@ -16616,14 +16600,14 @@
 	            g_micros.style("visibility","hidden");
 	        }
 	        else if(scope.geolevel=="metro"){
-	            scope.geoselection = draw_points(g_metros, cbsa_geos2.metro, {fill:fill(), r:5}, true);
+	            scope.geoselection = draw_points(g_metros, cbsa_geos2.metro, {fill:fill(), r:6, stroke:stroke()}, true);
 	            draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
 	           
 	            g_metros.style("visibility","visible");
 	            g_micros.style("visibility","hidden");
 	        }
 	        else if(scope.geolevel=="micro"){
-	            scope.geoselection = draw_points(g_micros, cbsa_geos2.micro, {fill:fill(), r:5}, true);
+	            scope.geoselection = draw_points(g_micros, cbsa_geos2.micro, {fill:fill(), r:6, stroke:stroke()}, true);
 	            draw_states(g_states, HLFC.features, {stroke:"#666666", fill:"#ffffff"});
 
 	            g_micros.style("visibility","visible");
@@ -16811,7 +16795,7 @@
 	        }
 	        else{
 	            var tickvals = scale.ticks(3);       
-	            var tickZero = [1];     
+	            var tickZero = [0];     
 	            bars_axis.style("visibility",null);
 	        }
 
@@ -16820,7 +16804,7 @@
 	        ticks.enter().append("line").classed("tick-mark",true).merge(ticks)
 	            .attr("x1", function(d){return scale(d)+"%"})
 	            .attr("x2", function(d){return scale(d)+"%"})
-	            .attr("y1","3.5").attr("y2","12").attr("stroke",palette.gray)
+	            .attr("y1","3.5").attr("y2","10").attr("stroke",palette.gray)
 	            .style("shape-rendering","crispEdges");
 
 	        var tickLabels = bars_axis.selectAll("text.tick-mark").data(tickvals);
@@ -16830,20 +16814,13 @@
 	            .attr("y","0").attr("fill",palette.gray).style("font-size","13px")
 	            .text(function(d){return formatAxis_(d)});
 
-	        var gridlines = bars_front.selectAll("line.grid-line").data(tickZero);
+	        var gridlines = bars_grid.selectAll("line.grid-line").data(tickZero);
 	        gridlines.exit().remove();
 	        gridlines.enter().append("line").classed("grid-line",true).merge(gridlines)
 	            .attr("x1", function(d){return scale(d)+"%"})
 	            .attr("x2", function(d){return scale(d)+"%"})
-	            .attr("y1","35").attr("y2","100%").attr("stroke",palette.gray)
+	            .attr("y1","45").attr("y2","100%").attr("stroke","#ffffff")
 	            .style("shape-rendering","crispEdges");
-
-	        /*var gridlines = bars_grid.selectAll("line.grid-line").data(tickvals);
-	        gridlines.exit().remove();
-	        gridlines.enter().append("line").classed("grid-line",true).merge(gridlines)
-	            .attr("x1", function(d){return scale(d)+"%"})
-	            .attr("x2", function(d){return scale(d)+"%"})
-	            .attr("y1","30").attr("y2","95%").attr("stroke","#dddddd");*/
 
 	    }
 
@@ -16866,33 +16843,9 @@
 	                extent = [min, max];
 	            }
 	        }
-	        
+	    
 
-	        /*if(false){
-	            //optional horizonal layout - TK
-	            if(extent !== null){
-	                var y = d3.scaleLinear().domain(extent).range([90,10]);
-	                var zero = y(0);
-	                var height = function(d){
-	                    var v = d.value;
-	                    var h;
-	                    var ypos = y(v);
-	                    if(v < 0){
-	                        h = ypos - zero;
-	                    }
-	                    else{
-	                        h = zero - ypos;
-	                    }
-	                    return h + "%";
-	                }
-	            }
-	            else{
-	                var y = function(){return 0};
-	                var height = 0;
-	            }
-	            
-	        
-	        }*/
+	        var title_html = "";
 
 	        if(extent !== null){
 	            var x = d3.scaleLinear().domain(extent).range([5,85]);
@@ -16946,11 +16899,12 @@
 	            });
 
 	            map_bars_panel.style("background-color","#ffffff");
-	            bars_title.html('<span class="fb-header">' + 
-	                            scope.data.label + 
-	                            '</span>&nbsp;<span class="fb-light-header">' + 
-	                            scope.data.period +
-	                            '</span>');
+
+	            title_html = '<span class="fb-header">' + scope.data.label + '</span>&nbsp;<span class="fb-light-header">' + 
+	                         scope.data.period + '</span><span class="fb-light-header">' + scope.data.units + '</span>';
+
+	            
+	            
 	        }
 	        else{
 	            var x = function(){return 0};
@@ -16958,146 +16912,110 @@
 	            draw_axis(null);
 	            var bar_groups = [];
 	            map_bars_panel.style("background-color","#e0e0e0");
-	            bars_title.html('<p class="fb-header">Data not available</p>');
+
+	            title_html = '<p class="fb-header">Data not available</p>';
 	        }
 
+	        bars_title.html(title_html);
+	        mobile_title.html(title_html);
+
+	        //draw bar chart
 	        //set height to accommodate all bars -- start with scope.height set by map
 	        var height = scope.height > 600 ? 600 : scope.height;
 	        var top_pad = 30;
 	        var bot_pad = 10;
 	        var group_pad = 30;        
-
-	        if(is_mobile){
-	            bars_axis.style("visibility","hidden");
-
-	            var bar_height = 10;
-	            
-	            //final height
-	            height = top_pad + bot_pad + (group_pad+bar_height)*bar_groups.length;
-	            bars_wrap1.style("height",height+"px");
-
-	            //bar groups
-	            var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
-	            bars_u.exit().remove();
-	            var bars_e = bars_u.enter().append("g").classed("bar",true);
-	            bars_e.append("text");
-	            var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
-	                return "translate(0," + (top_pad + (i+1)*group_pad + i*bar_height) + ")";
-	            });
-
-	            //actual rectangles
-	            var b_u = bars.selectAll("rect.bar").data(function(d){return [d.bars[0]]});
-	            b_u.exit().remove();
-	            var b_e = b_u.enter().append("rect").classed("bar",true);
-	            var b = b_e.merge(b_u);
-
-	            scope.bars = b; //make accessible
-
-	            b.attr("width", "40px").attr("height", "10px")
-	                .attr("x", "10").attr("y","0")
-	                .attr("fill", function(d){return d.color})
-	                .attr("stroke", "#ffffff");
-
-	            //bar labels (states)
-	            var bl_u = bars.selectAll("text.bar-label").data([]);
-	            bl_u.exit().remove();
-	            var bl_e = bl_u.enter().append("text").classed("bar-label",true);
-	            var bl = bl_e.merge(bl_u);
-
-	            //group labels (ranges)
-	            var labels_u = bars.selectAll("text.label").data(function(d,i){
-	                var lab = d.label + " (" + d.n + ")";
-	                return [lab];
-	            });
-	            labels_u.exit().remove();
-	            var labels_e = labels_u.enter().append("text").classed("label",true);
-	            var labels = labels_e.merge(labels_u);
-
-	            labels.attr("x", "10px") 
-	                .attr("text-anchor","start")
-	                .attr("y","25px")
-	                .text(function(d){return d})
-	                .attr("fill","#555555")
-	                .style("font-size","13px")
-	                ;
-
-	        }
-	        else{
-
-	            var bar_height = Math.floor((height-top_pad-bot_pad-(group_pad*bar_groups.length))/data.length);
-	            if(bar_height < 1){bar_height = 1;}
-	            
-	            //final height
-	            height = (bar_height * data.length) + top_pad + bot_pad + group_pad*bar_groups.length;
-	            bars_wrap1.style("height",height+"px");
-
-	            //bar groups
-	            var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
-	            bars_u.exit().remove();
-	            var bars_e = bars_u.enter().append("g").classed("bar",true);
-	            bars_e.append("text");
-	            var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
-	                return "translate(0," + (top_pad + (i+1)*group_pad + d.prior_bars*bar_height) + ")";
-	            });
-
-	            //actual rectangles
-	            var b_u = bars.selectAll("rect.bar").data(function(d){return d.bars});
-	            b_u.exit().remove();
-	            var b_e = b_u.enter().append("rect").classed("bar",true);
-	            var b = b_e.merge(b_u);
-
-	            scope.bars = b; //make accessible
+	        var bar_height = Math.floor((height-top_pad-bot_pad-(group_pad*bar_groups.length))/data.length);
+	        if(bar_height < 1){bar_height = 1;}
 	        
-	            b.attr("width", width)
-	                .attr("height", bar_height)
-	                .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
-	                .attr("y",function(d,i){return i*bar_height})
-	                .attr("fill", function(d){return d.color})
-	                .attr("stroke", bar_height > 5 ? "#ffffff" : "none")
-	                ;
+	        //final height
+	        height = (bar_height * data.length) + top_pad + bot_pad + group_pad*bar_groups.length;
+	        bars_wrap1.style("height",height+"px");
 
-	            //bar labels (states)
-	            var bl_u = bars.selectAll("text.bar-label").data(function(d){
-	                if(scope.geolevel == "state" || scope.geolevel == "rural"){
-	                    return d.bars;
-	                }
-	                else{
-	                    return [];
-	                }
-	            });
-	            bl_u.exit().remove();
-	            var bl_e = bl_u.enter().append("text").classed("bar-label",true);
-	            var bl = bl_e.merge(bl_u);
-	        
-	            bl.attr("x", function(d){return d.value > 0 ? x(d.value)+"%" : zero+"%"}) 
-	                .attr("y",function(d,i){return i*bar_height})
-	                .attr("dy", bar_height*0.8)
-	                .attr("dx",3)
-	                .attr("fill", function(d){return palette.gray})
-	                .text(function(d){return HLUSPS[d.geo]})
-	                .style("font-size","13px")
-	                ;
+	        //bar groups
+	        var bars_u = bars_main.selectAll("g.bar").data(bar_groups);
+	        bars_u.exit().remove();
+	        var bars_e = bars_u.enter().append("g").classed("bar",true);
+	        bars_e.append("text");
+	        var bars = bars_e.merge(bars_u).attr("transform", function(d,i){
+	            return "translate(0," + (top_pad + (i+1)*group_pad + d.prior_bars*bar_height) + ")";
+	        });
 
-	            //group labels (ranges)
-	            var labels_u = bars.selectAll("text.label").data(function(d,i){
-	                //var lab = i==0 ? d.label + " (n=" + d.n + ")" : d.label + " (" + d.n + ")";
-	                var lab = d.label + " (" + d.n + ")";
-	                return [lab];
-	            });
-	            labels_u.exit().remove();
-	            var labels_e = labels_u.enter().append("text").classed("label",true);
-	            var labels = labels_e.merge(labels_u);
-	        
-	            labels.attr("x", zero+"%") 
-	                .attr("text-anchor","start")
-	                .attr("y",function(d,i){return 0})
-	                .attr("dy","-3")
-	                .attr("dx","3")
-	                .text(function(d){return d})
-	                .attr("fill","#555555")
-	                .style("font-size","13px")
-	                ;
-	        }
+	        //actual rectangles
+	        var b_u = bars.selectAll("rect.bar").data(function(d){return d.bars});
+	        b_u.exit().remove();
+	        var b_e = b_u.enter().append("rect").classed("bar",true);
+	        var b = b_e.merge(b_u);
+
+	        scope.bars = b; //make accessible
+	    
+	        b.attr("width", width)
+	            .attr("height", bar_height)
+	            .attr("x", function(d){return d.value < 0 ? x(d.value)+"%" : zero+"%"}) 
+	            .attr("y",function(d,i){return i*bar_height})
+	            .attr("fill", function(d){return d.color})
+	            .attr("stroke", bar_height > 5 ? "#ffffff" : "none")
+	            ;
+
+	        //bar labels (states)
+	        var bl_u = bars.selectAll("text.bar-label").data(function(d){
+	            if(scope.geolevel == "state" || scope.geolevel == "rural"){
+	                return d.bars;
+	            }
+	            else{
+	                return [];
+	            }
+	        });
+	        bl_u.exit().remove();
+	        var bl_e = bl_u.enter().append("text").classed("bar-label",true);
+	        var bl = bl_e.merge(bl_u);
+	    
+	        bl.attr("x", function(d){return d.value > 0 ? x(d.value)+"%" : zero+"%"}) 
+	            .attr("y",function(d,i){return i*bar_height})
+	            .attr("dy", bar_height*0.8)
+	            .attr("dx",3)
+	            .attr("fill", function(d){return palette.gray})
+	            .text(function(d){return HLUSPS[d.geo]})
+	            .style("font-size","13px")
+	            ;
+
+	        //group labels (ranges)
+	        var labels_u = bars.selectAll("text.label").data(function(d,i){
+	            //var lab = i==0 ? d.label + " (n=" + d.n + ")" : d.label + " (" + d.n + ")";
+	            var lab = d.label + " (" + d.n + ")";
+	            return [lab, lab];
+	        });
+	        labels_u.exit().remove();
+	        var labels_e = labels_u.enter().append("text").classed("label",true);
+	        var labels = labels_e.merge(labels_u);
+	    
+	        labels.attr("x", zero+"%") 
+	            .attr("text-anchor", zero > 30 && zero < 60 ? "middle" : "start")
+	            .attr("y",function(d,i){return 0})
+	            .attr("dy","-5")
+	            .attr("dx","3")
+	            .text(function(d){return d})
+	            .attr("fill","#555555")
+	            .attr("stroke", function(d,i){return i==0 ? "#ffffff" : null})
+	            .attr("stroke-width", function(d,i){return i==0 ? 3 : null})
+	            .style("font-size","13px")
+	            .style("font-style","italic")
+	            ;
+
+	        //draw legend swatches
+
+	        var swatches_up = mobile_swatches.selectAll("div.legend-swatch").data(bar_groups);
+	        swatches_up.exit().remove();
+	        var swatches_enter = swatches_up.enter().append("div").classed("legend-swatch",true);
+	        swatches_enter.append("div");
+	        swatches_enter.append("p");
+
+	        var swatches = swatches_enter.merge(swatches_up);
+
+	        swatches.select("div").style("background-color", function(d){return d.bars[0].color});
+	        swatches.select("p").html(function(d){return d.label});
+
+
 
 	    }
 
@@ -17126,7 +17044,7 @@
 
 	    function test_mobile(){
 	        try{
-	            var box = wrap1.node().getBoundingClientRect();
+	            var box = wrap0.node().getBoundingClientRect();
 	            var width = box.right-box.left;
 	            is_mobile = width < 900;
 	        }
@@ -17134,7 +17052,7 @@
 	            is_mobile = true;
 	        }
 
-	        map_wrap1.classed("hl-mobile", is_mobile);
+	        wrap0.classed("hl-mobile", is_mobile);
 	    }
 
 	    var resizeTimer;
@@ -17151,14 +17069,17 @@
 	//v1.0 developed for congressional district poverty and gig economy
 
 	function header(container){
-	    var wrap = d3.select(container).append("div").style("padding","0px 15px").classed("fb-center-col",true).style("margin","0px auto");
+	    var wrap = d3.select(container).append("div").style("padding","0px 0px").classed("fb-center-col",true);
 
-	    var title = wrap.append("p").classed("fb-header section-title",true).style("display","none");
-	    var subtitle = wrap.append("p").classed("subtitle",true).style("display","none").style("max-width","780px");
+	    var title_box = wrap.append("div").style("padding","0px 15px");
+
+	    var title = title_box.append("p").classed("fb-header section-title",true).style("display","none");
+	    var subtitle = title_box.append("p").classed("subtitle half-width",true).style("display","none").style("max-width","780px");
 
 	    var controls = wrap.append("div").classed("c-fix", true);
-	    var legend_wrap = controls.append("div").classed("c-fix",true).style("display","none").style("padding","0px 0px 0px 0px");
-	    var dropdown_wrap = controls.append("div").classed("c-fix", true).style("padding","0px 0px 0px 0px");
+
+	    var dropdown_wrap = controls.append("div").classed("c-fix", true).style("padding","0px 15px");
+	    var legend_wrap = controls.append("div").classed("c-fix",true).style("display","none");
 
 	    
 	    var select_wrap = {};
@@ -17285,8 +17206,8 @@
 
 	        var update_legend = function(geolevel, geo){
 
-	            controls.classed("two-columns", true);
-	            dropdown_wrap.style("padding","0px 0px 0px 15px");
+	            controls.classed("two-column-header", true);
+	            //dropdown_wrap.style("padding","0px 0px 0px 15px");
 
 	            var levels = {
 	                metro: "Other Heartland metro areas",
@@ -17456,8 +17377,8 @@
 	    wrap_nl.selectAll("p.rm").remove();
 
 	    var dash_head = header(wrap_nl.node());
-	    dash_head.title("Heartland dashboard");
-	    dash_head.subtitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
+	    dash_head.title("Check out your place");
+	    dash_head.subtitle("Use the menus below to explore how your place performs on these important indicators of economic performance.");
 
 	    //args: container, metric [change|start|end], geolevel [state|metro|micro|rural], geocode [fips]
 	    var update_nl = number_lines(wrap_nl.node(), nl_state.metric, nl_state.geolevel, nl_state.geo);    
@@ -17499,8 +17420,8 @@
 	    //var update_legend = dash_head.legend();
 
 	    var map_head = header(wrap_mp.node());
-	    map_head.title("Map module");
-	    map_head.subtitle("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin quam eu efficitur mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper fringilla tortor, id vulputate leo dictum id. Suspendisse nibh tortor, bibendum id justo sed, placerat viverra urna.");
+	    map_head.title("Map the Heartland");
+	    map_head.subtitle("Visualize how Heartland states, metropolitan, micropolitan, and rural areas compare with one another across an array of indicators");
 
 	    var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
 
