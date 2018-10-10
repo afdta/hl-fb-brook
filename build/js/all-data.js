@@ -2288,7 +2288,7 @@ var all_data =
       },
       "start": {
         "var": "gdp_2010",
-        "label": "GDP ($thousands)",
+        "label": "GDP ($millions)",
         "years": [2010],
         "period": 2010,
         "format": "doll0",
@@ -2855,7 +2855,7 @@ var all_data =
       },
       "end": {
         "var": "gdp_2016",
-        "label": "GDP ($thousands)",
+        "label": "GDP ($millions)",
         "years": [2016],
         "period": 2016,
         "format": "doll0",

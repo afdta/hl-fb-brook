@@ -2410,7 +2410,7 @@
 	      },
 	      "start": {
 	        "var": "gdp_2010",
-	        "label": "GDP ($thousands)",
+	        "label": "GDP ($millions)",
 	        "years": [2010],
 	        "period": 2010,
 	        "format": "doll0",
@@ -2977,7 +2977,7 @@
 	      },
 	      "end": {
 	        "var": "gdp_2016",
-	        "label": "GDP ($thousands)",
+	        "label": "GDP ($millions)",
 	        "years": [2016],
 	        "period": 2016,
 	        "format": "doll0",
@@ -17237,7 +17237,7 @@
 	            }
 
 	            place_swatch_geolevel.text(levels[geolevel]);
-	            select_swatch_geo.text(name);
+	            select_swatch_geo.text(geolevel=="rural" ? "Rural "+name : name);
 	        };
 
 	        select.on("change", function(){

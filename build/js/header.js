@@ -166,7 +166,7 @@ export default function header(container){
             }
 
             place_swatch_geolevel.text(levels[geolevel]);
-            select_swatch_geo.text(name);
+            select_swatch_geo.text(geolevel=="rural" ? "Rural "+name : name);
         }
 
         select.on("change", function(){
