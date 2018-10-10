@@ -15841,6 +15841,8 @@
 	        flip_scale = true;
 	    }
 
+	    var report = {errors:[], warnings:[]};
+
 	    try{
 	        if(metric_object == null){throw new Error("No data")}
 
@@ -15854,16 +15856,16 @@
 	        d.format = metric_object.format;
 	        d.formatAxis = metric_object.formatAxis;
 	        d.get = function(g){
-	            g = g+"";
 	            var r;
 	            if(arguments.length > 0){
 	                try{
+	                    g = g+"";
 	                    var d = metric_object.lookup[geolevel];
 	                    r = d[g] == null ? null : d[g];
 	                }
 	                catch(e){
 	                    r = null;
-	                    console.warn("Data not available");
+	                    report.warnings.push({reason: "Data not available", indicator: indicator, metric: metric, geo:g});
 	                }
 	            }
 	            else{
@@ -15892,8 +15894,8 @@
 
 	    var universe = 0;
 	    var missings = 0;
-	    console.log("+++++++++++");
-	    console.log(indicator);
+
+	    report.indicator = indicator;
 
 	    //use summary to populate "all" array and to build color scales
 	    try{
@@ -15911,6 +15913,8 @@
 	                universe++;
 	            }
 
+	            report.summary = "available";
+	            report.lookup = data == null ? "NOT available" : "available";
 	        
 	            //color scales
 
@@ -15967,17 +15971,21 @@
 
 	        }
 	        else{
-	            console.log("summary is null, lookup for geolevel is " + metric_object.lookup[geolevel]);
+	            report.summary = "NOT available";
+	            report.lookup = data == null ? "NOT available" : "available";
 	        }
 	    }
 	    catch(e){
-	        console.log(e);
+	        report.errors.push({reason: e, indicator: indicator, metric: metric, geolevel: geolevel});
 	        all = [];
 	        d.color_scale = function(d){return "#e0e0e0"};
 	    }
 
-	    console.log("universe size: " + universe + " | valid data for: " + all.length + " | missings: " + missings);
-	    console.log("..........");
+	    report.universe_size = universe;
+	    report.missing = missings;
+	    report.non_missing = all.length;
+
+	    //console.log(report);
 
 	    return d;
 	}
@@ -16204,7 +16212,6 @@
 	    var update = function(metric, geolevel, geo){
 	        var data = lookup(indicator, metric, geolevel);
 	        var annotations = [];
-	        console.log(data.defs);
 
 	        def_box.html('<p>' + data.defs.definition + '</p><p class="subtitle">Source: ' + data.defs.source + '</p>' );
 

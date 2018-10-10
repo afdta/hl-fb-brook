@@ -83,7 +83,6 @@ function number_line(container, indicator, metric_, geolevel_, geo_){
     var update = function(metric, geolevel, geo){
         var data = lookup(indicator, metric, geolevel);
         var annotations = [];
-        console.log(data.defs);
 
         def_box.html('<p>' + data.defs.definition + '</p><p class="subtitle">Source: ' + data.defs.source + '</p>' );
 
