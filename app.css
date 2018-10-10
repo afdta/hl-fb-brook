@@ -57,7 +57,7 @@
 
 /*expected use: class="fb-header [section-title | chart-title]"*/
 .fb-interactive .fb-header, .fb-interactive .fb-light-header{
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', 'PT Serif', sans-serif;
     color:#0d2c6c;
     font-weight:900;
     margin:0rem 0rem 15px 0rem;
