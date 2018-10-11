@@ -51,7 +51,7 @@ export default function map_module(container, init_indicator, init_metric, init_
 
     //mobile map legend
     var mobile_legend = map_wrap0.append("div").style("padding","15px").classed("fb-mobile-view",true);
-    var mobile_title = mobile_legend.append("p").style("margin","0px");
+    var mobile_title = mobile_legend.append("p").style("margin","0px 0px 10px 0px");
     var mobile_swatches = mobile_legend.append("div").classed("c-fix",true);
 
     //build svg filters
@@ -512,7 +512,7 @@ export default function map_module(container, init_indicator, init_metric, init_
 
             map_bars_panel.style("background-color","#ffffff");
 
-            title_html = '<span class="fb-header">' + scope.data.label + '</span>&nbsp;<span class="fb-light-header">' + 
+            title_html = '<span class="fb-header fb-chart-title">' + scope.data.label + '</span>&nbsp;<span class="fb-light-header fb-chart-title">' + 
                          scope.data.period + '</span><span class="fb-light-header">' + scope.data.units + '</span>';
 
             

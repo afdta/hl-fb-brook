@@ -218,8 +218,8 @@ export default function number_lines(container, metric_, geolevel_, geo_){
 
     var wrap_drivers = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
-    wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true).style("padding","0px 15px");
-    wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true).style("padding","0px 15px");
+    wrap_outcomes.append("p").text("Outcomes").classed("fb-header fb-group-title",true).style("padding","0px 15px");
+    wrap_drivers.append("p").text("Drivers").classed("fb-header fb-group-title",true).style("padding","0px 15px");
 
     
     var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,

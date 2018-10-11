@@ -113,10 +113,11 @@
 	    text:{
 	        orange:"#cc4619"
 	    },
-	    blues5:['#dbe0eb', '#b3deff', '#82c2ff', '#2b80e3', '#0d2b6b'],
-	    //blues5:['#dbe0eb', '#75b4f8', '#4883d4', '#2555a2', '#0d2b6b'],
-	    reds5:['#fee5d9', '#f4b5a4', '#e5612c', '#de2d26', '#9b000c'],
-	    //reds5:['#fee5d9','#f7ae95','#eb7547','#cf3521','#9b000c'],
+	    //blues5:['#dbe0eb', '#b3deff', '#82c2ff', '#2b80e3', '#0d2b6b'],
+	    //reds5:['#ffe6d9', '#f5b5a3', '#e6612b', '#de2e26', '#9c000d'],
+
+	    reds5:['#f9f6b5', '#feba76', '#f67b49', '#d6402f', '#a50026'],
+	    blues5:['#e0f3f8','#9ac8e0','#689bc9','#4c6ab6','#3136a9'],
 	    na:"#dddddd"
 	};
 
@@ -16342,8 +16343,8 @@
 
 	    var wrap_drivers = wrap0.append("div").classed("green-square-wrap",true).append("div");
 
-	    wrap_outcomes.append("p").text("Outcomes").classed("fb-header group-title",true).style("padding","0px 15px");
-	    wrap_drivers.append("p").text("Drivers").classed("fb-header group-title",true).style("padding","0px 15px");
+	    wrap_outcomes.append("p").text("Outcomes").classed("fb-header fb-group-title",true).style("padding","0px 15px");
+	    wrap_drivers.append("p").text("Drivers").classed("fb-header fb-group-title",true).style("padding","0px 15px");
 
 	    
 	    var outcome_codes = all_data.map.growth.concat(all_data.map.prosperity,
@@ -16446,7 +16447,7 @@
 
 	    //mobile map legend
 	    var mobile_legend = map_wrap0.append("div").style("padding","15px").classed("fb-mobile-view",true);
-	    var mobile_title = mobile_legend.append("p").style("margin","0px");
+	    var mobile_title = mobile_legend.append("p").style("margin","0px 0px 10px 0px");
 	    var mobile_swatches = mobile_legend.append("div").classed("c-fix",true);
 
 	    //build svg filters
@@ -16907,7 +16908,7 @@
 
 	            map_bars_panel.style("background-color","#ffffff");
 
-	            title_html = '<span class="fb-header">' + scope.data.label + '</span>&nbsp;<span class="fb-light-header">' + 
+	            title_html = '<span class="fb-header fb-chart-title">' + scope.data.label + '</span>&nbsp;<span class="fb-light-header fb-chart-title">' + 
 	                         scope.data.period + '</span><span class="fb-light-header">' + scope.data.units + '</span>';
 
 	            
@@ -17080,8 +17081,8 @@
 
 	    var title_box = wrap.append("div").style("padding","0px 15px");
 
-	    var title = title_box.append("p").classed("fb-header section-title",true).style("display","none");
-	    var subtitle = title_box.append("p").classed("subtitle half-width",true).style("display","none").style("max-width","780px");
+	    var title = title_box.append("p").classed("fb-header fb-section-title",true).style("display","none");
+	    var subtitle = title_box.append("p").classed("half-width",true).style("display","none").style("max-width","780px").style("margin-bottom","2rem");
 
 	    var controls = wrap.append("div").classed("c-fix", true);
 
@@ -17129,7 +17130,7 @@
 	    var swatch_group1 = legend_wrap.append("div").classed("c-fix",true).style("float","left");
 	    var swatch_group2 = legend_wrap.append("div").classed("c-fix",true).style("float","left");
 
-	    var select_swatch = swatch_group1.append("div").classed("legend-swatch",true);
+	    var select_swatch = swatch_group1.append("div").classed("legend-swatch",true).style("margin-right","25px");
 	    var select_swatch_svg = select_swatch.append("svg").attr("height","18px").attr("width","23px").style("display","inline-block");
 	        select_swatch_svg.append("circle").attr("r", 4).attr("fill", palette.orange).attr("cx","16").attr("cy","50%").attr("fill-opacity","1");
 	        select_swatch_svg.append("path").attr("d",d_triangle).attr("fill", palette.orange).attr("stroke", palette.orange);
@@ -17140,7 +17141,7 @@
 	                    .append("circle").attr("r", 3.5).attr("fill", palette.green).attr("cx","50%").attr("cy","50%").attr("fill-opacity","0.7");
 	    var place_swatch_geolevel = place_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("States");
 
-	    var hl_swatch = swatch_group2.append("div").classed("legend-swatch",true);
+	    var hl_swatch = swatch_group2.append("div").classed("legend-swatch",true).style("margin-right","25px");
 	    var hl_swatch_svg = hl_swatch.append("svg").attr("height","18px").attr("width","15px").style("display","inline-block");
 	        hl_swatch_svg.append("path").attr("d",d_triangle).attr("fill", "none").attr("stroke", palette.green);
 	    hl_swatch.append("p").style("display","inline-block").style("line-height","1rem").text("Heartland avg.");
@@ -17427,7 +17428,7 @@
 	    //var update_legend = dash_head.legend();
 
 	    var map_head = header(wrap_mp.node());
-	    map_head.title("Map the Heartland");
+	    map_head.title("Map the region");
 	    map_head.subtitle("Visualize how Heartland states, metropolitan, micropolitan, and rural areas compare with one another across an array of indicators");
 
 	    var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
