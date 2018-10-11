@@ -83,7 +83,7 @@ function main(){
 
     var map_head = header(wrap_mp.node());
     map_head.title("Map the region");
-    map_head.subtitle("Visualize how Heartland states and metropolitan, micropolitan, and rural areas compare with one another across an array of indicators");
+    map_head.subtitle("Visualize how Heartland states and metropolitan, micropolitan, and rural areas compare with one another across an array of indicators.");
 
     var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
 
