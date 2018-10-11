@@ -116,8 +116,8 @@
 	    //blues5:['#dbe0eb', '#b3deff', '#82c2ff', '#2b80e3', '#0d2b6b'],
 	    //reds5:['#ffe6d9', '#f5b5a3', '#e6612b', '#de2e26', '#9c000d'],
 
-	    reds5:['#f9f6b5', '#feba76', '#f67b49', '#d6402f', '#a50026'],
-	    blues5:['#e0f3f8','#9ac8e0','#689bc9','#4c6ab6','#3136a9'],
+	    reds5:['#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026'],
+	    blues5:['#bdffee', '#5ec9d9', '#0490ba', '#13559a', '#002267'],
 	    na:"#dddddd"
 	};
 
@@ -17429,7 +17429,7 @@
 
 	    var map_head = header(wrap_mp.node());
 	    map_head.title("Map the region");
-	    map_head.subtitle("Visualize how Heartland states, metropolitan, micropolitan, and rural areas compare with one another across an array of indicators");
+	    map_head.subtitle("Visualize how Heartland states and metropolitan, micropolitan, and rural areas compare with one another across an array of indicators");
 
 	    var update_mp = map_module(wrap_mp.node(), mp_state.indicator, mp_state.metric, mp_state.geolevel, mp_state.geo);
 
