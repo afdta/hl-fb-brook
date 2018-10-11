@@ -206,7 +206,7 @@ export default function map_module(container, init_indicator, init_metric, init_
         
         //draw geoselection
         if(scope.geolevel=="state" || scope.geolevel=="rural"){
-            scope.geoselection = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:fill(state_accessor), "stroke-width":"0.5" }, true);
+            scope.geoselection = draw_states(g_states, HLFC.features, {stroke:stroke(state_accessor), fill:fill(state_accessor), "stroke-width":"0.5" }, true);
             g_voro.selectAll("path").remove();
             g_metros.style("visibility","hidden");
             g_micros.style("visibility","hidden");
@@ -567,6 +567,7 @@ export default function map_module(container, init_indicator, init_metric, init_
             .attr("y",function(d,i){return i*bar_height})
             .attr("fill", function(d){return d.color})
             .attr("stroke", bar_height > 5 ? "#ffffff" : "none")
+            .style("shape-rendering", bar_height > 3 ? "crispEdges" : null)
             ;
 
         //bar labels (states)

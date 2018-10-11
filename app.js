@@ -116,8 +116,8 @@
 	    //blues5:['#dbe0eb', '#b3deff', '#82c2ff', '#2b80e3', '#0d2b6b'],
 	    //reds5:['#ffe6d9', '#f5b5a3', '#e6612b', '#de2e26', '#9c000d'],
 
-	    reds5:['#fed976','#feb24c','#fd8d3c','#f03b20','#bd0026'],
-	    blues5:['#bdffee', '#5ec9d9', '#0490ba', '#13559a', '#002267'],
+	    reds5:['#ffe19c', '#ffa76c', '#ff6331', '#d63018', '#a20000'],
+	    blues5:['#c1e8ee', '#5ebfd7', '#0490ba', '#145e9f', '#032f7a'],
 	    na:"#dddddd"
 	};
 
@@ -16602,7 +16602,7 @@
 	        
 	        //draw geoselection
 	        if(scope.geolevel=="state" || scope.geolevel=="rural"){
-	            scope.geoselection = draw_states(g_states, HLFC.features, {stroke:"#666666", fill:fill(state_accessor), "stroke-width":"0.5" }, true);
+	            scope.geoselection = draw_states(g_states, HLFC.features, {stroke:stroke(state_accessor), fill:fill(state_accessor), "stroke-width":"0.5" }, true);
 	            g_voro.selectAll("path").remove();
 	            g_metros.style("visibility","hidden");
 	            g_micros.style("visibility","hidden");
@@ -16963,6 +16963,7 @@
 	            .attr("y",function(d,i){return i*bar_height})
 	            .attr("fill", function(d){return d.color})
 	            .attr("stroke", bar_height > 5 ? "#ffffff" : "none")
+	            .style("shape-rendering", bar_height > 3 ? "crispEdges" : null)
 	            ;
 
 	        //bar labels (states)
