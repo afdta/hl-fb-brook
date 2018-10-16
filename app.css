@@ -7,7 +7,7 @@
 /* >>> headers and text <<< */
 
 .fb-interactive p, .fb-interactive li, .fb-interactive text, .fb-interactive td{
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', 'PT Serif', sans-serif;
     color:#0d2c6c;
     margin:0rem 0rem 1rem 0rem;
     line-height:1.5em;
@@ -15,7 +15,7 @@
 }
 
 .fb-interactive select, .fb-interactive select option{
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', 'PT Serif', sans-serif;
     color:#0d2c6c;
     line-height:1.5em;
     font-size:18px;
@@ -208,6 +208,94 @@
     padding:0px 15px;
 }
 
+/*side-by-side section header img for brookings.edu*/
+.fb-section-panel{
+    width:100%;
+    min-height:770px;
+    height:100vh;
+    padding:0px;
+    background-size:cover;
+    background-repeat: no-repeat;
+    max-width:1525px;
+    margin:150px auto;
+}
+
+.fb-section-panel.fb-why{
+    background-image:url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-why.jpg');
+    background-position: 17vw bottom;
+}
+
+.fb-section-panel.fb-indicators{
+    background-image:url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-outcomes.jpg');
+    background-position: 17vw bottom;
+}
+
+.fb-section-panel.fb-what{
+    background-image:url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-what.jpg');
+    background-position: -25vw bottom;
+}
+.fb-section-panel.fb-where{
+    background-image:url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-where.png');
+    background-size:70%;
+    background-position: -15vw center;
+}
+
+.fb-section-panel .fb-mobile-panel{
+    background-repeat: no-repeat;
+    background-size:cover;
+    width:100%;
+    height:50vh;
+    min-height:300px;
+}
+.fb-section-panel .fb-mobile-what{
+    background-image: url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-what.jpg');
+}
+.fb-section-panel .fb-mobile-why{
+    background-image: url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-why.jpg');
+}
+.fb-section-panel .fb-mobile-where{
+    background-image:url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-where.png');
+    background-size:cover;
+    background-position: center center;
+}
+
+.fb-section-panel .fb-mobile-indicators{
+    background-image:url('https://www.brookings.edu/wp-content/uploads/2018/10/heartland-outcomes.jpg');
+}
+
+.fb-section-panel > div{
+    width:50%;
+    margin:0px;
+    padding:0px;
+    height:100%;
+    display:table;
+    background-color:#0d73d6;
+    box-sizing: border-box;
+    float:left;
+    padding:80px;
+}
+
+.fb-section-panel > div.right-panel{float:right;}
+
+.fb-section-panel > div > div{
+    display:table-row;
+}
+
+.fb-section-panel > div > div > div{
+    display:table-cell;
+    vertical-align:middle;
+}
+
+.fb-section-panel > div > div > div > p{
+    line-height:1.7em;
+    color:#ffffff !important;
+}
+
+.fb-interactive .rm{
+    display:none;
+}
+
+
 
 @media (min-width:0px){
     .fb-interactive .two-columns > div{
@@ -246,6 +334,24 @@
     .fb-interactive .fb-chart-title{font-size:18px;}
     .fb-interactive select, .fb-interactive select option{font-size:16px;}    
     .fb-interactive .legend-swatch p{font-size:16px;} 
+
+    .fb-section-panel{
+        height:auto;
+    }
+
+    .fb-section-panel > div{
+        padding:32px 40px;
+        float:none;
+        width:auto;
+        height:auto;
+        min-height:50vh;
+    }
+
+    .fb-section-panel > div.right-panel{float:none;}
+
+    .fb-section-panel .fb-mobile-panel{
+        display:block;
+    }
 }
 
 @media (min-width:768px){
@@ -274,6 +380,25 @@
     .fb-interactive .fb-chart-title{font-size:22px;}   
     .fb-interactive select, .fb-interactive select option{font-size:18px;}  
     .fb-interactive .legend-swatch p{font-size:18px;} 
+
+    .fb-section-panel{
+        height:100vh;
+    }
+
+    .fb-section-panel > div{
+        padding:0px 40px;
+        float:left;
+        width:50%;
+        height:100%;
+    }
+
+    .fb-section-panel > div.right-panel{
+        float:right;
+    }
+
+    .fb-section-panel .fb-mobile-panel{
+        display:none;
+    }
 }
 
 @media (min-width:1000px){
@@ -288,6 +413,10 @@
 
     .fb-interactive .fb-mobile-view{
         display:none;
+    }
+
+    .fb-section-panel > div{
+        padding:0px 80px;
     }
 
 }
