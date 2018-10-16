@@ -13,8 +13,64 @@
 
 <body>
 
-  <div class="fb-center-col">
-    <p class="fb-header">Development <a href="#dev-status">to dos/changelog »</a></p>
+  <div class="fb-interactive fb-section-panel fb-what c-fix">
+    <div class="fb-mobile-panel fb-mobile-what">
+      <p class="rm">...</p>
+    </div>
+    <div class="right-panel">
+      <div>
+        <div>
+          <p class="fb-header fb-section-title">What</p>
+          <p>The State of the Heartland: Factbook 2018 benchmarks the performance of the 19-state American “Heartland” on 26 socioeconomic measures and is intended to help Heartland leaders and citizens better comprehend the region’s current trajectory at a time of rapid economic and social change.</p>
+          <p>Focused on how the defined region’s economy has been performing since the recent financial crisis, the factbook provides both encouraging and trying news for the region.The good news is that the region is doing better than is sometimes portrayed, particularly on measures of tradable industry presence. With that said, the Heartland is variable in its prosperity and serious deficits in human capital and innovation capacity pose challenges to future prosperity in many areas.</p>
+          <p>The factbook was developed through a partnership of the Metropolitan Policy Program at the Brookings Institution and the Walton Family Foundation and was prepared to support the Walton Family Foundation’s inaugural “Heartland Summit.”</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="fb-interactive fb-section-panel fb-why c-fix">
+      <div class="fb-mobile-panel fb-mobile-why">
+        <p class="rm">...</p>
+      </div>
+      <div>
+        <div>
+          <div>
+            <p class="fb-header fb-section-title">Why</p>
+            <p>Why have we looked at the Heartland? The proliferation of “red vs. blue” maps and apocalyptic talk-show punditry has, if anything, made it harder for the region to get a clear sense of itself and how it is doing. What Heartland change makers need is a clarifying look at the region—by the numbers, and with an agreed-upon geography. Such a chronicle can help promote understanding and improved decision-making.</p>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="fb-interactive fb-section-panel fb-where c-fix">
+      <div class="fb-mobile-panel fb-mobile-where">
+        <p class="rm">...</p>
+      </div>
+      <div class="right-panel">
+        <div>
+          <div>
+            <p class="fb-header fb-section-title">Where</p>
+            <p>The factbook adopts a modern, state-based definition of the Heartland (developed by the Walton Family Foundation) that begins with the classic Midwest and includes parts of the South, but excludes both the original 13 American colonies and the Intermountain West. As defined here, the Heartland consists of 19 mostly inland states sprawled across nearly 1.1 million square miles—roughly one-third of the U.S. landmass. In total, the Heartland economy is bigger than Germany’s and just a bit smaller than Japan’s.</p>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="fb-interactive fb-section-panel fb-indicators c-fix">
+      <div class="fb-mobile-panel fb-mobile-indicators">
+        <p class="rm">...</p>
+      </div>
+      <div>
+        <div>
+          <div>
+            <p class="fb-header fb-section-title">Outcomes + Drivers</p>
+            <p>The factbook first reviews nine Outcomes that track and benchmark the region’s top-line economic health locally and relative to the rest of the nation. These nine indices address three dimensions of successful economic development: growth, prosperity, and inclusion. Data are available for the multistate region, states, and in some cases, metropolitan and non-metropolitan areas.</p>
+            <p>The factbook also explores 17 Drivers that benchmark the region’s standing on four crucial sources of prosperity: tradeable industries, human capital, innovation, and infrastructure. Strong positioning on these drivers will allow the Heartland to maximize prosperity and respond to the economic forces such as globalization, technological change, demographic transition, and declining national investment in growth and opportunity. Data for these measures are available for the multistate region, states, and in some cases, metropolitan and non-metropolitan areas.</p>
+          </div>
+        </div>
+      </div>
   </div>
 
   <!--Heartland Factbook interactive modules-->
@@ -31,65 +87,6 @@
   </div>
   <!--end interactives-->
 
-  <div class="fb-center-col" style="padding:30px 15px; margin:2rem auto 8rem auto;" id="dev-status">
-      <p class="fb-header section-title" style="margin-bottom:20px;">Development status: Final round of updates</p>
-      <div class="two-columns c-fix">
-        <div>
-          <p class="fb-header">TO DO</p>
-          <ul>
-            <li>Handle tooltips on mobile</li>
-            <li>Time permitting: Convert place dropdown to search + dropdown; convert other dropdowns to buttons where applicable</li>
-            <li>Integrate code into factbook website</li>
-            <li>Data validation</li>
-            <li>Final code review</li>
-          </ul>
-        </div>
-        <div>
-            <p class="fb-header">DONE</p>
-            <ul>
-                <li>Improved map legend/scales/colors. Scales are still equal width (in terms of values) except at the extremes. Values +/-3 standard deviations from mean are bundled with top/bottom groups</li>
-                <li>Map hover information. For CBSAs, nearest metro/micro to cursor is highlighted</li>
-                <li>Value on bar chart is highlighted upon map hover</li>
-                <li>Added map titles</li>
-                <li>Padded and rounded ranges of axes on number lines</li>
-                <li>Rounded to nearest 1000</li>
-                <li>Thinner borders, cleaner menus</li>
-                <li>Darker colors for non-Heartland marker on number lines</li>
-                <li>Pumped up letter spacing of titles to improve legibility</li>
-                <li>On dashboard, "gray out" indicators where data are missing</li>
-                <li>Remove transparency of legend wrapper</li>
-                <li>Revised indicator titles</li>
-                <li>Add "more information" boxes to number lines</li>
-                <li>Round dollar values to nearest 1000? Add "$" to GDP</li>
-                <li>Abbreviate state labels on map bar chart</li>
-                <li>Color match the PDF</li>
-                <li>Handle text in legend on narrow viewports</li>
-                <li></li>
-            </ul>
-        </div>
-      </div>
-    </div>
-
-
-<!--
-<canvas id="info"><</canvas>
-<script>
-  var canvas = document.getElementById("info");
-  canvas.height = "18";
-  canvas.width = "18";
-  var context = canvas.getContext('2d');
-
-  var img = new Image();
-  img.src = 'build/design/information.png';
-
-  setTimeout(function(){
-    context.drawImage(img, 0, 0);
-    var img64 = canvas.toDataURL();
-    console.log(img64);
-  },1000)
-  
-</script>
--->
 
 </body>
 </html>
